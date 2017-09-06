@@ -1,0 +1,10 @@
+{
+	"vertex":["On","Off","On"],
+	"edge":[[0,1],[1,2]],
+	"transtime":[[1,1.1],[1,1.1]],
+	"variables":["temp"],
+	"initialSet":[[75.0],[76.0]],
+	"unsafeSet":"@Allmode:And(temp>90)",
+	"timeHorizon":3.5,
+	"directory":"examples/Thermostats"
+}

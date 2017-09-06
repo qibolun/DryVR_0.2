@@ -1,0 +1,12 @@
+**/*.c
+**/*.h
+**/*.obj
+**/*.o
+**/*.mat
+**/*.dmr
+**/*.txt
+**/*.mexa64
+**/*.pyc
+**/*.eps
+output/unsafeSim
+

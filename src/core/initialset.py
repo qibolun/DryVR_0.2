@@ -3,10 +3,11 @@ This file contains initial set class for DryVR
 """
 
 class InitialSet():
-	def __init__(self, lower, upper):
+	def __init__(self, lower, upper, refineTime):
 		self.upperBound = upper
 		self.lowerBound = lower
 		self.delta = [(upper[i]-lower[i])/2.0 for i in range(len(upper))]
+		self.refineTime = refineTime
 	
 	def refine(self):
 		# Refine the initial set into two smaller set
@@ -22,8 +23,8 @@ class InitialSet():
 		initSetTwoUB[idx] -= self.delta[idx]
 
 		return (
-			InitialSet(initSetOneLB,initSetOneUB),
-			InitialSet(initSetTwoLB,initSetTwoUB),
+			InitialSet(initSetOneLB, initSetOneUB, self.refineTime+1),
+			InitialSet(initSetTwoLB, initSetTwoUB, self.refineTime+1),
 		)
 
 	def __str__(self):

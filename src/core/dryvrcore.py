@@ -10,10 +10,9 @@ from src.common.constant import *
 from src.common.io import writeToFile,readFromFile
 from src.common.utils import randomPoint,calcDelta,centerPoint
 
-def buildGraph(vertex, edge, transTime, timeHorizon):
+def buildGraph(vertex, edge, guards, timeHorizon):
 	g = Graph(directed = True)
 	g.add_vertices(len(vertex))
-	divideIntervals = [1 for _ in range(len(edge))]
 	remainTime = [0 for _ in range(len(vertex))]
 	g.add_edges(edge)
 
@@ -23,9 +22,7 @@ def buildGraph(vertex, edge, transTime, timeHorizon):
 	g.vs['label'] = vertex
 	g.vs['name'] = vertex
 	g.vs['remainTime'] = remainTime
-	g.es['label'] = transTime
-	g.es['trans_time'] = transTime
-	g.es['divide'] = divideIntervals
+	g.es['label'] = guards
 
 	computerOrder = g.topological_sorting(mode=OUT)
 	for node in computerOrder:
@@ -38,14 +35,14 @@ def buildGraph(vertex, edge, transTime, timeHorizon):
 
 	return g
 
-def refineGraph(g):
-	label = g.es['label']
-	divide = g.es['divide']
+# def refineGraph(g):
+# 	label = g.es['label']
+# 	divide = g.es['divide']
 
-	maxIdx = [(label[i][1]-label[i][0])/float(divide[i]) for i in range(len(label))]
-	idx = maxidx.index(max(maxIdx))
-	divide[idx] += 1
-	g.es["divide"] = divide
+# 	maxIdx = [(label[i][1]-label[i][0])/float(divide[i]) for i in range(len(label))]
+# 	idx = maxidx.index(max(maxIdx))
+# 	divide[idx] += 1
+# 	g.es["divide"] = divide
 
 def simulate(g, initCondition, timeHorizon, simFuc):
 	# Taken graph, initial condition, simulate time

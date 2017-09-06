@@ -11,7 +11,7 @@ from collections import namedtuple
 # This is the tuple for input file parsed from DryVR
 DryVRInput = namedtuple(
 	'DryVRInput',
-	'vertex edge transtime variables initialSet unsafeSet timeHorizon path'
+	'vertex edge guards variables initialSet unsafeSet timeHorizon path'
 )
 
 def importSimFunction(path):

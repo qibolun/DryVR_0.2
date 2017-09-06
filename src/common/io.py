@@ -28,7 +28,7 @@ def parseInputFile(path):
 		return DryVRInput(
 			vertex=data["vertex"],
 			edge=data["edge"],
-			transtime=data["transtime"],
+			guards=data["guards"],
 			variables=data["variables"],
 			initialSet=data["initialSet"],
 			unsafeSet=data["unsafeSet"],

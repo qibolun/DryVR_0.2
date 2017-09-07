@@ -2,6 +2,8 @@
 This file contains initial set class for DryVR
 """
 
+import random
+
 from z3 import *
 
 class Guard():
@@ -35,8 +37,11 @@ class Guard():
 		return curSolver
 
 	def guardSimuTube(self, tube, guardStr):
-		curSolver = self._buildGuard(guardStr)
+		if not guardStr:
+			return None, tube
 
+		curSolver = self._buildGuard(guardStr)
+		guardSet = {}
 		for idx,t in enumerate(tube):
 			curSolver.push()
 			curSolver.add(self.varDic['t'] == t[0])
@@ -46,9 +51,15 @@ class Guard():
 			if curSolver.check() == sat:
 				# The simulation trace hits the guard
 				curSolver.pop()
-				return t, tube[:idx]
+				guardSet[idx] = t
 			else:
 				curSolver.pop()
+				if guardSet:
+					# Guard is not empty, randomly pick one and return
+					idx, point = random.choice(list(guardSet.items()))
+					# Return the initial point for next mode, and truncked tube
+					return point[1:], tube[:idx+1]
+
 		# No guard hits for current tube
 		return None, tube
 

@@ -35,17 +35,8 @@ def buildGraph(vertex, edge, guards, timeHorizon):
 
 	return g
 
-# def refineGraph(g):
-# 	label = g.es['label']
-# 	divide = g.es['divide']
-
-# 	maxIdx = [(label[i][1]-label[i][0])/float(divide[i]) for i in range(len(label))]
-# 	idx = maxidx.index(max(maxIdx))
-# 	divide[idx] += 1
-# 	g.es["divide"] = divide
-
-def simulate(g, initCondition, timeHorizon, simFuc):
-	# Taken graph, initial condition, simulate time
+def simulate(g, initCondition, timeHorizon, guard, simFuc):
+	# Taken graph, initial condition, simulate time, guard
 	# simFuc is the simulation function
 	# which takes label, initial condition and simulation time
 	retval = defaultdict(list)
@@ -62,28 +53,36 @@ def simulate(g, initCondition, timeHorizon, simFuc):
 
 		if DEBUG:
 			print NEWLINE
-			print 'Current State', g.vs[curVertex]['label']
+			print 'Current State', g.vs[curVertex]['label'], remainTime
 
 		curSuccessors = g.successors(curVertex)
 
 		if len(curSuccessors) == 0:
 			transiteTime = remainTime
+			curGuardStr = None
 		else:
 			# Randomly pick a path and time to transit
 			curSuccessor = random.choice(curSuccessors)
 			edgeID = g.get_eid(curVertex,curSuccessor)
-			curTransitTime = g.es[edgeID]['label']
-			transiteTime = randomPoint(curTransitTime[0], curTransitTime[1])
+			curGuardStr = g.es[edgeID]['label']
+			transiteTime = remainTime
+		
 
 		curLabel = g.vs[curVertex]['label']
 		curSimResult = simFuc(curLabel, initCondition, transiteTime)
-		retval[curLabel] += curSimResult
-		for simRow in curSimResult:
+		initCondition, trunckedResult = guard.guardSimuTube(
+			curSimResult,
+			curGuardStr
+		)
+		# Get real transite time from truncked result
+		transiteTime = trunckedResult[-1][0]
+		retval[curLabel] += trunckedResult
+
+		for simRow in trunckedResult:
 			simRow[0] += curTime
 			simResult.append(simRow)
 
 		remainTime -= transiteTime
-		initCondition = curSimResult[-1][1:]
 		curTime += transiteTime
 		curVertex = curSuccessor
 

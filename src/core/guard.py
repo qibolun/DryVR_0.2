@@ -31,7 +31,7 @@ class Guard():
 		# Build solver for current guard based on guard string
 		curSolver = Solver()
 		for key in sorted(self.varDic)[::-1]:
-			# Replace the variable to self.vardic + variable
+			# Replace the variable to self.varDic + variable
 			guardStr = self._replace(guardStr,key)
 		curSolver.add(eval(guardStr))
 		return curSolver
@@ -55,7 +55,7 @@ class Guard():
 			else:
 				curSolver.pop()
 				if guardSet:
-					# Guard is not empty, randomly pick one and return
+					# Guard set is not empty, randomly pick one and return
 					idx, point = random.choice(list(guardSet.items()))
 					# Return the initial point for next mode, and truncked tube
 					return point[1:], tube[:idx+1]
@@ -63,4 +63,38 @@ class Guard():
 		# No guard hits for current tube
 		return None, tube
 
+	def guardReachTube(self, tube, guardStr):
+		if not guardStr:
+			return None, tube
 
+		curSolver = self._buildGuard(guardStr)
+		guardSetLower = []
+		guardSetUpper = []
+		for i in range(0,len(tube),2):
+			curSolver.push()
+			lowerBound = tube[i]
+			upperBound = tube[i+1]
+			curSolver.add(self.varDic['t'] >= lowerBound[0])
+			curSolver.add(self.varDic['t'] <= upperBound[0])
+			for j in range(1,len(lowerBound)):
+				curSolver.add(self.varDic[self.variables[j-1]]>=lowerBound[j])
+				curSolver.add(self.varDic[self.variables[j-1]]<=upperBound[j])
+
+			if curSolver.check() == sat:
+				# The reachtube hits the guard
+				curSolver.pop()
+				guardSetLower.append(lowerBound)
+				guardSetUpper.append(upperBound)
+			else:
+				curSolver.pop()
+				if guardSetLower:
+					# Guard set is not empty, build the next initial set and return
+					# At some point we might futher reduce the initial set for next mode
+					initLower = guardSetLower[0][1:]
+					initUpper = guardSetUpper[0][1:]
+					for j in range(1,len(guardSetLower)):
+						for k in range(1,len(guardSetLower[0])):
+							initLower[k-1] = min(initLower[k-1], guardSetLower[j][k])
+							initUpper[k-1] = max(initUpper[k-1], guardSetUpper[j][k])
+					return [initLower,initUpper], tube[:i+2]
+		return None, tube

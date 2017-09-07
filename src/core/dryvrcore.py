@@ -39,6 +39,10 @@ def simulate(g, initCondition, timeHorizon, guard, simFuc):
 	# Taken graph, initial condition, simulate time, guard
 	# simFuc is the simulation function
 	# which takes label, initial condition and simulation time
+	if not initCondition:
+		# Ideally this should not happen
+		break
+
 	retval = defaultdict(list)
 	computerOrder = g.topological_sorting(mode=OUT)
 	curVertex = computerOrder[0]

@@ -39,9 +39,6 @@ def simulate(g, initCondition, timeHorizon, guard, simFuc):
 	# Taken graph, initial condition, simulate time, guard
 	# simFuc is the simulation function
 	# which takes label, initial condition and simulation time
-	if not initCondition:
-		# Ideally this should not happen
-		break
 
 	retval = defaultdict(list)
 	computerOrder = g.topological_sorting(mode=OUT)
@@ -58,6 +55,10 @@ def simulate(g, initCondition, timeHorizon, guard, simFuc):
 		if DEBUG:
 			print NEWLINE
 			print 'Current State', g.vs[curVertex]['label'], remainTime
+
+		if not initCondition:
+			# Ideally this should not happen
+			break
 
 		curSuccessors = g.successors(curVertex)
 
@@ -92,7 +93,6 @@ def simulate(g, initCondition, timeHorizon, guard, simFuc):
 
 	writeToFile(simResult, SIMRESULTOUTPUT)
 	return retval
-
 
 # def calcReachTube(g, initialSet, timeHorizon, simFuc):
 # 	# Taken graph, initial condition, calculate the reachtube till time

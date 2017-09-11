@@ -88,6 +88,7 @@ class Guard():
 			else:
 				curSolver.pop()
 				if guardSetLower:
+					print guardSetLower, guardSetUpper
 					# Guard set is not empty, build the next initial set and return
 					# At some point we might futher reduce the initial set for next mode
 					initLower = guardSetLower[0][1:]
@@ -96,5 +97,6 @@ class Guard():
 						for k in range(1,len(guardSetLower[0])):
 							initLower[k-1] = min(initLower[k-1], guardSetLower[j][k])
 							initUpper[k-1] = max(initUpper[k-1], guardSetUpper[j][k])
-					return [initLower,initUpper], tube[:i+2]
-		return None, tube
+					# Return next initial Set, the result tube, and the true transit time
+					return [initLower,initUpper], tube[:i], guardSetLower[0][0]
+		return None, tube, tube[-1][0]

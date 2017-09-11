@@ -4,8 +4,8 @@ This file contains initial set class for DryVR
 
 class InitialSet():
 	def __init__(self, lower, upper, refineTime):
-		self.upperBound = upper
 		self.lowerBound = lower
+		self.upperBound = upper
 		self.delta = [(upper[i]-lower[i])/2.0 for i in range(len(upper))]
 		self.refineTime = refineTime
 	
@@ -14,12 +14,12 @@ class InitialSet():
 		# based on index with largest delta
 		idx = self.delta.index(max(self.delta))
 		# Construct first smaller initial set
-		initSetOneUB = self.upperBound
-		initSetOneLB = self.lowerBound
+		initSetOneUB = list(self.upperBound)
+		initSetOneLB = list(self.lowerBound)
 		initSetOneLB[idx] += self.delta[idx]
 		# Construct second smaller initial set
-		initSetTwoUB = self.upperBound
-		initSetTwoLB = self.lowerBound
+		initSetTwoUB = list(self.upperBound)
+		initSetTwoLB = list(self.lowerBound)
 		initSetTwoUB[idx] -= self.delta[idx]
 
 		return (

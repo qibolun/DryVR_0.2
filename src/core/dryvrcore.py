@@ -8,7 +8,8 @@ from collections import defaultdict
 from igraph import *
 from src.common.constant import *
 from src.common.io import writeToFile,readFromFile
-from src.common.utils import randomPoint,calcDelta,centerPoint
+from src.common.utils import randomPoint,calcDelta,calcCenterPoint,buildModeStr
+from src.discrepancy.Global_Disc import *
 
 def buildGraph(vertex, edge, guards, timeHorizon):
 	g = Graph(directed = True)
@@ -94,69 +95,79 @@ def simulate(g, initCondition, timeHorizon, guard, simFuc):
 	writeToFile(simResult, SIMRESULTOUTPUT)
 	return retval
 
-# def calcReachTube(g, initialSet, timeHorizon, simFuc):
-# 	# Taken graph, initial condition, calculate the reachtube till time
-# 	# simFuc is the simulation function
-# 	# which takes label, initial condition and simulation time
-# 	retval = defaultdict(list)
-# 	numVertex = g.vcount()
-# 	initValues = [[] for _ in range(numVertex)]
-# 	timeConcat = [[] for _ in range(numVertex)]
+def calcReachTube(g, initialSet, timeHorizon, guard, simFuc):
+	# Taken graph, initial condition, calculate the reachtube till time
+	# simFuc is the simulation function
+	# which takes label, initial condition and simulation time
+	retval = defaultdict(list)
+	numVertex = g.vcount()
+	initValues = [[] for _ in range(numVertex)]
 	
-# 	initValues[0].append(initialSet)
-# 	timeConcat[0].append((0,0))
 
-# 	computerOrder = g.topological_sorting(mode=OUT)
-# 	vertexOrder = 0
-# 	remainTime = timeHorizon
-# 	breakflag = False
-# 	modeSwitchDic = {}
-# 	reachtubeResult = []
+	computerOrder = g.topological_sorting(mode=OUT)
+	vertexOrder = 0
+	remainTime = timeHorizon
+	breakflag = False
+	reachtubeResult = []
+	initValues[0].append((initialSet, buildModeStr(g, computerOrder[vertexOrder])))
 
-# 	while remainTime > 0:
-# 		curVertex = computerOrder[vertexOrder]
-# 		curSuccessors = g.successors(curVertex)
-# 		curPredecessors = g.predecessors(curVertex)
+	while remainTime > 0 and vertexOrder<len(computerOrder):
+		curVertex = computerOrder[vertexOrder]
+		curSuccessors = g.successors(curVertex)
+		curPredecessors = g.predecessors(curVertex)
 
-# 		if DEBUG:
-# 			print NEWLINE
-# 			print("Current State is the %d th mode with name %s" %(curVertex, g.vs[curVertex]["name"]))
+		if DEBUG:
+			print NEWLINE
+			print("Current State is the %d th mode with name %s" %(curVertex, g.vs[curVertex]["name"]))
 
-# 		for s in curSuccessors:
-# 			modeSwitchDic[s] = str(curVertex)+'->'+str(s)
-# 		if len(curPredecessors) == 0:
-# 			modeSwitchDic[curVertex] = str(curVertex)
+		if not initValues[curVertex]:
+			# Ideally this should not happen
+			break
 
-# 		# Determine the time that we stay in this mode
-# 		if len(curSuccessors) == 0:
-# 			# If there is no successor, stay the remain time
-# 			transiteTimeMax = float(remainTime)
-# 			if vertexOrder == len(computerOrder)-1:
-# 				breakflag = True
-# 		else:
-# 			# If there are successors, find the max time we can stay in this mode
-# 			transiteTimeMax = float('-inf')
+		for initialSet, transitionLabel in initValues[curVertex]:
+			# Loop through all the initial sets we have for this mode
+			# This is because mutiple previous mode can go to current mode
+			reachtubeResult.append(transitionLabel)
+			curDelta = calcDelta(initialSet[0], initialSet[1])
 
-# 			for curSuc in curSuccessors:
-# 				edgeID = g.get_eid(curVertex, curSuc)
-# 				curTransitTime = g.es[edgeID]['trans_time']
-# 				g.vs[curSuc]['remainTime'] = max(
-# 					g.vs[curSuc]['remainTime'],
-# 					g.vs[curVertex]['remainTime']-curTransitTime[0]
-# 				)
-# 				transiteTimeMax = max(transiteTimeMax, curTransitTime[1])
+			if DEBUG:
+				print "Initial Condition is", initialSet
+				print "Initial Delta is ", curDelta
 
-# 			transiteTimeMax = float(min(transiteTimeMax), remainTime)
+			curCenter = calcCenterPoint(initialSet[0], initialSet[1])
+			curLabel = g.vs[curVertex]['label']
 
-# 		reachtubeResult.append(' %'+g.vs[curVertex]['name']+' '+modeSwitchDic[curVertex]+'\n')
+			traces = []
+			traces.append(simFuc(curLabel, curCenter, remainTime))
+			for _ in range(SIMTRACENUM):
+				newInitPoint = randomPoint(initialSet[0], initialSet[1])
+				traces.append(simFuc(curLabel, newInitPoint, remainTime))
 
-# 		for idx, initialSet in enumerate(initValues[curVertex]):
-# 			# Loop through all the initial sets we have for this mode
-# 			# This is because mutiple previous mode can go to current mode
-# 			curDelta = calcDelta(initialSet[0], initialSet[1])
-# 			if DEBUG:
-# 				print "Initial Condition is", initialSet
-# 				print "Initial Delta is ", curDelta
-# 				print "Time used to concat is ", timeConcat[curVertex][idx]
+			k, gamma = Global_Discrepancy(curLabel, curDelta, 0, 2, traces)
+			curReachTube = bloatToTube(curLabel, k, gamma, curDelta, traces)
 
-			
+			candidateTube = []
+			for curSuccessor in curSuccessors:
+				edgeID = g.get_eid(curVertex, curSuccessor)
+				curGuardStr = g.es[edgeID]['label']
+				nextInit, trunckedResult, transiteTime = guard.guardReachTube(
+					curReachTube,
+					curGuardStr,
+				)
+				g.vs[curSuccessor]['remainTime'] = max(
+					g.vs[curSuccessor]['remainTime'], 
+					g.vs[curVertex]['remainTime']-transiteTime,
+				)
+				if len(trunckedResult)>len(candidateTube):
+					candidateTube = trunckedResult
+				nextTransiteLabel = buildModeStr(g, curVertex)+'->'+buildModeStr(g, curSuccessor)
+				initValues[curSuccessor].append((nextInit, nextTransiteLabel))
+			if not candidateTube:
+				candidateTube = curReachTube
+
+			retval[curLabel] += candidateTube
+			reachtubeResult += candidateTube
+			vertexOrder += 1
+			if vertexOrder < len(computerOrder):
+				remainTime = g.vs[computerOrder[vertexOrder]]['remainTime']
+	return retval, reachtubeResult

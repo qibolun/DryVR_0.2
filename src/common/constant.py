@@ -14,6 +14,7 @@ REFINETHRES = 10
 # File Pathes
 GRAPHOUTPUT = 'output/curGraph.png'
 SIMRESULTOUTPUT = 'output/Traj.txt'
+REACHTUBEOUTPUT = 'output/reachtube.txt'
 
 # Useful constant string
 NEWLINE = '----------------------------------------------'

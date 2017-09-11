@@ -20,6 +20,15 @@ def readFromFile(path):
 			trace.append([float(x) for x in line.split()])
 	return trace
 
+def writeReachTubeFile(result, path):
+	# Write reach tube result
+	with open(path, 'w') as f:
+		for line in result:
+			if isinstance(line, str):
+				f.write(line+'\n')
+			elif isinstance(line, list):
+				f.write(' '.join(map(str,line))+'\n')
+
 def parseInputFile(path):
 	# Parse the input file for DryVR
 	with open(path, 'r') as f:

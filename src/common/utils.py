@@ -40,8 +40,13 @@ def calcDelta(lower, upper):
 	assert len(lower) == len(upper), "Delta calc List Range Error"
 	return [(upper[i]-lower[i])/2 for i in range(len(upper))]
 
-def centerPoint(lower, upper):
+def calcCenterPoint(lower, upper):
 	# Calculate the center point between the lower and upper bound
 	# The function only supports list since we assue initial set is always list
 	assert len(lower) == len(upper), "Center Point List Range Error"
 	return [(upper[i]+lower[i])/2 for i in range(len(upper))]
+
+def buildModeStr(g, vertex):
+	# Build a unique string to represent a mode
+	# This should be something like "modeName,modeNum"
+	return g.vs[vertex]['label']+','+str(vertex)

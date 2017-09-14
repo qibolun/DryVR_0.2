@@ -88,7 +88,6 @@ class Guard():
 			else:
 				curSolver.pop()
 				if guardSetLower:
-					print guardSetLower, guardSetUpper
 					# Guard set is not empty, build the next initial set and return
 					# At some point we might futher reduce the initial set for next mode
 					initLower = guardSetLower[0][1:]

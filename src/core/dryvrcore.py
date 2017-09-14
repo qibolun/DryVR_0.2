@@ -95,79 +95,94 @@ def simulate(g, initCondition, timeHorizon, guard, simFuc):
 	writeToFile(simResult, SIMRESULTOUTPUT)
 	return retval
 
-def calcReachTube(g, initialSet, timeHorizon, guard, simFuc):
-	# Taken graph, initial condition, calculate the reachtube till time
-	# simFuc is the simulation function
-	# which takes label, initial condition and simulation time
-	retval = defaultdict(list)
-	numVertex = g.vcount()
-	initValues = [[] for _ in range(numVertex)]
+def clacBloatedTube(modeLabel, initialSet, timeHorizon, simFuc):
+	# Taking modeLabel, initial set, time horizon information
+	# Calculate the bloated tube
+	curCenter = calcCenterPoint(initialSet[0], initialSet[1])
+	curDelta = calcDelta(initialSet[0], initialSet[1])
+	traces = []
+	traces.append(simFuc(modeLabel, curCenter, timeHorizon))
+	for _ in range(SIMTRACENUM):
+		newInitPoint = randomPoint(initialSet[0], initialSet[1])
+		traces.append(simFuc(modeLabel, newInitPoint, timeHorizon))
+
+	k, gamma = Global_Discrepancy(modeLabel, curDelta, 0, 2, traces)
+	curReachTube = bloatToTube(modeLabel, k, gamma, curDelta, traces)
+	return curReachTube
+
+# def calcReachTube(g, initialSet, timeHorizon, guard, simFuc):
+# 	# Taken graph, initial condition, calculate the reachtube till time
+# 	# simFuc is the simulation function
+# 	# which takes label, initial condition and simulation time
+# 	retval = defaultdict(list)
+# 	numVertex = g.vcount()
+# 	initValues = [[] for _ in range(numVertex)]
 	
 
-	computerOrder = g.topological_sorting(mode=OUT)
-	vertexOrder = 0
-	remainTime = timeHorizon
-	breakflag = False
-	reachtubeResult = []
-	initValues[0].append((initialSet, buildModeStr(g, computerOrder[vertexOrder])))
+# 	computerOrder = g.topological_sorting(mode=OUT)
+# 	vertexOrder = 0
+# 	remainTime = timeHorizon
+# 	breakflag = False
+# 	reachtubeResult = []
+# 	initValues[0].append((initialSet, buildModeStr(g, computerOrder[vertexOrder])))
 
-	while remainTime > 0 and vertexOrder<len(computerOrder):
-		curVertex = computerOrder[vertexOrder]
-		curSuccessors = g.successors(curVertex)
-		curPredecessors = g.predecessors(curVertex)
+# 	while remainTime > 0 and vertexOrder<len(computerOrder):
+# 		curVertex = computerOrder[vertexOrder]
+# 		curSuccessors = g.successors(curVertex)
+# 		curPredecessors = g.predecessors(curVertex)
 
-		if DEBUG:
-			print NEWLINE
-			print("Current State is the %d th mode with name %s" %(curVertex, g.vs[curVertex]["name"]))
+# 		if DEBUG:
+# 			print NEWLINE
+# 			print("Current State is the %d th mode with name %s" %(curVertex, g.vs[curVertex]["name"]))
 
-		if not initValues[curVertex]:
-			# Ideally this should not happen
-			break
+# 		if not initValues[curVertex]:
+# 			# Ideally this should not happen
+# 			break
 
-		for initialSet, transitionLabel in initValues[curVertex]:
-			# Loop through all the initial sets we have for this mode
-			# This is because mutiple previous mode can go to current mode
-			reachtubeResult.append(transitionLabel)
-			curDelta = calcDelta(initialSet[0], initialSet[1])
+# 		for initialSet, transitionLabel in initValues[curVertex]:
+# 			# Loop through all the initial sets we have for this mode
+# 			# This is because mutiple previous mode can go to current mode
+# 			reachtubeResult.append(transitionLabel)
+# 			curDelta = calcDelta(initialSet[0], initialSet[1])
 
-			if DEBUG:
-				print "Initial Condition is", initialSet
-				print "Initial Delta is ", curDelta
+# 			if DEBUG:
+# 				print "Initial Condition is", initialSet
+# 				print "Initial Delta is ", curDelta
 
-			curCenter = calcCenterPoint(initialSet[0], initialSet[1])
-			curLabel = g.vs[curVertex]['label']
+# 			curCenter = calcCenterPoint(initialSet[0], initialSet[1])
+# 			curLabel = g.vs[curVertex]['label']
 
-			traces = []
-			traces.append(simFuc(curLabel, curCenter, remainTime))
-			for _ in range(SIMTRACENUM):
-				newInitPoint = randomPoint(initialSet[0], initialSet[1])
-				traces.append(simFuc(curLabel, newInitPoint, remainTime))
+# 			traces = []
+# 			traces.append(simFuc(curLabel, curCenter, remainTime))
+# 			for _ in range(SIMTRACENUM):
+# 				newInitPoint = randomPoint(initialSet[0], initialSet[1])
+# 				traces.append(simFuc(curLabel, newInitPoint, remainTime))
 
-			k, gamma = Global_Discrepancy(curLabel, curDelta, 0, 2, traces)
-			curReachTube = bloatToTube(curLabel, k, gamma, curDelta, traces)
+# 			k, gamma = Global_Discrepancy(curLabel, curDelta, 0, 2, traces)
+# 			curReachTube = bloatToTube(curLabel, k, gamma, curDelta, traces)
 
-			candidateTube = []
-			for curSuccessor in curSuccessors:
-				edgeID = g.get_eid(curVertex, curSuccessor)
-				curGuardStr = g.es[edgeID]['label']
-				nextInit, trunckedResult, transiteTime = guard.guardReachTube(
-					curReachTube,
-					curGuardStr,
-				)
-				g.vs[curSuccessor]['remainTime'] = max(
-					g.vs[curSuccessor]['remainTime'], 
-					g.vs[curVertex]['remainTime']-transiteTime,
-				)
-				if len(trunckedResult)>len(candidateTube):
-					candidateTube = trunckedResult
-				nextTransiteLabel = buildModeStr(g, curVertex)+'->'+buildModeStr(g, curSuccessor)
-				initValues[curSuccessor].append((nextInit, nextTransiteLabel))
-			if not candidateTube:
-				candidateTube = curReachTube
+# 			candidateTube = []
+# 			for curSuccessor in curSuccessors:
+# 				edgeID = g.get_eid(curVertex, curSuccessor)
+# 				curGuardStr = g.es[edgeID]['label']
+# 				nextInit, trunckedResult, transiteTime = guard.guardReachTube(
+# 					curReachTube,
+# 					curGuardStr,
+# 				)
+# 				g.vs[curSuccessor]['remainTime'] = max(
+# 					g.vs[curSuccessor]['remainTime'], 
+# 					g.vs[curVertex]['remainTime']-transiteTime,
+# 				)
+# 				if len(trunckedResult)>len(candidateTube):
+# 					candidateTube = trunckedResult
+# 				nextTransiteLabel = buildModeStr(g, curVertex)+'->'+buildModeStr(g, curSuccessor)
+# 				initValues[curSuccessor].append((nextInit, nextTransiteLabel))
+# 			if not candidateTube:
+# 				candidateTube = curReachTube
 
-			retval[curLabel] += candidateTube
-			reachtubeResult += candidateTube
-			vertexOrder += 1
-			if vertexOrder < len(computerOrder):
-				remainTime = g.vs[computerOrder[vertexOrder]]['remainTime']
-	return retval, reachtubeResult
+# 			retval[curLabel] += candidateTube
+# 			reachtubeResult += candidateTube
+# 			vertexOrder += 1
+# 			if vertexOrder < len(computerOrder):
+# 				remainTime = g.vs[computerOrder[vertexOrder]]['remainTime']
+# 	return retval, reachtubeResult

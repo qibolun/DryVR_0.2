@@ -85,7 +85,7 @@ def verify(inputFile):
 				)
 				nextModeStack.parent = curModeStack
 				nextModeStack.stack.append(InitialSet(nextInit[0], nextInit[1]))
-				nextModeStack.bloatedTube.append(buildModeStr(graph, curVertex)+'->'+buildModeStr(graph, curSuccessor))
+				nextModeStack.bloatedTube.append(curModeStack.bloatedTube[0]+'->'+buildModeStr(graph, curSuccessor))
 				curStack[-1].child[curSuccessor] = nextModeStack
 				if len(trunckedResult)>len(candidateTube):
 					candidateTube = trunckedResult

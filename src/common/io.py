@@ -24,10 +24,14 @@ def writeReachTubeFile(result, path):
 	# Write reach tube result
 	with open(path, 'w') as f:
 		for line in result:
-			if isinstance(line, str):
+			if isinstance(line, unicode):
 				f.write(line+'\n')
 			elif isinstance(line, list):
 				f.write(' '.join(map(str,line))+'\n')
+
+def logEvent(logStr, path):
+	pass
+
 
 def parseInputFile(path):
 	# Parse the input file for DryVR

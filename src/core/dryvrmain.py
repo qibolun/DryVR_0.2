@@ -4,7 +4,7 @@ This file contains a single function that verifies model
 
 from src.common.constant import *
 from src.common.io import parseInputFile,writeReachTubeFile
-from src.common.utils import importSimFunction, randomPoint
+from src.common.utils import importSimFunction, randomPoint, buildModeStr
 from src.core.dryvrcore import *
 from src.core.guard import Guard
 from src.core.initialset import InitialSet
@@ -46,17 +46,19 @@ def verify(inputFile):
 
 	# Step 2) Check Reach Tube
 	# Calculate the over approximation of the reach tube and check the result
-
-	initialMode = graph.topological_sorting(mode=OUT)[0]
+	print "Verification Begin"
+	computeOrder =  graph.topological_sorting(mode=OUT)
+	initialMode = computeOrder[0]
 	curModeStack = InitialSetStack(initialMode, REFINETHRES, params.timeHorizon)
 	curModeStack.stack.append(InitialSet(params.initialSet[0], params.initialSet[1]))
+	curModeStack.bloatedTube.append(buildModeStr(graph, initialMode))
 	while True:
-		backWardFlag = SAFE
+		backwardFlag = SAFE
 		while curModeStack.stack:
-			print curModeStack.mode, len(curModeStack.stack)
+			print "Mode", curModeStack.mode, "has stack size", len(curModeStack.stack)
 			if not curModeStack.isValid():
 				print curModeStack.mode, "is not valid anymore"
-				backWardFlag = UNKNOWN
+				backwardFlag = UNKNOWN
 				break
 
 			curStack = curModeStack.stack
@@ -83,6 +85,7 @@ def verify(inputFile):
 				)
 				nextModeStack.parent = curModeStack
 				nextModeStack.stack.append(InitialSet(nextInit[0], nextInit[1]))
+				nextModeStack.bloatedTube.append(buildModeStr(graph, curVertex)+'->'+buildModeStr(graph, curSuccessor))
 				curStack[-1].child[curSuccessor] = nextModeStack
 				if len(trunckedResult)>len(candidateTube):
 					candidateTube = trunckedResult
@@ -104,36 +107,45 @@ def verify(inputFile):
 				curModeStack.stack.append(initTwo)
 
 			elif safety == SAFE:
-				print curModeStack.mode, "check bloated tube safe"
+				print "Mode", curModeStack.mode, "check bloated tube safe"
 				if curModeStack.stack[-1].child:
+					curModeStack.stack[-1].bloatedTube += candidateTube
 					nextMode, nextModeStack = curModeStack.stack[-1].child.popitem()
 					curModeStack = nextModeStack
+					print "Child exist in cur mode inital", curModeStack.mode, "is curModeStack Now"
 				else:
+					curModeStack.bloatedTube += candidateTube
 					curModeStack.stack.pop()
+					print "No child in mode initial, pop"
 			else:
 				print "Some thing bad happen in Mode ", curLabel
 				exit()
 
 		if curModeStack.parent is None:
-			if backWardFlag == SAFE:
+			if backwardFlag == SAFE:
 				print "System is Safe!"
+				writeReachTubeFile(curModeStack.bloatedTube, REACHTUBEOUTPUT)
 				return
-			elif backWardFlag == UNKNOWN:
+			elif backwardFlag == UNKNOWN:
 				print "Hit refine threshold, system halt, result unknown"
 				exit()
 		else:
-			if backWardFlag == SAFE:
+			if backwardFlag == SAFE:
 				prevModeStack = curModeStack.parent
+				prevModeStack.stack[-1].bloatedTube += curModeStack.bloatedTube
 				print 'back flag safe from',curModeStack.mode,'to',prevModeStack.mode
 				if len(prevModeStack.stack[-1].child) == 0:
 					# There is no next mode from this initial set
+					prevModeStack.bloatedTube += prevModeStack.stack[-1].bloatedTube
 					prevModeStack.stack.pop()
 					curModeStack = prevModeStack
+					print "No child in prev mode initial, pop,", prevModeStack.mode, "is curModeStack Now"
 				else:
 					# There is another mode transition from this initial set
 					nextMode, nextModeStack = prevModeStack.stack[-1].child.popitem()
 					curModeStack = nextModeStack
-			elif backWardFlag == UNKNOWN:
+					print "Child exist in prev mode inital", nextModeStack.mode, "is curModeStack Now"
+			elif backwardFlag == UNKNOWN:
 				prevModeStack = curModeStack.parent
 				print 'back flag unknown from',curModeStack.mode,'to',prevModeStack.mode
 				discardInitial = prevModeStack.stack.pop()

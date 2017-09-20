@@ -9,6 +9,7 @@ class InitialSetStack():
 		self.parent = None
 		self.stack = []
 		self.remainTime = remainTime
+		self.bloatedTube = []
 
 	def isValid(self):
 		# Check if number of element in stack is more than threshold

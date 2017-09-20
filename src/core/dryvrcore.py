@@ -2,6 +2,7 @@
 This file contains core functions used by DryVR
 """
 
+import numpy
 import random
 
 from collections import defaultdict
@@ -57,7 +58,7 @@ def simulate(g, initCondition, timeHorizon, guard, simFuc):
 			print NEWLINE
 			print 'Current State', g.vs[curVertex]['label'], remainTime
 
-		if not initCondition:
+		if initCondition is None:
 			# Ideally this should not happen
 			break
 
@@ -80,6 +81,10 @@ def simulate(g, initCondition, timeHorizon, guard, simFuc):
 			curSimResult,
 			curGuardStr
 		)
+		# Some model return numpy array, convert to list
+		if isinstance(trunckedResult,numpy.ndarray):
+			trunckedResult = trunckedResult.tolist()
+
 		# Get real transite time from truncked result
 		transiteTime = trunckedResult[-1][0]
 		retval[curLabel] += trunckedResult

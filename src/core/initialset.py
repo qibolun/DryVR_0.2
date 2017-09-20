@@ -8,6 +8,7 @@ class InitialSet():
 		self.upperBound = upper
 		self.delta = [(upper[i]-lower[i])/2.0 for i in range(len(upper))]
 		self.child = {}
+		self.bloatedTube = []
 	
 	def refine(self):
 		# Refine the initial set into two smaller set

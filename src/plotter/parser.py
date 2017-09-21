@@ -11,6 +11,8 @@ def parse(data):
 	curNode = None
 	lowerBound = {}
 	upperBound = {}
+	y_min = [float("inf") for _ in range(len(data[2].strip().split()))]
+	y_max = [float("-inf") for _ in range(len(data[2].strip().split()))]
 
 	for line in data:
 		# This is a mode indicator
@@ -22,10 +24,9 @@ def parse(data):
 				prevNode = initNode
 				for i in range(1, len(modeList)-1):
 					prevNode = prevNode.child[modeList[i]]
-				prevNode.child[modeList[-1]] = LinkedNode(modeList[-1])
-				curNode = prevNode.child[modeList[-1]]
+				curNode = prevNode.child.setdefault(modeList[-1], LinkedNode(modeList[-1], line))
 			else:
-				curNode = LinkedNode(line.strip())
+				curNode = LinkedNode(line.strip(), line)
 				initNode = curNode
 			# Using dictionary becasue we want to concat data
 			lowerBound = {}
@@ -33,7 +34,7 @@ def parse(data):
 			LOWER = True
 
 		else:
-			line = line.strip().split()
+			line = map(float,line.strip().split())
 			if LOWER:
 				LOWER = False
 				# This data appered in lowerBound before, concat the data
@@ -42,6 +43,9 @@ def parse(data):
 						lowerBound[line[0]][i] = min(lowerBound[line[0]][i], line[i])
 				else:
 					lowerBound[line[0]] = line
+
+				for i in range(len(line)):
+					y_min[i] = min(y_min[i], line[i])
 			else:
 				LOWER = True
 				if line[0] in upperBound:
@@ -49,7 +53,11 @@ def parse(data):
 						upperBound[line[0]][i] = max(upperBound[line[0]][i], line[i])
 				else:
 					upperBound[line[0]] = line
-	return initNode
+
+				for i in range(len(line)):
+					y_max[i] = max(y_max[i], line[i])
+	insertData(curNode, lowerBound, upperBound)
+	return initNode, y_min, y_max
 
 
 
@@ -57,8 +65,16 @@ def insertData(node, lowerBound, upperBound):
 	if not node or len(lowerBound) == 0:
 		return
 
-	for key in sorted(lowerBound):
-		node.lowerBound.append(lowerBound[key])
+	for key in lowerBound:
+		if key in node.lowerBound:
+			for i in range(1,len(lowerBound[key])):
+				node.lowerBound[key][i] = min(node.lowerBound[key][i], lowerBound[key][i])
+		else:	
+			node.lowerBound[key] = lowerBound[key]
 
 	for key in sorted(upperBound):
-		node.upperBound.append(upperBound[key])
+		if key in node.upperBound:
+			for i in range(1,len(upperBound[key])):
+				node.upperBound[key][i] = max(node.upperBound[key][i], upperBound[key][i])
+		else:
+			node.upperBound[key] = upperBound[key]

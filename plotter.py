@@ -1,13 +1,16 @@
 import argparse
+import pygraphviz as pgv
 
 from src.plotter.parser import parse
+from src.plotter.plot import plot
 
 parser = argparse.ArgumentParser(
 	description = 'This is plotter script for DryVR generated reach tube output'
 )
 
 parser.add_argument('-f', type=str, default='output/reachtube.txt', help='file path for reach tube')
-parser.add_argument('-d', type=int, default='1', help='dimension number you want to plot')
+parser.add_argument('-d', type=str, default='[1]', help='dimension number you want to plot, ex [1,2]')
+parser.add_argument('-o', type=str, default='plotResult.png', help='output file name')
 args = parser.parse_args()
 
 try:
@@ -16,4 +19,31 @@ except IOError:
 	print ('File does not exist')
 
 lines = file.readlines()
-initNode = parse(lines)
+initNode, y_min, y_max= parse(lines)
+
+dim = eval(args.d)
+# Using DFS algorithm to Draw image per Node
+stack = [initNode]
+while stack:
+	curNode = stack.pop()
+	for c in curNode.child:
+		stack.append(curNode.child[c])
+	plot(curNode, dim, y_min, y_max)
+
+# Construct node graph
+G=pgv.AGraph(strict=True, directed=True)
+
+# Using DFS algorithm to add node and egde of the graph
+G.add_node(initNode.nodeId, image='output/'+initNode.fileName+'.png')
+stack = [initNode]
+while stack:
+	curNode = stack.pop()
+	for c in curNode.child:
+		childNode = curNode.child[c]
+		G.add_node(childNode.nodeId, image='output/'+childNode.fileName+'.png')
+		G.add_edge(curNode.nodeId, childNode.nodeId)
+		stack.append(childNode)
+G.layout(prog='dot')
+G.draw(args.o)  # write previously positioned graph to PNG file
+
+

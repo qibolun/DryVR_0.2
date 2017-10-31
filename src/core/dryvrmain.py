@@ -279,6 +279,9 @@ def rrtSimulation(inputFile):
  				traces.append(temp)
  			curModeStack = curModeStack.parent
  		# Reorganize the content in modes list for plotter use
+ 		modes = modes[::-1]
+ 		traces = traces[::-1]
+ 		buildRrtGraph(modes, traces)
  		for i in range(1, len(modes)):
  			modes[i] = modes[i-1]+'->'+modes[i]
  		

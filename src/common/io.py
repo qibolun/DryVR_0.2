@@ -30,8 +30,6 @@ def writeReachTubeFile(result, path):
 				f.write(' '.join(map(str,line))+'\n')
 
 def writeRrtResultFile(modes, traces, path):
-	modes = modes[::-1]
-	traces = traces[::-1]
 	with open(path, 'w') as f:
 		for mode, trace in zip(modes, traces):
 			f.write(mode + '\n')

@@ -20,6 +20,7 @@ NOSTATUS = 99
 
 # File Pathes
 GRAPHOUTPUT = 'output/curGraph.png'
+RRTGRAPHPOUTPUT = 'output/rrtGraph.png'
 SIMRESULTOUTPUT = 'output/Traj.txt'
 REACHTUBEOUTPUT = 'output/reachtube.txt'
 RRTOUTPUT = 'output/rrtTube.txt'

@@ -32,7 +32,7 @@ def buildGraph(vertex, edge, guards, timeHorizon):
 			g.vs[node]["remainTime"]  = timeHorizon
 
 	if PLOTGRAPH:
-		graph = plot(g, 'output/curGraph.png', margin=40)
+		graph = plot(g, GRAPHOUTPUT, margin=40)
 		graph.save()
 
 	return g
@@ -43,7 +43,7 @@ def buildRrtGraph(modes, traces):
 	g.add_vertices(len(modes))
 	edges = []
 	for i in range(1, len(modes)):
-		edges.append([i-1, 1])
+		edges.append([i-1, i])
 	g.add_edges(edges)
 
 	g.vs['label'] = modes
@@ -54,9 +54,9 @@ def buildRrtGraph(modes, traces):
 	for i in range(len(traces)-1):
 		lower = traces[i][-2][0]
 		upper = traces[i][-1][0]
-		guard.append("And(t>" + lower +", t<=" + upper + ")")
-	g.es['label'] = guards
-	graph = plot(g, 'output/rrtGraph.png', margin=40)
+		guard.append("And(t>" + str(lower) +", t<=" + str(upper) + ")")
+	g.es['label'] = guard
+	graph = plot(g, RRTGRAPHPOUTPUT, margin=40)
 	graph.save()
 
 

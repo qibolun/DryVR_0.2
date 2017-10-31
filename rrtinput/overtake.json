@@ -1,0 +1,12 @@
+{	
+	"modes":["Acc1", "TurnLeft", "TurnRight", "Dec", "Const"],
+	"initialMode":"Const",
+	"variables":["sx","sy","vx","vy"],
+	"initialSet":[[0.0,15.0,0.0,1.0],[0.0,16.0,0.0,1.0]],
+	"unsafeSet":"@Allmode:Or(And(sx<1, sx>-1, sy<1, sy>-1), sx<-6, sx>2)",
+	"goalSet":"And(sx<=1, sx>=-1, sy<=-10, sy>=-1000)",
+	"timeHorizon":50.0,
+	"minTimeThres":2.0,
+	"directory":"examples/rrtcars",
+	"goal":[["sx","sy"],[-1,-1000],[1,-10]]
+}

@@ -9,5 +9,6 @@
 **/*.pyc
 **/*.eps
 **/*.png
+**/*.txt
 output/unsafeSim
 

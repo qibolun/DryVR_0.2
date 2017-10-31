@@ -37,6 +37,29 @@ def buildGraph(vertex, edge, guards, timeHorizon):
 
 	return g
 
+def buildRrtGraph(modes, traces):
+	# Build Rrt Graph based on modes and traces
+	g = Graph(directed = True)
+	g.add_vertices(len(modes))
+	edges = []
+	for i in range(1, len(modes)):
+		edges.append([i-1, 1])
+	g.add_edges(edges)
+
+	g.vs['label'] = modes
+	g.vs['name'] = modes
+
+	# Build guard
+	guard = []
+	for i in range(len(traces)-1):
+		lower = traces[i][-2][0]
+		upper = traces[i][-1][0]
+		guard.append("And(t>" + lower +", t<=" + upper + ")")
+	g.es['label'] = guards
+	graph = plot(g, 'output/rrtGraph.png', margin=40)
+	graph.save()
+
+
 def simulate(g, initCondition, timeHorizon, guard, simFuc):
 	# Taken graph, initial condition, simulate time, guard
 	# simFuc is the simulation function
@@ -114,80 +137,3 @@ def clacBloatedTube(modeLabel, initialSet, timeHorizon, simFuc):
 	k, gamma = Global_Discrepancy(modeLabel, curDelta, 0, 2, traces)
 	curReachTube = bloatToTube(modeLabel, k, gamma, curDelta, traces)
 	return curReachTube
-
-# def calcReachTube(g, initialSet, timeHorizon, guard, simFuc):
-# 	# Taken graph, initial condition, calculate the reachtube till time
-# 	# simFuc is the simulation function
-# 	# which takes label, initial condition and simulation time
-# 	retval = defaultdict(list)
-# 	numVertex = g.vcount()
-# 	initValues = [[] for _ in range(numVertex)]
-	
-
-# 	computerOrder = g.topological_sorting(mode=OUT)
-# 	vertexOrder = 0
-# 	remainTime = timeHorizon
-# 	breakflag = False
-# 	reachtubeResult = []
-# 	initValues[0].append((initialSet, buildModeStr(g, computerOrder[vertexOrder])))
-
-# 	while remainTime > 0 and vertexOrder<len(computerOrder):
-# 		curVertex = computerOrder[vertexOrder]
-# 		curSuccessors = g.successors(curVertex)
-# 		curPredecessors = g.predecessors(curVertex)
-
-# 		if DEBUG:
-# 			print NEWLINE
-# 			print("Current State is the %d th mode with name %s" %(curVertex, g.vs[curVertex]["name"]))
-
-# 		if not initValues[curVertex]:
-# 			# Ideally this should not happen
-# 			break
-
-# 		for initialSet, transitionLabel in initValues[curVertex]:
-# 			# Loop through all the initial sets we have for this mode
-# 			# This is because mutiple previous mode can go to current mode
-# 			reachtubeResult.append(transitionLabel)
-# 			curDelta = calcDelta(initialSet[0], initialSet[1])
-
-# 			if DEBUG:
-# 				print "Initial Condition is", initialSet
-# 				print "Initial Delta is ", curDelta
-
-# 			curCenter = calcCenterPoint(initialSet[0], initialSet[1])
-# 			curLabel = g.vs[curVertex]['label']
-
-# 			traces = []
-# 			traces.append(simFuc(curLabel, curCenter, remainTime))
-# 			for _ in range(SIMTRACENUM):
-# 				newInitPoint = randomPoint(initialSet[0], initialSet[1])
-# 				traces.append(simFuc(curLabel, newInitPoint, remainTime))
-
-# 			k, gamma = Global_Discrepancy(curLabel, curDelta, 0, 2, traces)
-# 			curReachTube = bloatToTube(curLabel, k, gamma, curDelta, traces)
-
-# 			candidateTube = []
-# 			for curSuccessor in curSuccessors:
-# 				edgeID = g.get_eid(curVertex, curSuccessor)
-# 				curGuardStr = g.es[edgeID]['label']
-# 				nextInit, trunckedResult, transiteTime = guard.guardReachTube(
-# 					curReachTube,
-# 					curGuardStr,
-# 				)
-# 				g.vs[curSuccessor]['remainTime'] = max(
-# 					g.vs[curSuccessor]['remainTime'], 
-# 					g.vs[curVertex]['remainTime']-transiteTime,
-# 				)
-# 				if len(trunckedResult)>len(candidateTube):
-# 					candidateTube = trunckedResult
-# 				nextTransiteLabel = buildModeStr(g, curVertex)+'->'+buildModeStr(g, curSuccessor)
-# 				initValues[curSuccessor].append((nextInit, nextTransiteLabel))
-# 			if not candidateTube:
-# 				candidateTube = curReachTube
-
-# 			retval[curLabel] += candidateTube
-# 			reachtubeResult += candidateTube
-# 			vertexOrder += 1
-# 			if vertexOrder < len(computerOrder):
-# 				remainTime = g.vs[computerOrder[vertexOrder]]['remainTime']
-# 	return retval, reachtubeResult

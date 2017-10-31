@@ -81,6 +81,18 @@ class UniformChecker():
 					safe = 0
 		return safe
 
+	def cutTubeTillUnsafe(self, tube):
+		# Cut the reach tube till it intersect with unsafe
+		for i in range(0, len(tube), 2):
+			lower = tube[i]
+			upper = tube[i+1]
+			if self._checkIntersection(lower, upper, 'Allmode'):
+				# we need to cut here
+				return tube[:i]
+
+		return tube
+
+
 	def _checkIntersection(self, lower, upper, mode):
 		# Check if the reach tube intersect with the unsafe region
 		if mode in self.solverDic:

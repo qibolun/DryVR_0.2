@@ -22,6 +22,14 @@ NOSTATUS = 99
 GRAPHOUTPUT = 'output/curGraph.png'
 SIMRESULTOUTPUT = 'output/Traj.txt'
 REACHTUBEOUTPUT = 'output/reachtube.txt'
+RRTOUTPUT = 'output/rrtTube.txt'
 
 # Useful constant string
 NEWLINE = '----------------------------------------------'
+
+
+
+
+# RRT Constant
+RANDMODENUM = 3
+RANDSECTIONNUM = 3

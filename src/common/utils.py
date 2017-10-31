@@ -8,10 +8,16 @@ import random
 from collections import namedtuple
 
 
-# This is the tuple for input file parsed from DryVR
+# This is the tuple for input file parsed by DryVR
 DryVRInput = namedtuple(
 	'DryVRInput',
 	'vertex edge guards variables initialSet unsafeSet timeHorizon path'
+)
+
+# This is the tuple for rtt input file parsed by DryVR
+RrtInput = namedtuple(
+	'RttInput',
+	'modes initialMode variables initialSet unsafeSet goalSet timeHorizon minTimeThres path goal'
 )
 
 def importSimFunction(path):

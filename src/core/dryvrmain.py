@@ -1,14 +1,17 @@
 """
 This file contains a single function that verifies model
 """
+import random
 
 from src.common.constant import *
-from src.common.io import parseInputFile,writeReachTubeFile
+from src.common.io import parseInputFile, writeReachTubeFile, parseRrtInputFile, writeRrtResultFile
 from src.common.utils import importSimFunction, randomPoint, buildModeStr
+from src.core.distance import DistChecker
 from src.core.dryvrcore import *
+from src.core.goalchecker import GoalChecker
 from src.core.guard import Guard
 from src.core.initialset import InitialSet
-from src.core.initialsetstack import InitialSetStack
+from src.core.initialsetstack import InitialSetStack, RrtSetStack
 from src.core.uniformchecker import UniformChecker
 
 def verify(inputFile):
@@ -43,7 +46,6 @@ def verify(inputFile):
 			if safety == -1:
 				print 'Current simulation is not safe. Program halt'
 				exit()
-
 	# Step 2) Check Reach Tube
 	# Calculate the over approximation of the reach tube and check the result
 	print "Verification Begin"
@@ -78,6 +80,9 @@ def verify(inputFile):
 					curBloatedTube,
 					curGuardStr,
 				)
+				if nextInit == None:
+					continue
+				
 				nextModeStack = InitialSetStack(
 					curSuccessor,
 					CHILDREFINETHRES,
@@ -155,52 +160,151 @@ def verify(inputFile):
 				curModeStack = prevModeStack
 
 
-	# initialStack = [
-	# 	InitialSet(
-	# 		params.initialSet[0],
-	# 		params.initialSet[1],
-	# 		0,
-	# 	)
-	# ]
-	# reachTubeResult = []
+def rrtSimulation(inputFile):
+	params = parseRrtInputFile(inputFile)
+	simFunction = importSimFunction(params.path)
+	checker = UniformChecker(params.unsafeSet, params.variables)
+	goalSetChecker = GoalChecker(params.goalSet, params.variables)
+	distanceChecker = DistChecker(params.goal, params.variables)
+	simFunction = importSimFunction(params.path)
+	availableModes = params.modes
+	initialMode = params.initialMode
+	remainTime = params.timeHorizon
+	minTimeThres = params.minTimeThres
 
-	# while initialStack:
-	# 	curInitial = initialStack.pop()
-	# 	if curInitial.refineTime >= REFINETHRES:
-	# 		print "Maximum refine time hits, verification halt. Result unknown"
-	# 		exit()
+ 	goalReached = False
+ 	curModeStack = RrtSetStack(initialMode, remainTime, minTimeThres, 0)
+ 	curModeStack.initial = (params.initialSet[0], params.initialSet[1])
+	
+ 	while True:
+ 		print str(curModeStack)
+ 		if curModeStack.remainTime < minTimeThres:
+ 			print "Back to previous mode because we cannot stay longer than the min time thres"
+ 			curModeStack = curModeStack.parent
+ 			continue
 
-	# 	if DEBUG:
-	# 		print NEWLINE
-	# 		print str(curInitial)
+ 		if len(curModeStack.visited) == len(availableModes):
+ 			if len(curModeStack.candidates)<2:
+ 				print "Back to previous mode because we do not have any other modes to pick"
+	 			curModeStack = curModeStack.parent
+	 			# If the tried all possible case with no luck to find path
+	 			if not curModeStack:
+	 				break
+	 			continue
+	 		else:
+	 			print "Pick a new point from candidates"
+	 			curModeStack.candidates.pop(0)
+	 			curModeStack.visited = set()
+	 			curModeStack.children = {}
+	 			continue
 
-	# 	tubeDic, curReachTubeResult = calcReachTube(
-	# 		graph,
-	# 		[curInitial.lowerBound, curInitial.upperBound],
-	# 		params.timeHorizon,
-	# 		guard,
-	# 		simFunction,
-	# 	)
 
-	# 	safe = 1
-	# 	for key in tubeDic:
-	# 		curTube = tubeDic[key]
-	# 		safety = checker.checkReachTube(curTube, key)
-	# 		if safety == -1:
-	# 			print "System is not safe from reach tube computation, halt"
-	# 			exit()
+ 		# Generate bloated tube if we have not done so
+ 		if not curModeStack.bloatedTube:
+ 			print "no bloated tube find in this mode, generate one"
+ 			curBloatedTube = clacBloatedTube(
+ 				curModeStack.mode, 
+ 				curModeStack.initial, 
+ 				curModeStack.remainTime, 
+ 				simFunction
+ 			)
+ 			curBloatedTube = checker.cutTubeTillUnsafe(curBloatedTube)
+ 			# we cannot stay in this mode for min thres time, back to the previous mode
+ 			if not curBloatedTube or curBloatedTube[-1][0] < minTimeThres:
+ 				print "bloated tube is not long enough, discard the mode"
+ 				curModeStack = curModeStack.parent
+ 				continue
+ 			curModeStack.bloatedTube = curBloatedTube
 
-	# 		elif safety == 0:
-	# 			print "System is unknown at ", key
-	# 			safe = 0
+ 			# Generate candidates point for next mode
+ 			randomSections = curModeStack.randomPicker(RANDSECTIONNUM)
 
-	# 	if safe == 0:
-	# 		print "System is unknown. Refine the initial set"
-	# 		initOne, initTwo = curInitial.refine()
-	# 		initialStack.append(initOne)
-	# 		initialStack.append(initTwo)
-	# 	else:
-	# 		reachTubeResult += curReachTubeResult
+ 			if not randomSections:
+ 				print "bloated tube is not long enough, discard the mode"
+ 				curModeStack = curModeStack.parent
+ 				continue
 
-	# print "System is Safe!"
-	# writeReachTubeFile(reachTubeResult, REACHTUBEOUTPUT)
+ 			randomSections.sort(key=lambda x: distanceChecker.calcDistance(x[0], x[1]))
+ 			curModeStack.candidates = randomSections
+ 			print "Generate new bloated tube and candidate, with candidates length", len(curModeStack.candidates)
+
+
+ 			# Check if the current tube reaches goal
+ 			result, tube = goalSetChecker.goalReachTube(curBloatedTube)
+ 			if result:
+ 				curModeStack.bloatedTube = tube
+ 				goalReached = True
+ 				break
+
+ 		# We have visited all next mode we have, generate some thing new
+ 		if len(curModeStack.visited) == len(curModeStack.children):
+ 			leftMode = set(availableModes) - set(curModeStack.children.keys())
+ 			randomModes = random.sample(leftMode, min(len(leftMode), RANDMODENUM))
+
+ 			randomSections = curModeStack.randomPicker(RANDSECTIONNUM)
+ 			for mode in randomModes:
+ 				candidate = curModeStack.candidates[0]
+ 				curModeStack.children[mode] = RrtSetStack(mode, curModeStack.remainTime-candidate[1][0], minTimeThres, curModeStack.level+1)
+ 				curModeStack.children[mode].initial = (candidate[0][1:], candidate[1][1:])
+ 				curModeStack.children[mode].parent = curModeStack
+
+ 		# Random visit a candidate that is not visited before
+ 		for key in curModeStack.children:
+ 			if not key in curModeStack.visited:
+ 				break
+
+ 		print "transit point is", curModeStack.candidates[0]
+ 		curModeStack.visited.add(key)
+ 		curModeStack = curModeStack.children[key]
+
+ 	# Back track to print out trace
+ 	if goalReached:
+ 		print("goal reached!!!!!!")
+ 		traces = []
+ 		modes = []
+ 		while curModeStack:
+ 			modes.append(curModeStack.mode)
+ 			if not curModeStack.candidates:
+ 				traces.append([t for t in curModeStack.bloatedTube])
+ 			else:
+ 				# Cut the trace till candidate
+ 				temp = []
+ 				for t in curModeStack.bloatedTube:
+ 					if t == curModeStack.candidates[0][0]:
+ 						temp.append(curModeStack.candidates[0][0])
+ 						temp.append(curModeStack.candidates[0][1])
+ 						break
+ 					else:
+ 						temp.append(t)
+ 				traces.append(temp)
+ 			curModeStack = curModeStack.parent
+ 		# Reorganize the content in modes list for plotter use
+ 		for i in range(1, len(modes)):
+ 			modes[i] = modes[i-1]+'->'+modes[i]
+ 		
+ 		writeRrtResultFile(modes, traces, RRTOUTPUT)
+ 	else:
+ 		print("could not find trace")
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	

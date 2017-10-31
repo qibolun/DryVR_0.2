@@ -34,14 +34,14 @@ while stack:
 G=pgv.AGraph(strict=True, directed=True)
 
 # Using DFS algorithm to add node and egde of the graph
-G.add_node(initNode.nodeId, image='output/'+initNode.fileName+'.png')
+G.add_node(initNode.fileName, image='output/'+initNode.fileName+'.png')
 stack = [initNode]
 while stack:
 	curNode = stack.pop()
 	for c in curNode.child:
 		childNode = curNode.child[c]
-		G.add_node(childNode.nodeId, image='output/'+childNode.fileName+'.png')
-		G.add_edge(curNode.nodeId, childNode.nodeId)
+		G.add_node(childNode.fileName, image='output/'+childNode.fileName+'.png')
+		G.add_edge(curNode.fileName, childNode.fileName)
 		stack.append(childNode)
 G.layout(prog='dot')
 G.draw(args.o)  # write previously positioned graph to PNG file

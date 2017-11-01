@@ -82,6 +82,8 @@ def verify(inputFile):
 				)
 				if nextInit == None:
 					continue
+
+				print "next initial is ", nextInit
 				
 				nextModeStack = InitialSetStack(
 					curSuccessor,
@@ -259,7 +261,7 @@ def rrtSimulation(inputFile):
 
  	# Back track to print out trace
  	if goalReached:
- 		print("goal reached!!!!!!")
+ 		print("goal reached")
  		traces = []
  		modes = []
  		while curModeStack:

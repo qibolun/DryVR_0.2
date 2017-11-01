@@ -3,7 +3,7 @@
 	"edge":[[0,1],[1,2],[2,3],[3,4],[4,5]],
 	"variables":["car1_x","car1_y","car1_vx","car1_vy","car2_x","car2_y","car2_vx","car2_vy"],
 	"guards":[
-		"And(car1_y-car2_y>=10,car1_y-car2_y<=10.1)",
+		"And(t>5.0,t<=6.0)",
 		"And(t>10.0,t<=12.0)",
 		"And(t>5.0,t<=6.0)",
 		"And(t>5.0,t<=6.0)",

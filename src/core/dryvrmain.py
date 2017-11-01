@@ -242,6 +242,7 @@ def rrtSimulation(inputFile):
  		if len(curModeStack.visited) == len(curModeStack.children):
  			leftMode = set(availableModes) - set(curModeStack.children.keys())
  			randomModes = random.sample(leftMode, min(len(leftMode), RANDMODENUM))
+ 			random.shuffle(randomModes)
 
  			randomSections = curModeStack.randomPicker(RANDSECTIONNUM)
  			for mode in randomModes:

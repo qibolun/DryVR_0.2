@@ -292,25 +292,3 @@ def rrtSimulation(inputFile):
  	else:
  		print("could not find trace")
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-	

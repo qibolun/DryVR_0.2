@@ -8,5 +8,5 @@
 	"timeHorizon":10.0,
 	"minTimeThres":1.0,
 	"directory":"examples/robot",
-	"goal":[["x","y"],[3.5,3.5],[4.5,4.5]]
+	"goal":[["x","y"],[3.0,3.0],[4.0,4.0]]
 }

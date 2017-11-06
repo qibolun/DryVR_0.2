@@ -12,6 +12,7 @@ from src.core.goalchecker import GoalChecker
 from src.core.guard import Guard
 from src.core.initialset import InitialSet
 from src.core.initialsetstack import InitialSetStack, RrtSetStack
+from src.core.reset import Reset
 from src.core.uniformchecker import UniformChecker
 
 def verify(inputFile):
@@ -21,10 +22,12 @@ def verify(inputFile):
 		params.edge,
 		params.guards,
 		params.timeHorizon,
+		params.resets
 	)
 	simFunction = importSimFunction(params.path)
 	checker = UniformChecker(params.unsafeSet, params.variables)
 	guard = Guard(params.variables)
+	reseter = Reset(params.variables)
 
 	# Step 1) Simulation Test 
 	# Random generate points, then simulate and check the result
@@ -40,6 +43,7 @@ def verify(inputFile):
 			params.timeHorizon,
 			guard,
 			simFunction,
+			reseter,
 		)
 		for mode in simResult:
 			safety = checker.checkSimuTube(simResult[mode], mode)
@@ -76,12 +80,15 @@ def verify(inputFile):
 			for curSuccessor in curSuccessors:
 				edgeID = graph.get_eid(curVertex, curSuccessor)
 				curGuardStr = graph.es[edgeID]['label']
+				curResetStr = graph.es[edgeID]['resets']
 				nextInit, trunckedResult, transiteTime = guard.guardReachTube(
 					curBloatedTube,
 					curGuardStr,
 				)
 				if nextInit == None:
 					continue
+
+				nextInit = reseter.resetReachTube(curResetStr, nextInit[0], nextInit[1])
 
 				print "next initial is ", nextInit
 				

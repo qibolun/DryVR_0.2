@@ -1,5 +1,5 @@
 """
-This file contains initial set class for DryVR
+This file contains guard class for DryVR
 """
 
 import random

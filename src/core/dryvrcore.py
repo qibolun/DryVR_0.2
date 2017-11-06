@@ -12,7 +12,7 @@ from src.common.io import writeToFile,readFromFile
 from src.common.utils import randomPoint,calcDelta,calcCenterPoint,buildModeStr
 from src.discrepancy.Global_Disc import *
 
-def buildGraph(vertex, edge, guards, timeHorizon):
+def buildGraph(vertex, edge, guards, timeHorizon, resets):
 	g = Graph(directed = True)
 	g.add_vertices(len(vertex))
 	remainTime = [0 for _ in range(len(vertex))]
@@ -25,6 +25,7 @@ def buildGraph(vertex, edge, guards, timeHorizon):
 	g.vs['name'] = vertex
 	g.vs['remainTime'] = remainTime
 	g.es['label'] = guards
+	g.es['resets'] = resets
 
 	computerOrder = g.topological_sorting(mode=OUT)
 	for node in computerOrder:
@@ -60,7 +61,7 @@ def buildRrtGraph(modes, traces):
 	graph.save()
 
 
-def simulate(g, initCondition, timeHorizon, guard, simFuc):
+def simulate(g, initCondition, timeHorizon, guard, simFuc, reseter):
 	# Taken graph, initial condition, simulate time, guard
 	# simFuc is the simulation function
 	# which takes label, initial condition and simulation time
@@ -90,11 +91,13 @@ def simulate(g, initCondition, timeHorizon, guard, simFuc):
 		if len(curSuccessors) == 0:
 			transiteTime = remainTime
 			curGuardStr = None
+			curResetStr = None
 		else:
 			# Randomly pick a path and time to transit
 			curSuccessor = random.choice(curSuccessors)
 			edgeID = g.get_eid(curVertex,curSuccessor)
 			curGuardStr = g.es[edgeID]['label']
+			curResetStr = g.es[edgeID]['resets']
 			transiteTime = remainTime
 		
 
@@ -104,6 +107,8 @@ def simulate(g, initCondition, timeHorizon, guard, simFuc):
 			curSimResult,
 			curGuardStr
 		)
+		initCondition = reseter.resetSimTrace(curResetStr, initCondition)
+
 		# Some model return numpy array, convert to list
 		if isinstance(trunckedResult,numpy.ndarray):
 			trunckedResult = trunckedResult.tolist()

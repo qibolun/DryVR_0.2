@@ -44,7 +44,11 @@ def parseInputFile(path):
 	# Parse the input file for DryVR
 	with open(path, 'r') as f:
 		data = json.load(f)
-		
+
+		# If resets is missing, fill the resets
+		if not 'resets' in data:
+			data['resets'] = ["" for _ in range(len(data["edge"]))]
+
 		return DryVRInput(
 			vertex=data["vertex"],
 			edge=data["edge"],
@@ -54,6 +58,7 @@ def parseInputFile(path):
 			unsafeSet=data["unsafeSet"],
 			timeHorizon=data["timeHorizon"],
 			path=data["directory"],
+			resets=data["resets"],
 		)
 
 def parseRrtInputFile(path):

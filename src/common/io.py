@@ -49,6 +49,9 @@ def parseInputFile(path):
 		if not 'resets' in data:
 			data['resets'] = ["" for _ in range(len(data["edge"]))]
 
+		if not 'initialMode' in data:
+			data['initialMode'] = ""
+
 		return DryVRInput(
 			vertex=data["vertex"],
 			edge=data["edge"],
@@ -59,6 +62,7 @@ def parseInputFile(path):
 			timeHorizon=data["timeHorizon"],
 			path=data["directory"],
 			resets=data["resets"],
+			initialMode=data["initialMode"],
 		)
 
 def parseRrtInputFile(path):

@@ -15,22 +15,12 @@ from src.discrepancy.Global_Disc import *
 def buildGraph(vertex, edge, guards, timeHorizon, resets):
 	g = Graph(directed = True)
 	g.add_vertices(len(vertex))
-	remainTime = [0 for _ in range(len(vertex))]
 	g.add_edges(edge)
-
-	# Check the graph is dag
-	assert g.is_dag()==True, "Graph is not DAG!"
 
 	g.vs['label'] = vertex
 	g.vs['name'] = vertex
-	g.vs['remainTime'] = remainTime
 	g.es['label'] = guards
 	g.es['resets'] = resets
-
-	computerOrder = g.topological_sorting(mode=OUT)
-	for node in computerOrder:
-		if len(g.predecessors(node)) == 0:
-			g.vs[node]["remainTime"]  = timeHorizon
 
 	if PLOTGRAPH:
 		graph = plot(g, GRAPHOUTPUT, margin=40)
@@ -61,14 +51,20 @@ def buildRrtGraph(modes, traces):
 	graph.save()
 
 
-def simulate(g, initCondition, timeHorizon, guard, simFuc, reseter):
+def simulate(g, initCondition, timeHorizon, guard, simFuc, reseter, initialMode):
 	# Taken graph, initial condition, simulate time, guard
 	# simFuc is the simulation function
 	# which takes label, initial condition and simulation time
 
 	retval = defaultdict(list)
-	computerOrder = g.topological_sorting(mode=OUT)
-	curVertex = computerOrder[0]
+
+	# If you do not delcare initialMode, then we will just use topological sort to find starting point
+	if not initialMode:
+		computerOrder = g.topological_sorting(mode=OUT)
+		curVertex = computerOrder[0]
+	else:
+		curVertex = g.vs.find(label=initialMode).index
+
 	remainTime = timeHorizon
 	curTime = 0
 

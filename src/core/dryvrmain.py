@@ -24,6 +24,9 @@ def verify(inputFile):
 		params.timeHorizon,
 		params.resets
 	)
+
+	assert graph.is_dag()==True or params.initialMode!="", "Graph is not DAG and you do not have initial mode!"
+	
 	simFunction = importSimFunction(params.path)
 	checker = UniformChecker(params.unsafeSet, params.variables)
 	guard = Guard(params.variables)
@@ -44,6 +47,7 @@ def verify(inputFile):
 			guard,
 			simFunction,
 			reseter,
+			params.initialMode
 		)
 		for mode in simResult:
 			safety = checker.checkSimuTube(simResult[mode], mode)
@@ -53,8 +57,12 @@ def verify(inputFile):
 	# Step 2) Check Reach Tube
 	# Calculate the over approximation of the reach tube and check the result
 	print "Verification Begin"
-	computeOrder =  graph.topological_sorting(mode=OUT)
-	initialMode = computeOrder[0]
+	if not params.initialMode:
+		computeOrder =  graph.topological_sorting(mode=OUT)
+		initialMode = computeOrder[0]
+	else:
+		initialMode = graph.vs.find(label=params.initialMode).index
+
 	curModeStack = InitialSetStack(initialMode, REFINETHRES, params.timeHorizon)
 	curModeStack.stack.append(InitialSet(params.initialSet[0], params.initialSet[1]))
 	curModeStack.bloatedTube.append(buildModeStr(graph, initialMode))

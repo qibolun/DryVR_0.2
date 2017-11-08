@@ -95,7 +95,7 @@ def simulate(g, initCondition, timeHorizon, guard, simFuc, reseter, initialMode)
 			curGuardStr = g.es[edgeID]['label']
 			curResetStr = g.es[edgeID]['resets']
 			transiteTime = remainTime
-		
+
 
 		curLabel = g.vs[curVertex]['label']
 		curSimResult = simFuc(curLabel, initCondition, transiteTime)
@@ -133,6 +133,7 @@ def clacBloatedTube(modeLabel, initialSet, timeHorizon, simFuc):
 	traces.append(simFuc(modeLabel, curCenter, timeHorizon))
 	for _ in range(SIMTRACENUM):
 		newInitPoint = randomPoint(initialSet[0], initialSet[1])
+		#print newInitPoint
 		traces.append(simFuc(modeLabel, newInitPoint, timeHorizon))
 
 	k, gamma = Global_Discrepancy(modeLabel, curDelta, 0, 2, traces)

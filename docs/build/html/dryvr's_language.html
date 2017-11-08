@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>DryVR’s Language &mdash; DryVR 0.1 documentation</title>
+  <title>DryVR’s Language &mdash; DryVR 0.2 documentation</title>
   
 
   
@@ -35,7 +35,7 @@
         <link rel="index" title="Index"
               href="genindex.html"/>
         <link rel="search" title="Search" href="search.html"/>
-    <link rel="top" title="DryVR 0.1 documentation" href="index.html"/>
+    <link rel="top" title="DryVR 0.2 documentation" href="index.html"/>
         <link rel="next" title="Examples" href="example.html"/>
         <link rel="prev" title="Usage" href="usage.html"/> 
 
@@ -66,7 +66,7 @@
             
             
               <div class="version">
-                0.1
+                0.2
               </div>
             
           
@@ -200,23 +200,34 @@ as the simulation trajectory of the system in the given mode starting from <img 
 <div class="section" id="input-format">
 <span id="input-format-label"></span><h2>Input Format<a class="headerlink" href="#input-format" title="Permalink to this headline">¶</a></h2>
 <p>The input for DryVR is of the form</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">vertex</span><span class="p">:[</span><span class="n">transition</span> <span class="n">graph</span> <span class="n">vertex</span> <span class="n">labels</span> <span class="p">(</span><span class="n">modes</span><span class="p">)]</span>
-<span class="n">edge</span><span class="p">:[</span><span class="n">transition</span> <span class="n">graph</span> <span class="n">edges</span><span class="p">,</span> <span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">)</span> <span class="n">means</span> <span class="n">there</span> <span class="ow">is</span> <span class="n">a</span> <span class="n">directed</span> <span class="n">edge</span> <span class="kn">from</span> <span class="nn">vertex</span> <span class="n">i</span> <span class="n">to</span> <span class="n">vertex</span> <span class="n">j</span><span class="p">]</span>
-<span class="n">transtime</span><span class="p">:[</span><span class="n">transition</span> <span class="n">graph</span> <span class="n">edge</span> <span class="n">labels</span> <span class="p">(</span><span class="n">transition</span> <span class="n">times</span><span class="p">)]</span>
-<span class="n">initialSet</span><span class="p">:[</span><span class="n">two</span> <span class="n">arrays</span> <span class="n">defining</span> <span class="n">the</span> <span class="n">lower</span> <span class="ow">and</span> <span class="n">upper</span> <span class="n">bound</span> <span class="n">of</span> <span class="n">each</span> <span class="n">variable</span><span class="p">]</span>
-<span class="n">unsafeSet</span><span class="p">:</span><span class="o">@</span><span class="p">[</span><span class="n">mode</span> <span class="n">name</span><span class="p">]:[</span><span class="n">unsafe</span> <span class="n">region</span><span class="p">]</span>
-<span class="n">timeHorizon</span><span class="p">:[</span><span class="n">Time</span> <span class="n">bound</span> <span class="k">for</span> <span class="n">the</span> <span class="n">verification</span><span class="p">]</span>
-<span class="n">directory</span><span class="p">:</span> <span class="n">directory</span> <span class="n">of</span> <span class="n">the</span> <span class="n">folder</span> <span class="n">which</span> <span class="n">contains</span> <span class="n">the</span> <span class="n">simulator</span> <span class="k">for</span> <span class="n">black</span><span class="o">-</span><span class="n">box</span> <span class="n">system</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="p">{</span>
+  <span class="s2">&quot;vertex&quot;</span><span class="p">:[</span><span class="n">transition</span> <span class="n">graph</span> <span class="n">vertex</span> <span class="n">labels</span> <span class="p">(</span><span class="n">modes</span><span class="p">)]</span>
+  <span class="s2">&quot;edge&quot;</span><span class="p">:[</span><span class="n">transition</span> <span class="n">graph</span> <span class="n">edges</span><span class="p">,</span> <span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">)</span> <span class="n">means</span> <span class="n">there</span> <span class="ow">is</span> <span class="n">a</span> <span class="n">directed</span> <span class="n">edge</span> <span class="kn">from</span> <span class="nn">vertex</span> <span class="n">i</span> <span class="n">to</span> <span class="n">vertex</span> <span class="n">j</span><span class="p">]</span>
+  <span class="s2">&quot;variables&quot;</span><span class="p">:[</span><span class="n">the</span> <span class="n">name</span> <span class="n">of</span> <span class="n">variables</span> <span class="ow">in</span> <span class="n">the</span> <span class="n">system</span><span class="p">]</span>
+  <span class="s2">&quot;guards&quot;</span><span class="p">:[</span><span class="n">transition</span> <span class="n">graph</span> <span class="n">edge</span> <span class="n">labels</span> <span class="p">(</span><span class="n">transition</span> <span class="n">condition</span><span class="p">)]</span>
+  <span class="s2">&quot;resets&quot;</span><span class="p">:[</span><span class="n">reset</span> <span class="n">condition</span> <span class="n">after</span> <span class="n">transition</span><span class="p">]</span> <span class="c1"># This is optional if you do not want reset</span>
+  <span class="s2">&quot;initialMode&quot;</span><span class="p">:[</span><span class="n">label</span> <span class="k">for</span> <span class="n">initial</span> <span class="n">mode</span><span class="p">]</span> <span class="c1"># This is optional for DAG graph</span>
+  <span class="s2">&quot;initialSet&quot;</span><span class="p">:[</span><span class="n">two</span> <span class="n">arrays</span> <span class="n">defining</span> <span class="n">the</span> <span class="n">lower</span> <span class="ow">and</span> <span class="n">upper</span> <span class="n">bound</span> <span class="n">of</span> <span class="n">each</span> <span class="n">variable</span><span class="p">]</span>
+  <span class="s2">&quot;unsafeSet&quot;</span><span class="p">:</span><span class="o">@</span><span class="p">[</span><span class="n">mode</span> <span class="n">name</span><span class="p">]:[</span><span class="n">unsafe</span> <span class="n">region</span><span class="p">]</span>
+  <span class="s2">&quot;timeHorizon&quot;</span><span class="p">:[</span><span class="n">Time</span> <span class="n">bound</span> <span class="k">for</span> <span class="n">the</span> <span class="n">verification</span><span class="p">]</span>
+  <span class="s2">&quot;directory&quot;</span><span class="p">:</span> <span class="n">directory</span> <span class="n">of</span> <span class="n">the</span> <span class="n">folder</span> <span class="n">which</span> <span class="n">contains</span> <span class="n">the</span> <span class="n">simulator</span> <span class="k">for</span> <span class="n">black</span><span class="o">-</span><span class="n">box</span> <span class="n">system</span>
+<span class="p">}</span>
 </pre></div>
 </div>
 <p>Example input for the Automatic Emergency Braking System</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">vertex</span><span class="p">:[</span><span class="s2">&quot;Const;Const&quot;</span><span class="p">,</span><span class="s2">&quot;Brk;Const&quot;</span><span class="p">,</span><span class="s2">&quot;Brk;Brk&quot;</span><span class="p">]</span>
-<span class="n">edge</span><span class="p">:[(</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">),(</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">)]</span>
-<span class="n">transtime</span><span class="p">:[(</span><span class="mi">0</span><span class="p">,</span><span class="mf">0.1</span><span class="p">),(</span><span class="mf">0.8</span><span class="p">,</span><span class="mf">0.9</span><span class="p">)]</span>
-<span class="n">initialSet</span><span class="p">:[[</span><span class="mf">0.0</span><span class="p">,</span><span class="o">-</span><span class="mf">23.0</span><span class="p">,</span><span class="mf">0.0</span><span class="p">,</span><span class="mf">1.0</span><span class="p">,</span><span class="mf">0.0</span><span class="p">,</span><span class="o">-</span><span class="mf">15.0</span><span class="p">,</span><span class="mf">0.0</span><span class="p">,</span><span class="mf">1.0</span><span class="p">],[</span><span class="mf">0.0</span><span class="p">,</span><span class="o">-</span><span class="mf">22.8</span><span class="p">,</span><span class="mf">0.0</span><span class="p">,</span><span class="mf">1.0</span><span class="p">,</span><span class="mf">0.0</span><span class="p">,</span><span class="o">-</span><span class="mf">15.0</span><span class="p">,</span><span class="mf">0.0</span><span class="p">,</span><span class="mf">1.0</span><span class="p">]]</span>
-<span class="n">unsafeSet</span><span class="p">:</span><span class="nd">@Allmode</span><span class="p">:</span><span class="n">And</span><span class="p">(</span><span class="n">v2</span><span class="o">-</span><span class="n">v6</span><span class="o">&lt;</span><span class="mi">3</span><span class="p">,</span><span class="n">v6</span><span class="o">-</span><span class="n">v2</span><span class="o">&lt;</span><span class="mi">3</span><span class="p">)</span>
-<span class="n">timeHorizon</span><span class="p">:</span><span class="mi">5</span>
-<span class="n">directory</span><span class="p">:</span><span class="n">ExamplesPython</span><span class="o">/</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="p">{</span>
+  <span class="s2">&quot;vertex&quot;</span><span class="p">:[</span><span class="s2">&quot;Const;Const&quot;</span><span class="p">,</span><span class="s2">&quot;Brk;Const&quot;</span><span class="p">,</span><span class="s2">&quot;Brk;Brk&quot;</span><span class="p">],</span>
+  <span class="s2">&quot;edge&quot;</span><span class="p">:[[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">],[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">]],</span>
+  <span class="s2">&quot;variables&quot;</span><span class="p">:[</span><span class="s2">&quot;car1_x&quot;</span><span class="p">,</span><span class="s2">&quot;car1_y&quot;</span><span class="p">,</span><span class="s2">&quot;car1_vx&quot;</span><span class="p">,</span><span class="s2">&quot;car1_vy&quot;</span><span class="p">,</span><span class="s2">&quot;car2_x&quot;</span><span class="p">,</span><span class="s2">&quot;car2_y&quot;</span><span class="p">,</span><span class="s2">&quot;car2_vx&quot;</span><span class="p">,</span><span class="s2">&quot;car2_vy&quot;</span><span class="p">],</span>
+  <span class="s2">&quot;guards&quot;</span><span class="p">:[</span>
+    <span class="s2">&quot;And(t&gt;0.0,t&lt;=0.1)&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;And(t&gt;0.8,t&lt;=0.9)&quot;</span>
+  <span class="p">],</span>
+  <span class="s2">&quot;initialSet&quot;</span><span class="p">:[[</span><span class="mf">0.0</span><span class="p">,</span><span class="mf">0.5</span><span class="p">,</span><span class="mf">0.0</span><span class="p">,</span><span class="mf">1.0</span><span class="p">,</span><span class="mf">0.0</span><span class="p">,</span><span class="o">-</span><span class="mf">17.0</span><span class="p">,</span><span class="mf">0.0</span><span class="p">,</span><span class="mf">1.0</span><span class="p">],[</span><span class="mf">0.0</span><span class="p">,</span><span class="mf">1.0</span><span class="p">,</span><span class="mf">0.0</span><span class="p">,</span><span class="mf">1.0</span><span class="p">,</span><span class="mf">0.0</span><span class="p">,</span><span class="o">-</span><span class="mf">15.0</span><span class="p">,</span><span class="mf">0.0</span><span class="p">,</span><span class="mf">1.0</span><span class="p">]],</span>
+  <span class="s2">&quot;unsafeSet&quot;</span><span class="p">:</span><span class="s2">&quot;@Allmode:And(car1_y-car2_y&lt;3, car2_y-car1_y&lt;3)&quot;</span><span class="p">,</span>
+  <span class="s2">&quot;timeHorizon&quot;</span><span class="p">:</span><span class="mf">5.0</span><span class="p">,</span>
+  <span class="s2">&quot;directory&quot;</span><span class="p">:</span><span class="s2">&quot;examples/cars&quot;</span>
+<span class="p">}</span>
 </pre></div>
 </div>
 </div>
@@ -225,17 +236,14 @@ as the simulation trajectory of the system in the given mode starting from <img 
 <p>The tool will print background information like the current mode, transition time, initial set and discrepancy function information on the run. The final result about safe/unsafe will be printed at the bottom.</p>
 <p>When the system is safe, the final result will look like</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span>System is Safe!
-System has been refined for * Times
-Simulation safety check is * (seconds)
-Verification safety check is * (seconds)
 </pre></div>
 </div>
 <p>When the system is unsafe, the final result will look like</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">Simulation</span> <span class="n">safety</span> <span class="n">check</span> <span class="ow">is</span> <span class="o">*</span> <span class="p">(</span><span class="n">seconds</span><span class="p">)</span>
-<span class="n">System</span> <span class="n">Unsafe</span> <span class="kn">from</span> <span class="nn">simulation</span><span class="p">,</span> <span class="n">halt</span> <span class="n">verification</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">Current</span> <span class="n">simulation</span> <span class="ow">is</span> <span class="ow">not</span> <span class="n">safe</span><span class="o">.</span> <span class="n">Program</span> <span class="n">halt</span>
 </pre></div>
 </div>
-<p>The unsafe simulation trajectory will be stored as &#8220;unsafeSim&#8221; in the output folder.</p>
+<p>If the simulation result is not safe, the unsafe simulation trajectory will be stored in &#8220;Traj.txt&#8221; in the output folder.
+Otherwise the last simulation result will be stored in &#8220;Traj.txt&#8221;.</p>
 </div>
 <div class="section" id="advanced-tricks-verify-your-own-black-box-system">
 <span id="advance-label"></span><h2>Advanced Tricks: Verify your own black-box system<a class="headerlink" href="#advanced-tricks-verify-your-own-black-box-system" title="Permalink to this headline">¶</a></h2>
@@ -249,13 +257,14 @@ Verification safety check is * (seconds)
 </div><p>As for DryVR, of course, all the information about dynamics is hidden. Instead, you need to provide the simulator function TC_Simulate as discussed in <a class="reference internal" href="#black-box-label"><span class="std std-ref">Black-box Simulator</span></a>.</p>
 <p><strong>Step 1</strong>:
 Create a folder in the DryVR root directory for your new model and enter it.</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">mkdir</span> <span class="n">Thermostats</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">cd</span> <span class="n">examples</span>
+<span class="n">mkdir</span> <span class="n">Thermostats</span>
 <span class="n">cd</span> <span class="n">Thermostats</span>
 </pre></div>
 </div>
 <p><strong>Step 2</strong>:
 Inside your model folder, create a python script for your model.</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">vim</span> <span class="n">Thermostats_ODE</span><span class="o">.</span><span class="n">py</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">touch</span> <span class="n">Thermostats_ODE</span><span class="o">.</span><span class="n">py</span>
 </pre></div>
 </div>
 <p><strong>Step 3</strong>: Write the TC_Simulate function in the python file Thermostats_ODE.py.</p>
@@ -307,7 +316,7 @@ Inside your model folder, create a python script for your model.</p>
 </div>
 <p><strong>Step 4</strong>:
 Inside your model folder, create a Python initiate script.</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">vim</span> <span class="fm">__init__</span><span class="o">.</span><span class="n">py</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">touch</span> <span class="fm">__init__</span><span class="o">.</span><span class="n">py</span>
 </pre></div>
 </div>
 <p>Inside your initiate script, import file with function TC_Simulate.</p>
@@ -318,35 +327,35 @@ Inside your model folder, create a Python initiate script.</p>
 Go to inputFile folder and create an input file for your new model using the format discussed in <a class="reference internal" href="#input-format-label"><span class="std std-ref">Input Format</span></a>.</p>
 <p>Create a transition graph specifying the mode transitions. For example, we want the temperature to start within the range <img class="math" src="_images/math/586d9f2d0bf8bd88a1ba56a8613540065633bec8.png" alt="[75,76]"/> in the &#8220;On&#8221; mode. After <img class="math" src="_images/math/c1d7feec46252ba2d3538cfa5c71a9235802383c.png" alt="[1,1.1]"/> second, it transits to the &#8220;Off&#8221; mode, and transits back to the &#8220;On&#8221; mode after another <img class="math" src="_images/math/c1d7feec46252ba2d3538cfa5c71a9235802383c.png" alt="[1,1.1]"/> seconds. For bounded time <img class="math" src="_images/math/b7a8028fc10b9e828d9b340dc3459e6c678a38aa.png" alt="3.5s"/>, we want to check whether the temperature is above <img class="math" src="_images/math/85dd92a01545069e5720b438fa43981e71f9f41e.png" alt="90"/>.</p>
 <p>The input file can be written as:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">vertex</span><span class="p">:[</span><span class="s2">&quot;On&quot;</span><span class="p">,</span><span class="s2">&quot;Off&quot;</span><span class="p">,</span><span class="s2">&quot;On&quot;</span><span class="p">]</span>
-<span class="n">edge</span><span class="p">:[(</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">),(</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">)]</span>
-<span class="n">transtime</span><span class="p">:[(</span><span class="mi">1</span><span class="p">,</span><span class="mf">1.1</span><span class="p">),(</span><span class="mi">1</span><span class="p">,</span><span class="mf">1.1</span><span class="p">)]</span>
-<span class="n">initialSet</span><span class="p">:[[</span><span class="mf">75.0</span><span class="p">],[</span><span class="mf">76.0</span><span class="p">]]</span>
-<span class="n">unsafeSet</span><span class="p">:</span><span class="nd">@Allmode</span><span class="p">:</span><span class="n">And</span><span class="p">(</span><span class="n">v1</span><span class="o">&gt;</span><span class="mi">90</span><span class="p">)</span>
-<span class="n">timeHorizon</span><span class="p">:</span><span class="mf">3.5</span>
-<span class="n">directory</span><span class="p">:</span><span class="n">Thermostats</span><span class="o">/</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="p">{</span>
+  <span class="s2">&quot;vertex&quot;</span><span class="p">:[</span><span class="s2">&quot;On&quot;</span><span class="p">,</span><span class="s2">&quot;Off&quot;</span><span class="p">,</span><span class="s2">&quot;On&quot;</span><span class="p">],</span>
+  <span class="s2">&quot;edge&quot;</span><span class="p">:[[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">],[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">]],</span>
+  <span class="s2">&quot;variables&quot;</span><span class="p">:[</span><span class="s2">&quot;temp&quot;</span><span class="p">],</span>
+  <span class="s2">&quot;guards&quot;</span><span class="p">:[</span><span class="s2">&quot;And(t&gt;1.0,t&lt;=1.1)&quot;</span><span class="p">,</span><span class="s2">&quot;And(t&gt;1.0,t&lt;=1.1)&quot;</span><span class="p">],</span>
+  <span class="s2">&quot;initialSet&quot;</span><span class="p">:[[</span><span class="mf">75.0</span><span class="p">],[</span><span class="mf">76.0</span><span class="p">]],</span>
+  <span class="s2">&quot;unsafeSet&quot;</span><span class="p">:</span><span class="s2">&quot;@On:temp&gt;91@Off:temp&gt;91&quot;</span><span class="p">,</span>
+  <span class="s2">&quot;timeHorizon&quot;</span><span class="p">:</span><span class="mf">3.5</span><span class="p">,</span>
+  <span class="s2">&quot;directory&quot;</span><span class="p">:</span><span class="s2">&quot;examples/Thermostats&quot;</span>
+<span class="p">}</span>
 </pre></div>
 </div>
-<p>Save the input file in the folder inputFile and name it as input_thermo.</p>
+<p>Save the input file in the folder input/daginput and name it as input_thermo.json.</p>
 <p><strong>Step6</strong>:
 Run the verification algorithm using the command:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">python</span> <span class="n">main</span><span class="o">.</span><span class="n">py</span> <span class="n">inputFile</span><span class="o">/</span><span class="n">input_thermo</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">python</span> <span class="n">main</span><span class="o">.</span><span class="n">py</span> <span class="nb">input</span><span class="o">/</span><span class="n">daginput</span><span class="o">/</span><span class="n">input_thermo</span><span class="o">.</span><span class="n">json</span>
 </pre></div>
 </div>
 <p>The system has been checked to be safe with the output:</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span>System is Safe!
-System has been refined for 0 Times
-Simulation safety check is 0.150208
-Verification safety check is 0.116688
 </pre></div>
 </div>
 <p>We can plot the reachtube using the command:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">python</span> <span class="n">tubePlotter</span><span class="o">.</span><span class="n">py</span> <span class="mi">1</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">python</span> <span class="n">plotter</span><span class="o">.</span><span class="n">py</span>
 </pre></div>
 </div>
 <p>And the reachtube for the temperature is shown as</p>
 <div class="figure align-center" id="id2">
-<a class="reference internal image-reference" href="_images/thermostat.png"><img alt="thermostat reachtubs" src="_images/thermostat.png" style="width: 480.0px; height: 360.0px;" /></a>
+<a class="reference internal image-reference" href="_images/thermostat.png"><img alt="thermostat reachtubs" src="_images/thermostat.png" style="width: 1095.0px; height: 2514.6px;" /></a>
 <p class="caption"><span class="caption-text">The reachtube for the temperature of the thermostat system example</span></p>
 </div>
 </div>
@@ -396,7 +405,7 @@ Verification safety check is 0.116688
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'./',
-            VERSION:'0.1',
+            VERSION:'0.2',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
             HAS_SOURCE:  true,

@@ -22,24 +22,15 @@ The black-box of the vehicle dynamics is described in :ref:`ADAS-label`, and the
 Verification Result of the AEB System
 ----------------------------------------
 Run DryVR's verification algorithm for the AEB system: ::
-	
-	python main.py inputFile/input_AEB
+
+	python main.py input/daginput/input_brake.json
 
 The system is checked to be safe. We can also plot the reachtubes for different variables. For example, the reachtubes for the position of Car1 and Car2 along the road the direction are shown below. From the reachtube we can also clearly see that the relative distance between the two cars are never too small.
 
 .. figure:: v2.png
-	:scale: 4%
-	:align: left
 	:alt: Reachtube
 
-	Reachtube of the position sy of Car1 
-
-.. figure:: v6.png
-	:scale: 4%
-	:align: right
-	:alt: Reachtube
-
-	Reachtube of the position sy of Car2
+	Reachtube of the position sy of Car1 and Car2
 
 
 .. _ADAS-label:
@@ -50,16 +41,16 @@ The hybrid system for a scenario is constructed by putting together several indi
 
 Each vehicle has the following modes
 
-- Const: move forward at constant speed, 
+- Const: move forward at constant speed,
 - Acc1: constant acceleration,
 - Brk or Dec: constant (slow) deceleration,
-- TurnLeft and TurnRight:  the acceleration and steering are controlled in such a manner that the vehicle switches to its left (resp. right) lane in a certain amount of time. 
+- TurnLeft and TurnRight:  the acceleration and steering are controlled in such a manner that the vehicle switches to its left (resp. right) lane in a certain amount of time.
 
 The mode for the entire system consists of n vehicles are the mode of each vehicle separated by semicolon. For example, Const;Brk means the first car is in the const speed mode, while the second car is in the brake mode.
 For each vehicle, we mainly analyze four variables: absolute position
 (:math:`sx`) and velocity (:math:`vx`) orthogonal to the road direction
 (:math:`x`-axis), and absolute position (:math:`sy`) and velocity (:math:`vy`) along the
-road direction (:math:`y`-axis). The throttle and steering is captured using the four variables. 
+road direction (:math:`y`-axis). The throttle and steering is captured using the four variables.
 
 Due to the MATLAB license issue, we are not able to release the Simulink benchmarks we have used in the publications. We have since reproduced the ADAS and autonomous vehicle benchmark in Python and connect it with DryVR as a simulator. We are hoping to move more examples to Python in the near future.
 
@@ -79,7 +70,7 @@ Transition graph: Car1 goes through the mode sequence TurnLeft, Acc1, Brk, and  
 
 Requirement: Car1 overtakes Car2 or abort the overtaking while maintaining minimal safe separation.
 
-Inputfiles: 
+Inputfiles:
 
 - input\_AutoPassingSafe: safe
 - input\_AutoPassingUnsafe: unsafe
@@ -93,9 +84,9 @@ Initial condition: Car1 is in left and Car2 is in the right lane; initial positi
 
 Transition graph:  Car1 goes through the mode Acc1, TurnRight, Const with specified intervals of time to transit from mode to another mode. Car2 goes through the mode Acc1 or Const, TurnRight, Const with specified intervals of time to transit from mode to another mode. Car1 will merge ahead of Car2 of behind of Car2 based on cars's mode transition.
 
-Requirement: Car1 merges ahead or behind of Car2 and maintains at least a given safe separation. 
+Requirement: Car1 merges ahead or behind of Car2 and maintains at least a given safe separation.
 
-InputFiles: 
+InputFiles:
 
 - input_MergeSafe: safe
 - input_MergeUnsafe: unsafe
@@ -110,14 +101,7 @@ Transition graph: Car1 goes through the mode sequence TurnLeft, Acc1, Dec, and T
 
 Requirement: Car1 merges between Car2 and Car3 and any two vehicles maintain at least a given safe separation.
 
-InputFiles: 
+InputFiles:
 
-- input\_MergeBetweenSafe: safe 
+- input\_MergeBetweenSafe: safe
 - input\_MergeBetweenUnsafe: unsafe
-
-
-
-
-
-
-

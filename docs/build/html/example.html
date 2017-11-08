@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Examples &mdash; DryVR 0.1 documentation</title>
+  <title>Examples &mdash; DryVR 0.2 documentation</title>
   
 
   
@@ -35,7 +35,7 @@
         <link rel="index" title="Index"
               href="genindex.html"/>
         <link rel="search" title="Search" href="search.html"/>
-    <link rel="top" title="DryVR 0.1 documentation" href="index.html"/>
+    <link rel="top" title="DryVR 0.2 documentation" href="index.html"/>
         <link rel="next" title="Publications" href="publications.html"/>
         <link rel="prev" title="DryVR’s Language" href="dryvr&#39;s_language.html"/> 
 
@@ -66,7 +66,7 @@
             
             
               <div class="version">
-                0.1
+                0.2
               </div>
             
           
@@ -187,17 +187,13 @@ Cars 1 and 2 are cruising down the highway with zero relative velocity and certa
 <div class="section" id="verification-result-of-the-aeb-system">
 <h3>Verification Result of the AEB System<a class="headerlink" href="#verification-result-of-the-aeb-system" title="Permalink to this headline">¶</a></h3>
 <p>Run DryVR&#8217;s verification algorithm for the AEB system:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">python</span> <span class="n">main</span><span class="o">.</span><span class="n">py</span> <span class="n">inputFile</span><span class="o">/</span><span class="n">input_AEB</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">python</span> <span class="n">main</span><span class="o">.</span><span class="n">py</span> <span class="nb">input</span><span class="o">/</span><span class="n">daginput</span><span class="o">/</span><span class="n">input_brake</span><span class="o">.</span><span class="n">json</span>
 </pre></div>
 </div>
 <p>The system is checked to be safe. We can also plot the reachtubes for different variables. For example, the reachtubes for the position of Car1 and Car2 along the road the direction are shown below. From the reachtube we can also clearly see that the relative distance between the two cars are never too small.</p>
-<div class="figure align-left" id="id2">
-<a class="reference internal image-reference" href="_images/v2.png"><img alt="Reachtube" src="_images/v2.png" style="width: 307.2px; height: 230.4px;" /></a>
-<p class="caption"><span class="caption-text">Reachtube of the position sy of Car1</span></p>
-</div>
-<div class="figure align-right" id="id3">
-<a class="reference internal image-reference" href="_images/v6.png"><img alt="Reachtube" src="_images/v6.png" style="width: 307.2px; height: 230.4px;" /></a>
-<p class="caption"><span class="caption-text">Reachtube of the position sy of Car2</span></p>
+<div class="figure" id="id2">
+<img alt="Reachtube" src="_images/v2.png" />
+<p class="caption"><span class="caption-text">Reachtube of the position sy of Car1 and Car2</span></p>
 </div>
 </div>
 </div>
@@ -298,7 +294,7 @@ road direction (<img class="math" src="_images/math/276f7e256cbddeb81eee42e1efc3
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'./',
-            VERSION:'0.1',
+            VERSION:'0.2',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
             HAS_SOURCE:  true,

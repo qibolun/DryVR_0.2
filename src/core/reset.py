@@ -27,6 +27,8 @@ class Reset():
 
 	def resetSimTrace(self, rawEqus, point):
 		# Using reset Reachtube function to handle this case
+		if not point:
+			return point
 		ret, _ = self.resetReachTube(rawEqus, point, point)
 		return ret
 
@@ -45,7 +47,7 @@ class Reset():
 					retLb[j] = curLb[j]
 				if curUb[j]!=upperBound[j]:
 					retUb[j] = curUb[j]
-		return curLb, curUb
+		return retLb, retUb
 
 	def _buildAllCombo(self, symbols, lowerBound, upperBound):
 		# This function allows us to build all combination given vars in symbol
@@ -72,18 +74,20 @@ class Reset():
 		lhs, rhs = equSplit[0], equSplit[1]
 		target = sympy.sympify(lhs)
 		# Construct the equation
-		equ = sympy.Eq(sympy.sympify(lhs) - sympy.sympify(rhs), 0)
+		finalEqu = sympy.sympify(rhs)
 		rhsSymbols = list(sympy.sympify(rhs).free_symbols)
-
+		# print target, rhsSymbols
 		combos = self._buildAllCombo(rhsSymbols, lowerBound, upperBound)
-		finalEqu = solve(equ, target)[0]
+		# finalEqu = solve(equ, target)[0]
 
 		minReset = float('inf')
 		maxReset = float('-inf')
-
 		if combos:
 			for combo in combos:
-				result = float(finalEqu, subs(combo))
+				if len(combo) == 2:
+					result = float(finalEqu.subs(combo[0], combo[1]))
+				else:
+					result = float(finalEqu.subs(combo))
 				minReset = min(minReset, float(result))
 				maxReset = max(maxReset, float(result))
 		else:
@@ -95,4 +99,5 @@ class Reset():
 		targetIdx = self.variables.index(str(target))
 		retLb[targetIdx] = minReset
 		retUb[targetIdx] = maxReset
+		print minReset, maxReset
 		return retLb, retUb

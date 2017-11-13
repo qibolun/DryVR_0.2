@@ -104,7 +104,6 @@ def simulate(g, initCondition, timeHorizon, guard, simFuc, reseter, initialMode)
 			curGuardStr
 		)
 		initCondition = reseter.resetSimTrace(curResetStr, initCondition)
-
 		# Some model return numpy array, convert to list
 		if isinstance(trunckedResult,numpy.ndarray):
 			trunckedResult = trunckedResult.tolist()

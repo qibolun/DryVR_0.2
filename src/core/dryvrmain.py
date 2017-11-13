@@ -26,13 +26,13 @@ def verify(inputFile):
 	)
 
 	assert graph.is_dag()==True or params.initialMode!="", "Graph is not DAG and you do not have initial mode!"
-	
+
 	simFunction = importSimFunction(params.path)
 	checker = UniformChecker(params.unsafeSet, params.variables)
 	guard = Guard(params.variables)
 	reseter = Reset(params.variables)
 
-	# Step 1) Simulation Test 
+	# Step 1) Simulation Test
 	# Random generate points, then simulate and check the result
 	for _ in range(SIMUTESTNUM):
 		randInit = randomPoint(params.initialSet[0], params.initialSet[1])
@@ -99,7 +99,7 @@ def verify(inputFile):
 				nextInit = reseter.resetReachTube(curResetStr, nextInit[0], nextInit[1])
 
 				print "next initial is ", nextInit
-				
+
 				nextModeStack = InitialSetStack(
 					curSuccessor,
 					CHILDREFINETHRES,
@@ -192,7 +192,7 @@ def rrtSimulation(inputFile):
  	goalReached = False
  	curModeStack = RrtSetStack(initialMode, remainTime, minTimeThres, 0)
  	curModeStack.initial = (params.initialSet[0], params.initialSet[1])
-	
+
  	while True:
  		print str(curModeStack)
  		if curModeStack.remainTime < minTimeThres:
@@ -220,9 +220,9 @@ def rrtSimulation(inputFile):
  		if not curModeStack.bloatedTube:
  			print "no bloated tube find in this mode, generate one"
  			curBloatedTube = clacBloatedTube(
- 				curModeStack.mode, 
- 				curModeStack.initial, 
- 				curModeStack.remainTime, 
+ 				curModeStack.mode,
+ 				curModeStack.initial,
+ 				curModeStack.remainTime,
  				simFunction
  			)
  			curBloatedTube = checker.cutTubeTillUnsafe(curBloatedTube)
@@ -302,8 +302,7 @@ def rrtSimulation(inputFile):
  		buildRrtGraph(modes, traces)
  		for i in range(1, len(modes)):
  			modes[i] = modes[i-1]+'->'+modes[i]
- 		
+
  		writeRrtResultFile(modes, traces, RRTOUTPUT)
  	else:
  		print("could not find trace")
-

@@ -39,7 +39,6 @@ class Guard():
 	def guardSimuTube(self, tube, guardStr):
 		if not guardStr:
 			return None, tube
-
 		curSolver = self._buildGuard(guardStr)
 		guardSet = {}
 		for idx,t in enumerate(tube):
@@ -47,7 +46,6 @@ class Guard():
 			curSolver.add(self.varDic['t'] == t[0])
 			for i in range(1, len(t)):
 				curSolver.add(self.varDic[self.variables[i-1]]==t[i])
-
 			if curSolver.check() == sat:
 				# The simulation trace hits the guard
 				curSolver.pop()

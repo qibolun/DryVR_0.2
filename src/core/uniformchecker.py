@@ -2,7 +2,9 @@
 This file contains uniform checker class for DryVR
 """
 
+from src.common.utils import handleReplace
 from z3 import *
+
 
 class UniformChecker():
 	def __init__(self, unsafe, variables):
@@ -11,29 +13,13 @@ class UniformChecker():
 		self.solverDic = {}
 		for var in variables:
 			self.varDic[var] = Real(var)
-		for key in sorted(self.varDic)[::-1]:
-			# Replace the variable to self.vardic + variable
-			unsafe = self._replace(unsafe,key)
+		unsafe = handleReplace(unsafe, self.varDic.keys())
 		unsafeList = unsafe[1:].split('@')
 		for unsafe in unsafeList:
 			mode, cond = unsafe.split(':')
 			self.solverDic[mode] = [Solver(), Solver()]
 			self.solverDic[mode][0].add(eval(cond))
 			self.solverDic[mode][1].add(eval(self._neg(cond)))
-
-	def _replace(self, unsafe, key):
-		# Replace the key in the unsafe string to target
-		target = 'self.varDic["'+key+'"]'
-		idxes = []
-		for i in range(len(unsafe)):
-			if unsafe[i:].startswith(key):
-				idxes.append(i)
-
-		for idx in idxes[::-1]:
-			if idx != 0 and unsafe[idx-1] == '"':
-				continue
-			unsafe = unsafe[:idx] + target + unsafe[idx+len(key):]
-		return unsafe
 
 	def _neg(self, orig):
 		# Neg the original condition

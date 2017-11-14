@@ -4,6 +4,7 @@ This file contains guard class for DryVR
 
 import random
 
+from src.common.utils import handleReplace
 from z3 import *
 
 class Guard():
@@ -13,26 +14,10 @@ class Guard():
 		for var in variables:
 			self.varDic[var] = Real(var)
 
-	def _replace(self, unsafe, key):
-		# Replace the key in the unsafe string to target
-		target = 'self.varDic["'+key+'"]'
-		idxes = []
-		for i in range(len(unsafe)):
-			if unsafe[i:].startswith(key):
-				idxes.append(i)
-
-		for idx in idxes[::-1]:
-			if idx != 0 and unsafe[idx-1] == '"':
-				continue
-			unsafe = unsafe[:idx] + target + unsafe[idx+len(key):]
-		return unsafe
-
 	def _buildGuard(self, guardStr):
 		# Build solver for current guard based on guard string
 		curSolver = Solver()
-		for key in sorted(self.varDic)[::-1]:
-			# Replace the variable to self.varDic + variable
-			guardStr = self._replace(guardStr,key)
+		guardStr = handleReplace(guardStr,self.varDic.keys())
 		curSolver.add(eval(guardStr))
 		return curSolver
 

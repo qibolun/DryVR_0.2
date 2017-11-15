@@ -57,21 +57,32 @@ def buildModeStr(g, vertex):
     # This should be something like "modeName,modeNum"
     return g.vs[vertex]['label']+','+str(vertex)
 
-def handleReplace(rawString, keys):
-    # Replace the rawString to something DryVR can understand
+def handleReplace(unsafe, keys):
     idxes = []
     i = 0
-    while i < len(rawString):
+
+    while i < len(unsafe):
         tempStr = ''
-        while rawString[i].isalpha():
-            tempStr += rawString[i]
+        while unsafe[i].isalpha():
+            tempStr += unsafe[i]
             i+=1
         if tempStr in keys:
             idxes.append((i-len(tempStr), i))
+            continue
+        elif tempStr:
+            while any([key.startswith(tempStr) for key in keys]):
+                tempStr += unsafe[i]
+                i+=1
+
+                if tempStr in keys and [key.startswith(tempStr) for key in keys].count(True)==1:
+                    idxes.append((i-len(tempStr), i))
+                    i-=1
+                    break
+
         i+=1
 
     for idx in idxes[::-1]:
-        key = rawString[idx[0]:idx[1]]
+        key = unsafe[idx[0]:idx[1]]
         target = 'self.varDic["'+key+'"]'
-        rawString = rawString[:idx[0]] + target + rawString[idx[1]:]
-    return rawString
+        unsafe = unsafe[:idx[0]] + target + unsafe[idx[1]:]
+    return unsafe

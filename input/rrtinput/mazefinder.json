@@ -1,8 +1,8 @@
-{	
+{
 	"modes":["UP", "DOWN", "LEFT", "RIGHT"],
 	"initialMode":"RIGHT",
 	"variables":["x","y"],
-	"initialSet":[[1.0,1.0],[1.1,1.0]],
+	"initialSet":[[0.0,0.0],[0.1,0.1]],
 	"unsafeSet":"@Allmode:Or(x<0, x>5, y<0, y>5)",
 	"goalSet":"And(x>=3.5, x<=4.5, y>=3.5, y<=4.5)",
 	"timeHorizon":25.0,

@@ -195,6 +195,9 @@ def rrtSimulation(inputFile):
 
  	while True:
  		print str(curModeStack)
+		if not curModeStack:
+			break
+
  		if curModeStack.remainTime < minTimeThres:
  			print "Back to previous mode because we cannot stay longer than the min time thres"
  			curModeStack = curModeStack.parent

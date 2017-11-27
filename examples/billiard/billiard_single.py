@@ -2,14 +2,17 @@ from scipy.integrate import odeint
 import numpy as np
 
 def Ball_dynamic(y, t):
-    hy, v = y
-    hy_dot = v
-    v_dot = -9.8
-    dydt = [hy_dot, v_dot]
+    px, py, vx, vy = y
+    px_dot = vx
+    py_dot = vy
+    vx_dot = 0
+    vy_dot = 0
+    dydt = [px_dot, py_dot, vx_dot, vy_dot]
     return dydt
 
-def TC_Simulate(Mode,initialCondition,time_bound):
-    time_step = 0.01;
+
+def Ball_simulate(Mode,initialCondition,time_bound):
+    time_step = 0.05;
     time_bound = float(time_bound)
 
     number_points = int(np.ceil(time_bound/time_step))
@@ -22,6 +25,7 @@ def TC_Simulate(Mode,initialCondition,time_bound):
     t = newt
     while t[-1] == t[-2]:
         t.pop()
+
     sol = odeint(Ball_dynamic,initialCondition,t,hmax = time_step)
     # Construct the final output
     trace = []
@@ -31,10 +35,7 @@ def TC_Simulate(Mode,initialCondition,time_bound):
         tmp.append(t[j])
         tmp.append(float(sol[j,0]))
         tmp.append(float(sol[j,1]))
+        tmp.append(float(sol[j,2]))
+        tmp.append(float(sol[j,3]))
         trace.append(tmp)
     return trace
-
-if __name__ == "__main__":
-    sol = TC_Simulate('BOUNCE',[100.0,0.0],10)
-    for s in sol:
-        print(s)

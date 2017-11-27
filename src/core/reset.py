@@ -27,6 +27,7 @@ class Reset():
 
 	def resetSimTrace(self, rawEqus, point):
 		# Using reset Reachtube function to handle this case
+		
 		if point == [] or not point:
 			return point
 		ret, _ = self.resetReachTube(rawEqus, point, point)

@@ -7,7 +7,7 @@ import matplotlib.patches as patches
 
 colors = ['red', 'green', 'blue', 'yellow', 'black']
 
-def plot(node, dim, y_min, y_max):
+def plot(node, dim, y_min, y_max, xdim):
 	fig1 = plt.figure()
 	ax1 = fig1.add_subplot('111')
 	lowerBound = []
@@ -23,7 +23,7 @@ def plot(node, dim, y_min, y_max):
 		#print lb[0],ub[0], lb[1],ub[1]
 
 		for ci, d in enumerate(dim):
-			rect = patches.Rectangle((lb[0],lb[d]),ub[0]-lb[0],ub[d]-lb[d],color=colors[ci%len(colors)],alpha=0.7)
+			rect = patches.Rectangle((lb[xdim],lb[d]),ub[xdim]-lb[xdim],ub[d]-lb[d],color=colors[ci%len(colors)],alpha=0.7)
 			ax1.add_patch(rect)
 
 	y_axis_min = min([y_min[i] for i in dim])
@@ -67,6 +67,3 @@ def rrtPlot(lowerBound, upperBound, xDim, yDim, goal, unsafes, region):
 	ax1.set_xlim([x_min, x_max])
 	ax1.plot()
 	fig1.savefig('output/rrt.png', format='png', dpi=200)
-
-
-

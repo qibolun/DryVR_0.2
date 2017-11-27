@@ -87,7 +87,7 @@ def verify(inputFile):
 
 			for curSuccessor in curSuccessors:
 				edgeID = graph.get_eid(curVertex, curSuccessor)
-				curGuardStr = graph.es[edgeID]['label']
+				curGuardStr = graph.es[edgeID]['guards']
 				curResetStr = graph.es[edgeID]['resets']
 				nextInit, trunckedResult, transiteTime = guard.guardReachTube(
 					curBloatedTube,

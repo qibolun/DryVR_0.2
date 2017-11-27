@@ -2,7 +2,7 @@
 	"vertex":["On","Off","Off","On"],
 	"edge":[[0,1],[1,3],[0,2],[2,3]],
 	"variables":["temp"],
-	"guards":["And(t>=1.0,t<=1.1)","And(t>=1.0,t<=1.1)","And(t>=1.0,t<=1.1)","And(t>=1.5,t<=1.6)"],
+	"guards":["And(t>=1.0,t<=1.1)","And(t>=1.0,t<=1.1)","And(t>=1.1,t<=1.2)","And(t>=1.5,t<=1.6)"],
 	"initialSet":[[75.0],[76.0]],
 	"unsafeSet":"@Allmode:temp>91",
 	"timeHorizon":3.5,

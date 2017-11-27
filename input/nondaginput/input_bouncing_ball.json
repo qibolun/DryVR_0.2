@@ -2,7 +2,7 @@
 	"vertex":["BOUNCE"],
 	"edge":[[0,0]],
 	"variables":["y", "velocity"],
-	"guards":["And(y<=0,t>=0.2, y>=-0.1)"],
+	"guards":["And(y<0,t>=0.2, y>=-0.01)"],
 	"resets":["velocity=-0.8*velocity;y=0"],
 	"initialMode":"BOUNCE",
 	"initialSet":[[10.0, 0.0],[10.1, 0.0]],

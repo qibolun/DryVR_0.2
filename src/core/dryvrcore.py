@@ -19,13 +19,22 @@ def buildGraph(vertex, edge, guards, timeHorizon, resets):
 
 	g.vs['label'] = vertex
 	g.vs['name'] = vertex
-	g.es['label'] = guards
+	labels = []
+	for i in range(len(guards)):
+		curGuard = guards[i]
+		curReset = resets[i]
+		if not curReset:
+			labels.append(curGuard)
+		else:
+			labels.append(curGuard+'|'+curReset)
+
+	g.es['label'] = labels
+	g.es['guards'] = guards
 	g.es['resets'] = resets
 
 	if PLOTGRAPH:
 		graph = plot(g, GRAPHOUTPUT, margin=40)
 		graph.save()
-
 	return g
 
 def buildRrtGraph(modes, traces):
@@ -72,7 +81,8 @@ def simulate(g, initCondition, timeHorizon, guard, simFuc, reseter, initialMode)
 	dimensions = len(initCondition)+1
 
 	simResult = []
-	while remainTime>0:
+	# Avoid numeric error
+	while remainTime>0.01:
 
 		if DEBUG:
 			print NEWLINE
@@ -83,35 +93,49 @@ def simulate(g, initCondition, timeHorizon, guard, simFuc, reseter, initialMode)
 			break
 
 		curSuccessors = g.successors(curVertex)
+		transiteTime = remainTime
+		curLabel = g.vs[curVertex]['label']
 
 		if len(curSuccessors) == 0:
-			transiteTime = remainTime
-			curGuardStr = None
-			curResetStr = None
+			curSimResult = simFuc(curLabel, initCondition, transiteTime)
+			# Some model return numpy array, convert to list
+			if isinstance(curSimResult,numpy.ndarray):
+				curSimResult = curSimResult.tolist()
+			initCondition, trunckedResult = guard.guardSimuTube(
+				curSimResult,
+				None
+			)
+
 		else:
-			# Randomly pick a path and time to transit
-			curSuccessor = random.choice(curSuccessors)
-			edgeID = g.get_eid(curVertex,curSuccessor)
-			curGuardStr = g.es[edgeID]['label']
-			curResetStr = g.es[edgeID]['resets']
-			transiteTime = remainTime
+			# First find all possible transition
+			# Second randomly pick a path and time to transit
+			nextModes = []
+			for curSuccessor in curSuccessors:
+				edgeID = g.get_eid(curVertex,curSuccessor)
+				curGuardStr = g.es[edgeID]['guards']
+				curResetStr = g.es[edgeID]['resets']
+				curSimResult = simFuc(curLabel, initCondition, transiteTime)
+				# Some model return numpy array, convert to list
+				if isinstance(curSimResult,numpy.ndarray):
+					curSimResult = curSimResult.tolist()
 
-
-		curLabel = g.vs[curVertex]['label']
-		curSimResult = simFuc(curLabel, initCondition, transiteTime)
-		initCondition, trunckedResult = guard.guardSimuTube(
-			curSimResult,
-			curGuardStr
-		)
-		initCondition = reseter.resetSimTrace(curResetStr, initCondition)
-		# Some model return numpy array, convert to list
-		if isinstance(trunckedResult,numpy.ndarray):
-			trunckedResult = trunckedResult.tolist()
+				nextInit, trunckedResult = guard.guardSimuTube(
+					curSimResult,
+					curGuardStr
+				)
+				nextInit = reseter.resetSimTrace(curResetStr, nextInit)
+				# If there is a transition
+				if nextInit:
+					nextModes.append((curSuccessor, nextInit, trunckedResult))
+			if nextModes:
+				curSuccessor, initCondition, trunckedResult = random.choice(nextModes)
+			else:
+				curSuccessor = None
+				initCondition = None
 
 		# Get real transite time from truncked result
 		transiteTime = trunckedResult[-1][0]
 		retval[curLabel] += trunckedResult
-
 		for simRow in trunckedResult:
 			simRow[0] += curTime
 			simResult.append(simRow)

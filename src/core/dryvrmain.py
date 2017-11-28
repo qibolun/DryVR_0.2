@@ -47,7 +47,8 @@ def verify(inputFile):
 			guard,
 			simFunction,
 			reseter,
-			params.initialMode
+			params.initialMode,
+			params.deterministic
 		)
 		for mode in simResult:
 			safety = checker.checkSimuTube(simResult[mode], mode)
@@ -84,6 +85,8 @@ def verify(inputFile):
 			curBloatedTube = clacBloatedTube(curLabel, curInitial, curRemainTime, simFunction)
 
 			candidateTube = []
+			shortestTime = float("inf")
+			shortestTube = None
 
 			for curSuccessor in curSuccessors:
 				edgeID = graph.get_eid(curVertex, curSuccessor)
@@ -111,6 +114,25 @@ def verify(inputFile):
 				curStack[-1].child[curSuccessor] = nextModeStack
 				if len(trunckedResult)>len(candidateTube):
 					candidateTube = trunckedResult
+
+				if trunckedResult[-1][0] < shortestTime:
+					shortestTime = trunckedResult[-1][0]
+					shortestTube = trunckedResult
+
+			# Handle deterministic system
+			if params.deterministic and len(curStack[-1].child)>0:
+				nextModesInfo = []
+				for nextMode in curStack[-1].child:
+					nextModesInfo.append((curStack[-1].child[nextMode].remainTime, nextMode))
+				# This mode gets transit first, only keep this mode
+				maxRemainTime, maxTimeMode = max(nextModesInfo)
+				# Pop other modes becuase of deterministic system
+				for time, nextMode in nextModesInfo:
+					if nextMode == maxTimeMode:
+						continue
+					curStack[-1].child.pop(nextMode)
+				candidateTube = shortestTube
+				print "Handle deterministic system, next mode", curStack[-1].child.keys()
 
 			if not candidateTube:
 				candidateTube = curBloatedTube
@@ -140,7 +162,7 @@ def verify(inputFile):
 					curModeStack.stack.pop()
 					print "No child in mode initial, pop"
 			else:
-				print "Some thing bad happen in Mode ", curLabel
+				print "Something bad happen in Mode ", curLabel
 				exit()
 
 		if curModeStack.parent is None:

@@ -45,22 +45,17 @@ def parseInputFile(path):
 	with open(path, 'r') as f:
 		data = json.load(f)
 
-		# If resets is missing, fill the resets
+		# If resets is missing, fill with empty resets
 		if not 'resets' in data:
 			data['resets'] = ["" for _ in range(len(data["edge"]))]
 
+		# If initialMode is missing, fill with empty initial mode
 		if not 'initialMode' in data:
 			data['initialMode'] = ""
 
-		# Validate input variables
-		# for idx, var in enumerate(data["variables"]):
-		# 	for checkIdx, checkVar in enumerate(data["variables"]):
-		# 		if idx == checkIdx:
-		# 			continue
-		# 		if var in checkVar:
-		# 			print "variable should not be substring of another variable, system halt"
-		# 			exit()
-
+		# If deterministic is missing, defaultdict to non-deterministic
+		if not 'deterministic' in data:
+			data['deterministic'] = False
 
 		return DryVRInput(
 			vertex=data["vertex"],
@@ -73,6 +68,7 @@ def parseInputFile(path):
 			path=data["directory"],
 			resets=data["resets"],
 			initialMode=data["initialMode"],
+			deterministic=data["deterministic"],
 		)
 
 def parseRrtInputFile(path):

@@ -60,7 +60,7 @@ def buildRrtGraph(modes, traces):
 	graph.save()
 
 
-def simulate(g, initCondition, timeHorizon, guard, simFuc, reseter, initialMode):
+def simulate(g, initCondition, timeHorizon, guard, simFuc, reseter, initialMode, deterministic):
 	# Taken graph, initial condition, simulate time, guard
 	# simFuc is the simulation function
 	# which takes label, initial condition and simulation time
@@ -128,7 +128,19 @@ def simulate(g, initCondition, timeHorizon, guard, simFuc, reseter, initialMode)
 				if nextInit:
 					nextModes.append((curSuccessor, nextInit, trunckedResult))
 			if nextModes:
-				curSuccessor, initCondition, trunckedResult = random.choice(nextModes)
+				# It is a non-deterministic system, randomly choose next state to transit
+				if deterministic == False:
+					curSuccessor, initCondition, trunckedResult = random.choice(nextModes)
+				# This is deterministic system, choose earliest transition
+				else:
+					shortestTime = float('inf')
+					for s, i, t in nextModes:
+						curTubeTime = t[-1][0]
+						if curTubeTime<shortestTime:
+							curSuccessor = s
+							initCondition = i
+							trunckedResult = t
+							shortestTime = curTubeTime
 			else:
 				curSuccessor = None
 				initCondition = None

@@ -16,6 +16,14 @@ class InitialSetStack():
 		# Check if number of element in stack is more than threshold
 		return len(self.stack) <= self.threshold
 
+	def __str__(self):
+		# Build string representation for the initial set
+		ret = "===============================================\n"
+		ret += "Mode: "+str(self.mode)+"\n"
+		ret += "stack size: "+str(len(self.stack))+"\n"
+		ret += "remainTime: "+str(self.remainTime)+"\n"
+		return ret
+
 
 class RrtSetStack():
 	def __init__(self, mode, remainTime, minTimeThres, level):
@@ -54,9 +62,4 @@ class RrtSetStack():
 			ret += "bloatedTube: True"+"\n"
 		else:
 			ret += "bloatedTube: False"+"\n"
-		return ret 
-
-	
-
-
-
+		return ret

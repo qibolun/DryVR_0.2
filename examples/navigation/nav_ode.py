@@ -19,7 +19,7 @@ def nav_dynamic(y, t, modeNum):
         vy_dot = 0.1*vx-1.2*vy-3.9
     return [px_dot, py_dot, vx_dot, vy_dot]
 
-def TC_simulate(Mode,initialCondition,time_bound):
+def TC_Simulate(Mode,initialCondition,time_bound):
     time_step = 0.05;
     time_bound = float(time_bound)
 

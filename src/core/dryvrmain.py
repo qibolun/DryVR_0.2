@@ -70,11 +70,14 @@ def verify(inputFile):
 	while True:
 		backwardFlag = SAFE
 		while curModeStack.stack:
-			print "Mode", curModeStack.mode, "has stack size", len(curModeStack.stack)
+			print str(curModeStack)
 			if not curModeStack.isValid():
 				print curModeStack.mode, "is not valid anymore"
 				backwardFlag = UNKNOWN
 				break
+
+			if isinstance(curModeStack.bloatedTube[-1], list):
+				curModeStack.bloatedTube.append(curModeStack.bloatedTube[0])
 
 			curStack = curModeStack.stack
 			curVertex = curModeStack.mode
@@ -100,8 +103,6 @@ def verify(inputFile):
 					continue
 
 				nextInit = reseter.resetReachTube(curResetStr, nextInit[0], nextInit[1])
-
-				print "next initial is ", nextInit
 
 				nextModeStack = InitialSetStack(
 					curSuccessor,

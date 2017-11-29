@@ -105,6 +105,7 @@ def simulate(g, initCondition, timeHorizon, guard, simFuc, reseter, initialMode,
 				curSimResult,
 				None
 			)
+			curSuccessor = None
 
 		else:
 			# First find all possible transition

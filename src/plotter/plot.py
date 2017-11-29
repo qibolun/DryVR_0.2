@@ -52,15 +52,17 @@ def rrtPlot(lowerBound, upperBound, xDim, yDim, goal, unsafes, region):
 		ax1.add_patch(rect)
 
 	# Draw the goal
-	lb, ub = goal
-	rect = patches.Rectangle((lb[0], lb[1]), ub[0]-lb[0], ub[1]-lb[1], color='green', alpha=0.7)
-	ax1.add_patch(rect)
+	if goal:
+		lb, ub = goal
+		rect = patches.Rectangle((lb[0], lb[1]), ub[0]-lb[0], ub[1]-lb[1], color='green', alpha=0.7)
+		ax1.add_patch(rect)
 
 	# Draw the unsafe
-	for unsafe in unsafes:
-		lb, ub = unsafe
-		rect = patches.Rectangle((lb[0], lb[1]), ub[0]-lb[0], ub[1]-lb[1], color='red', alpha=0.7)
-		ax1.add_patch(rect)
+	if unsafes:
+		for unsafe in unsafes:
+			lb, ub = unsafe
+			rect = patches.Rectangle((lb[0], lb[1]), ub[0]-lb[0], ub[1]-lb[1], color='red', alpha=0.7)
+			ax1.add_patch(rect)
 
 	ax1.set_title("RRT",fontsize=12)
 	ax1.set_ylim([y_min, y_max])

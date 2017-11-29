@@ -4,7 +4,7 @@
 	"variables":["x","y"],
 	"guards":[],
 	"initialMode":"Default",
-	"initialSet":[[0.8, 0],[1, 0.2]],
+	"initialSet":[[1.25, 1.55],[2.25, 2.35]],
 	"unsafeSet":"@Allmode:And(x<=-2.5,x>=2.5,y<=-3,y>=3)",
 	"timeHorizon":7.0,
 	"directory":"examples/vanderpol"

@@ -1,0 +1,11 @@
+{
+	"vertex":["Default"],
+	"edge":[],
+	"variables":["x","y"],
+	"guards":[],
+	"initialMode":"Default",
+	"initialSet":[[0.8, 0],[1, 0.2]],
+	"unsafeSet":"@Allmode:And(x<=-100,x>=-101)",
+	"timeHorizon":7.0,
+	"directory":"examples/vanderpol"
+}

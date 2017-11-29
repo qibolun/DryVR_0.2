@@ -41,7 +41,7 @@ def TC_Simulate(Mode,initialCondition,time_bound):
 
 if __name__ == "__main__":
 
-    sol = TC_Simulate("Default", [1, 0], 10.0)
+    sol = TC_Simulate("Default", [0.9, 0.15], 10.0)
     #for s in sol:
 	#	print(s)
 

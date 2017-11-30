@@ -4,11 +4,11 @@
 	"variables":["x_one", "x_two"],
 	"guards":["And(x_two>=1,x_two<=1.1)",
 		"And(x_one<=-1,x_one>=-1.1)", 
-		"And(x_two>=0,x_two<=0.1)", 
+		"And(x_two<=0,x_two>=-0.1)", 
 		"And(x_one<=-1,x_one>=-1.1)",
 		"And(x_two>=1,x_two<=1.1)",
 		"And(x_one>=1,x_one<=1.1)",
-		"And(x_two>=0,x_two<=0.1)"
+		"And(x_two<=0,x_two>=-0.1)"
 	],
 	"initialMode":"off_off",
 	"initialSet":[[1.5, 1.0],[2.5, 1.0]],

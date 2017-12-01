@@ -1,150 +1,187 @@
 # The differential equations of a single car dynamics
-
+#from __future__ import contextlib
 from scipy.integrate import odeint
-import numpy as np 
+import scipy as scipy
 
-def Car_dynamic(y,t,v_initial,acc,acc_time,turn_indicator,turn_time,turn_back_time):
+import scipy.special as sc
+import numpy as np 
+import warnings
+
+def Car_dynamic(y,t,acc,w,mode):
 	L = 5.0 # the length of the car, make it fix here
 	# make everything double
-	v_initial = float(v_initial)
 	acc = float(acc)
-	y = [float(tmp) for tmp in y]
-	acc_time = float(acc_time)
-	turn_time = float(turn_time)
-	turn_back_time = float(turn_back_time)
+	w = float(w)
 	# end of making float
 
-	# set the velocity
-	if t <= acc_time:
-		v = v_initial
-		#print('20')
-	elif (t > acc_time) and (t <= acc_time + 5.0):
-		v = v_initial + acc*(t-acc_time)
-		#print('23')
-	elif t > acc_time + 5.0:
-		v = v_initial + acc * 5.0
-		#print('25')
-	else:
-		print('Something is wrong with time here when calculting velocity!')
+	sx, sy, delta, v, psi = y
+	#print v
+	# psi is the angle between y axis and v
+	# y
+	# |psi/
+	# |  /
+	# | /
+	# |/__________ x
+	sx_dot = v * np.sin(psi)		
+	sy_dot = v * np.cos(psi)
+	#print "sx_dot: "+str(sx_dot)
+	#print "sy_dot: "+str(sy_dot)
+	#print "psi: "+str(psi)
+	#print "delta: "+str(delta)
+	#print "w: "+str(w)
 
-	# set the steering angle
-	delta_initial = 0.0
-	if turn_indicator == 'Right':
-		# print(t)
-		if t <= turn_time:
-			delta_steer = delta_initial;
-		elif (t > turn_time) and (t <= turn_time + 2.0):
-			delta_steer = delta_initial + 1.0 
-		elif (t > turn_time + 2.0) and (t <= turn_back_time):
-			delta_steer = delta_initial 
-		elif (t > turn_back_time) and (t <= turn_back_time + 2.0):
-			delta_steer = delta_initial - 1.0 
-		elif t > turn_back_time + 2.0:
-			delta_steer = delta_initial
-		else:
-			print('Something is wrong with time here when calculting steering angle!')
-	elif turn_indicator =='Left':
-		if t <= turn_time:
-			delta_steer = delta_initial;
-		elif (t > turn_time) and (t <= turn_time + 2.0):
-			delta_steer = delta_initial + (-1.0) 
-		elif (t > turn_time + 2.0) and (t <= turn_back_time):
-			delta_steer = delta_initial 
-		elif (t > turn_back_time) and (t < turn_back_time + 2.0):
-			delta_steer = delta_initial + (1.0)
-		elif t > turn_back_time + 2.0:
-			delta_steer = delta_initial
-		else:
-			print('Something is wrong with time here when calculting steering angle!')
-	elif turn_indicator == 'Straight':
-		delta_steer = delta_initial
-	else:
-		print('Wrong turn indicator!')
+	#print delta
 
-	psi, sx, py = y
-	psi_dot = (v)/L*(np.pi/8.0)*delta_steer
-	w_z = psi_dot
-	sx_dot = v * np.cos(psi) - L/2.0 * w_z * np.sin(psi) 
-	sy_dot = v * np.sin(psi) + L/2.0 * w_z * np.cos(psi)
-	#sx_dot = v * np.cos(psi) 
-	#sy_dot = v * np.sin(psi)
-	dydt = [psi_dot, sx_dot, sy_dot]
+#	if((mode == "Brk") or (mode == "Dec")) and (v < 0):
+#		v_dot = 0
+#	else:
+#		v_dot = acc
+
+	delta_dot = w
+	#if(delta>=0.3):
+	#	delta_dot=0
+	psi_dot = v/L * np.tan(delta)
+	#print "v: " + str(v)
+	dydt = [sx_dot, sy_dot, delta_dot, acc, psi_dot]
 	return dydt
 
 
 def Car_simulate(Mode,initial,time_bound):
+	turntimelimit = 0#TODO Temp solution
 	time_step = 0.05;
 	time_bound = float(time_bound)
+	actualtime = time_bound
 	initial = [float(tmp)  for tmp in initial]
 	number_points = int(np.ceil(time_bound/time_step))
 	t = [i*time_step for i in range(0,number_points)]
 	if t[-1] != time_step:
 		t.append(time_bound)
-
 	# initial = [sx,sy,vx,vy]
 	# set the parameters according to different modes
 	# v_initial,acc,acc_time,turn_indicator,turn_time,turn_back_time
-
 	sx_initial = initial[0]
 	sy_initial = initial[1]
 	vx_initial = initial[2]
 	vy_initial = initial[3]
-	psi_initial = 1.0*(-np.pi/2)
+	if vy_initial == 0:
+		psi_initial = np.pi/2
+	else:
+		psi_initial = np.arctan(vx_initial/vy_initial)
+	delta_initial = initial[4]	# magic number
 
 	v_initial = (vx_initial**2 + vy_initial**2)**0.5
 	acc = 0.0
 	acc_time = 0.0
 	turn_time = 0.0
 	turn_back_time = 0.0
-
 	# Initialize according to different mode
 	if Mode == 'Const':
-		turn_indicator = 'Straight'
-	elif ((Mode == 'Acc1') or (Mode == 'Acc2')):
-		turn_indicator = 'Straight'
-		acc = 0.2
-		acc_time = 0.0
+		acc = 0.0
+		w = 0.0
+	elif Mode == 'Acc':
+		acc = 0.5
+		w = 0.0
 	elif (Mode == 'Dec') or (Mode == 'Brk'): 
-		turn_indicator = 'Straight'
-		acc = -0.2
-		acc_time = 0.0
+		acc = -0.5
+		w = 0.0
 	elif Mode =='TurnLeft':
-		turn_indicator = 'Left'
-		turn_time = 0.0
-		turn_back_time = 5.0
+		acc = 0.0
+		w = -0.2
+		turntimelimit = abs((-0.35-psi_initial))/0.2
+		time_bound = min(turntimelimit,time_bound)
+		number_points = int(np.ceil(time_bound/time_step))+1
+		t = [i*time_step for i in range(0,number_points)]
 	elif Mode == 'TurnRight':
-		turn_indicator = 'Right'
-		turn_time = 0.0
-		turn_back_time = 5.0
+		acc = 0.0
+		w = 0.2
+		turntimelimit = (0.35-psi_initial)/0.2
+		time_bound = min(turntimelimit,time_bound)
+		number_points = int(np.ceil(time_bound/time_step))+1
+		t = [i*time_step for i in range(0,number_points)]
 	else:
 		print('Wrong Mode name!')
 
-	Initial_ode = [psi_initial, sx_initial, sy_initial]
-	sol = odeint(Car_dynamic,Initial_ode,t,args=(v_initial,acc,acc_time,turn_indicator,turn_time,turn_back_time),hmax = time_step)
-
-	# Construct v
-	v = np.zeros(len(t))
-
-	for i in range(len(t)):
-		if t[i] <= acc_time:
-			v[i] = v_initial
-		elif (t[i] > acc_time) and (t[i] <= acc_time + 5.0):
-			v[i] = v_initial + acc*(t[i]-acc_time)
-		elif (t[i] > acc_time + 5.0):
-			v[i] = v_initial + acc * 5.0
-
-	# print v
-
-	# Construct the final output
+	Initial_ode = [sx_initial, sy_initial, delta_initial, v_initial, psi_initial]
+	sol = odeint(Car_dynamic,Initial_ode,t,args=(acc,w,"Const"),hmax = time_step)
 	trace = []
+	is_zero = False
+	turn_lock = False
+	max_speed = False
 	for j in range(len(t)):
-		current_psi = sol[j,0]
-		#print t[j], current_psi
-		tmp = []
-		tmp.append(t[j])
-		tmp.append(sol[j,1])
-		tmp.append(sol[j,2])
-		tmp.append(v[j]*np.cos(current_psi))
-		tmp.append(v[j]*np.sin(current_psi))
-		trace.append(tmp)
+		current_psi = sol[j,4]
+		if not is_zero and not turn_lock and not max_speed:
+			tmp = []
+			tmp.append(t[j])
+			tmp.append(sol[j, 0])
+			tmp.append(sol[j, 1])
+			tmp.append(sol[j, 3] * np.sin(current_psi))
+			tmp.append(sol[j, 3] * np.cos(current_psi))
+			tmp.append(sol[j, 2])
+			trace.append(tmp)
+
+		if((Mode=="Brk") or (Mode=="Dec")) and (sol[j,3]<=0.0) and not is_zero:
+			sol[j,3] = 0 
+			temp0 = sol[j,0]
+			temp1 = sol[j,1]
+			temp2 = sol[j,2]
+			temp3 = sol[j,3]
+			temp4 = sol[j,4]
+
+		if (actualtime>=turntimelimit) and Mode=="TurnRight" and not turn_lock: #this statement needs working if we want to decelerate while driving
+			sol[j,2] = 0.35
+			temp0 = sol[j, 0]
+			temp1 = sol[j, 1]
+			temp2 = sol[j, 2]
+			temp3 = sol[j, 3]
+			temp4 = sol[j, 4]
+			turn_lock = True
+
+		if (actualtime>=turntimelimit) and Mode=="TurnLeft" and not turn_lock: #this statement needs working if we want to decelerate while driving
+			sol[j,2] = -0.35
+			temp0 = sol[j, 0]
+			temp1 = sol[j, 1]
+			temp2 = sol[j, 2]
+			temp3 = sol[j, 3]
+			temp4 = sol[j, 4]
+			turn_lock = True
+
+
+		if(abs(sol[j,3])>=45.8 and not max_speed):
+			sol[j,3]=45.8
+			temp0 = sol[j, 0]
+			temp1 = sol[j, 1]
+			temp2 = sol[j, 2]
+			temp3 = sol[j, 3]
+			temp4 = sol[j, 4]
+			max_speed = True
+
+		if turn_lock or max_speed:
+			
+			curtime = t[j]
+			Initial_ode = [temp0, temp1, temp2, temp3, temp4]
+			time_step = 0.05;
+			actualtime = float(actualtime) - curtime
+			number_points = int(np.ceil(actualtime / time_step))
+			newt = [i * time_step + curtime for i in range(0, number_points)]
+
+			newsol = odeint(Car_dynamic, Initial_ode, newt, args=(0, 0, "Const"), hmax=time_step)
+			for x in range(len(newt)):
+				tmp1 = []
+				tmp1.append(newt[x])
+				tmp1.append(newsol[x, 0])
+				tmp1.append(newsol[x, 1])
+				tmp1.append(newsol[x, 3] * np.sin(newsol[x, 4]))
+				tmp1.append(newsol[x, 3] * np.cos(newsol[x, 4]))
+				tmp1.append(newsol[x, 2])
+				trace.append(tmp1)
+			break
+
+		if is_zero:
+			tmp.append(t[j])
+			tmp.append(temp0)
+			tmp.append(temp1)
+			tmp.append(temp3*np.sin(temp4))
+			tmp.append(temp3*np.cos(temp4))
+			tmp.append(temp2)
+			trace.append(tmp)
 	return trace

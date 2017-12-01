@@ -1,8 +1,6 @@
 # The differential equations of a single car dynamics
-#from __future__ import contextlib
 from scipy.integrate import odeint
 import scipy as scipy
-
 import scipy.special as sc
 import numpy as np 
 import warnings
@@ -24,24 +22,8 @@ def Car_dynamic(y,t,acc,w,mode):
 	# |/__________ x
 	sx_dot = v * np.sin(psi)		
 	sy_dot = v * np.cos(psi)
-	#print "sx_dot: "+str(sx_dot)
-	#print "sy_dot: "+str(sy_dot)
-	#print "psi: "+str(psi)
-	#print "delta: "+str(delta)
-	#print "w: "+str(w)
-
-	#print delta
-
-#	if((mode == "Brk") or (mode == "Dec")) and (v < 0):
-#		v_dot = 0
-#	else:
-#		v_dot = acc
-
 	delta_dot = w
-	#if(delta>=0.3):
-	#	delta_dot=0
 	psi_dot = v/L * np.tan(delta)
-	#print "v: " + str(v)
 	dydt = [sx_dot, sy_dot, delta_dot, acc, psi_dot]
 	return dydt
 

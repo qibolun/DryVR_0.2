@@ -2,6 +2,8 @@ from scipy.integrate import odeint
 import numpy as np
 import matplotlib.pyplot as plt
 
+# Source: https://ths.rwth-aachen.de/research/projects/hypro/two-tank/ 
+
 def two_tank_dynamic(y, t, Mode):
     x1, x2 = y
     x1 = float(x1)

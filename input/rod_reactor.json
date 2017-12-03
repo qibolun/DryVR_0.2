@@ -18,5 +18,5 @@
     "initialSet":[[510, 20, 20],[510, 20, 20]],
     "unsafeSet":"@Allmode:And(x>=550, x<551, c1<20, c2<20)",
     "timeHorizon":50,
-    "directory":"examples/rod_reactor.json"
+    "directory":"examples/rod_reactors"
 }

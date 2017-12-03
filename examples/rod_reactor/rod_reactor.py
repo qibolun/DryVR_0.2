@@ -57,12 +57,15 @@ if __name__ == "__main__":
 
     time = [row[0] for row in sol]
 
-    a = [row[1] for row in sol]
+    x = [row[1] for row in sol]
 
-    b = [row[2] for row in sol]
+    c1 = [row[2] for row in sol]
 
-    plt.plot(time, a, "-r")
-    plt.plot(time, b, "-g")
+    c2 = [row[3] for row in sol]
+
+    plt.plot(x, c1, "-r")
     plt.show()
-    plt.plot(a, b, "-r")
+    plt.plot(x, c2, "-g")
+    plt.show()
+    plt.plot(c1, c2, "-r")
     plt.show()

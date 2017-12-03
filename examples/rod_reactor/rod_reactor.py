@@ -14,11 +14,11 @@ def rod_reactor_dynamic(y,t,Mode):
         x_dot = 0.1*x - 56
         c1_dot = 1
         c2_dot = 1
-    elif Mode = "rod_2":
+    elif Mode == "rod_2":
         x_dot = 0.1*x - 60
         c1_dot = 1
         c2_dot = 1
-    elif Mode = "no_rod":
+    elif Mode == "no_rod":
         x_dot = 0.1*x - 50
         c1_dot = 1
         c2_dot = 1

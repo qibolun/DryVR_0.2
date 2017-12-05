@@ -17,7 +17,7 @@ def spiking_neuron_dynamic(y, t)：
     b = 8
     k = 1
 
-    v_dot = (k * (v - (v_r)) * (v - v_t) - u + I)/100
+    v_dot = (k * (v - (v_r)) * (v - v_t) - u + I)/C
     u_dot = a * (b * (v - v_r) - u)
 
     dydt = [v_dot, u_dot]

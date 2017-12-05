@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 
 # Source: https://ths.rwth-aachen.de/research/projects/hypro/spiking-neurons/
 
-def spiking_neuron_dynamic(y, t)：
+def spiking_neuron_dynamic(y,t):
     v, u = y
     v = float(v)
     u = float(u)

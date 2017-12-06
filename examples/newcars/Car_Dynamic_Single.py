@@ -69,17 +69,25 @@ def Car_simulate(Mode,initial,time_bound):
 	elif Mode =='TurnLeft':
 		acc = 0.0
 		w = -0.2
-		turntimelimit = abs((-0.35-psi_initial))/0.2
+		turntimelimit = abs((-0.35-initial[4]))/0.2
+		print turntimelimit
 		time_bound = min(turntimelimit,time_bound)
+		#time_bound = float(format(time_bound, '.2f'))
 		number_points = int(np.ceil(time_bound/time_step))+1
-		t = [i*time_step for i in range(0,number_points)]
+		t = [float(format(i*time_step,".2f")) for i in range(0,number_points)]
 	elif Mode == 'TurnRight':
 		acc = 0.0
 		w = 0.2
-		turntimelimit = (0.35-psi_initial)/0.2
+		print psi_initial
+		turntimelimit = (0.35-initial[4])/0.2
+		print turntimelimit	
 		time_bound = min(turntimelimit,time_bound)
+		#time_bound = float(format(time_bound, '.2f'))
 		number_points = int(np.ceil(time_bound/time_step))+1
-		t = [i*time_step for i in range(0,number_points)]
+		#print numberpoints
+		t = [float(format(i*time_step,".2f")) for i in range(0,number_points)]
+		
+		print t
 	else:
 		print('Wrong Mode name!')
 
@@ -87,11 +95,11 @@ def Car_simulate(Mode,initial,time_bound):
 	sol = odeint(Car_dynamic,Initial_ode,t,args=(acc,w,"Const"),hmax = time_step)
 	trace = []
 	is_zero = False
-	turn_lock = False
+
 	max_speed = False
 	for j in range(len(t)):
 		current_psi = sol[j,4]
-		if not is_zero and not turn_lock and not max_speed:
+		if not is_zero and not max_speed:
 			tmp = []
 			tmp.append(t[j])
 			tmp.append(sol[j, 0])
@@ -109,23 +117,23 @@ def Car_simulate(Mode,initial,time_bound):
 			temp3 = sol[j,3]
 			temp4 = sol[j,4]
 
-		if (actualtime>=turntimelimit) and Mode=="TurnRight" and not turn_lock: #this statement needs working if we want to decelerate while driving
-			sol[j,2] = 0.35
-			temp0 = sol[j, 0]
-			temp1 = sol[j, 1]
-			temp2 = sol[j, 2]
-			temp3 = sol[j, 3]
-			temp4 = sol[j, 4]
-			turn_lock = True
+		#if (sol[j,2]>=0.35) and Mode=="TurnRight" and not turn_lock: #this statement needs working if we want to decelerate while driving
+		#	sol[j,2] = 0.35
+		#	temp0 = sol[j, 0]
+		#	temp1 = sol[j, 1]
+		#	temp2 = sol[j, 2]
+		#	temp3 = sol[j, 3]
+		#	temp4 = sol[j, 4]
+		#	turn_lock = True
 
-		if (actualtime>=turntimelimit) and Mode=="TurnLeft" and not turn_lock: #this statement needs working if we want to decelerate while driving
-			sol[j,2] = -0.35
-			temp0 = sol[j, 0]
-			temp1 = sol[j, 1]
-			temp2 = sol[j, 2]
-			temp3 = sol[j, 3]
-			temp4 = sol[j, 4]
-			turn_lock = True
+		#if (sol[j,2]<=-0.35) and Mode=="TurnLeft" and not turn_lock: #this statement needs working if we want to decelerate while driving
+		#	sol[j,2] = -0.35
+		#	temp0 = sol[j, 0]
+		#	temp1 = sol[j, 1]
+		#	temp2 = sol[j, 2]
+		#	temp3 = sol[j, 3]
+		#	temp4 = sol[j, 4]
+		#	turn_lock = True
 
 
 		if(abs(sol[j,3])>=45.8 and not max_speed):
@@ -136,15 +144,16 @@ def Car_simulate(Mode,initial,time_bound):
 			temp3 = sol[j, 3]
 			temp4 = sol[j, 4]
 			max_speed = True
-
-		if turn_lock or max_speed:
-			
+			#print "MMMMMAAAX"
+		if max_speed:
 			curtime = t[j]
 			Initial_ode = [temp0, temp1, temp2, temp3, temp4]
 			time_step = 0.05;
 			actualtime = float(actualtime) - curtime
+			#actualtime = float(format(actualtime, '.2f'))
 			number_points = int(np.ceil(actualtime / time_step))
-			newt = [i * time_step + curtime for i in range(0, number_points)]
+			
+			newt = [float(format(i * time_step + curtime,".2f")) for i in range(0, number_points)]
 
 			newsol = odeint(Car_dynamic, Initial_ode, newt, args=(0, 0, "Const"), hmax=time_step)
 			for x in range(len(newt)):
@@ -166,4 +175,26 @@ def Car_simulate(Mode,initial,time_bound):
 			tmp.append(temp3*np.cos(temp4))
 			tmp.append(temp2)
 			trace.append(tmp)
+
+	if (Mode=="TurnLeft" or Mode=="TurnRight") and (actualtime>turntimelimit):
+		last = len(sol)-1
+		Initial_ode = [sol[last,0], sol[last,1], sol[last,2], sol[last,3], sol[last,4]]
+		time_step = 0.05;
+		actualtime = float(actualtime) - turntimelimit
+			#actualtime = float(format(actualtime, '.2f'))
+		number_points = int(np.ceil(actualtime / time_step))
+			
+		newt = [float(format(i * time_step + turntimelimit,".2f")) for i in range(0, number_points)]
+
+		newsol = odeint(Car_dynamic, Initial_ode, newt, args=(0, 0, "Const"), hmax=time_step)
+		for x in range(len(newt)):
+			tmp1 = []
+			tmp1.append(newt[x])
+			tmp1.append(newsol[x, 0])
+			tmp1.append(newsol[x, 1])
+			tmp1.append(newsol[x, 3] * np.sin(newsol[x, 4]))
+			tmp1.append(newsol[x, 3] * np.cos(newsol[x, 4]))
+			tmp1.append(newsol[x, 2])
+			trace.append(tmp1)
+
 	return trace

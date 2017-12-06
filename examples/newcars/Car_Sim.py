@@ -25,11 +25,11 @@ def TC_Simulate(Modes,initialCondition,time_bound):
 				#	print b
 				#for x in trace[:,0:6]:
 				#	print x
-				print Modes[car_numer]
-				print "length of final trace is: "
-				print len(Final_trace)
-				print "length of next trace is: "
-				print len(trace[:,1:6])
+				#print Modes[car_numer]
+				#print "length of final trace is: "
+				##print len(Final_trace)
+				#print "length of next trace is: "
+				#print len(trace[:,1:6])
 				Final_trace = np.concatenate((Final_trace, trace[:,1:6]), axis=1)
 	else:
 		print('Number of cars does not match the initial condition')
@@ -38,23 +38,25 @@ def TC_Simulate(Modes,initialCondition,time_bound):
 
 if __name__ == "__main__":
 
-	sol = TC_Simulate("TurnLeft", [0, 0, 0, 1, 0], 10)
+	sol = TC_Simulate("TurnLeft", [0, 0, 0, 1, 0.1], 30)
 
-
-	nextsol = TC_Simulate("TurnRight",sol[-1][1:],10)#2.4
+	#nextsol = TC_Simulate("TurnRight",sol[-1][1:],50)#2.4
 
 	#finalsol = TC_Simulate("Const",nextsol[-1][1:],1.5)
 	#print sol
-	
+	#for i in sol:
+	#	print i
+	#for j in nextsol:
+	#	print j
 
 	#nextsoltime = [(row[0]+sol[-1][0]) for row in nextsol]
-	sxnext = [row[1] for row in nextsol]
-	synext = [row[2] for row in nextsol]
+	#sxnext = [row[1] for row in nextsol]
+	#synext = [row[2] for row in nextsol]
 	sx = [row[1] for row in sol]
 	sy = [row[2] for row in sol]
 	#sxfinal = [row[1] for row in finalsol]
 	#syfinal = [row[2] for row in finalsol]
-	plt.plot(sx+sxnext, sy+synext, "-r")
+	plt.plot(sx, sy, "-r")
 	plt.show()
 
 	# 	nextdelta = [row[5] for row in nextsol]

@@ -11,7 +11,7 @@ from collections import namedtuple
 # This is the tuple for input file parsed by DryVR
 DryVRInput = namedtuple(
     'DryVRInput',
-    'vertex edge guards variables initialSet unsafeSet timeHorizon path resets initialMode deterministic'
+    'vertex edge guards variables initialSet unsafeSet timeHorizon path resets initialMode deterministic bloatingMethod kvalue'
 )
 
 # This is the tuple for rtt input file parsed by DryVR

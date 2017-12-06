@@ -11,6 +11,7 @@ from src.common.constant import *
 from src.common.io import writeToFile,readFromFile
 from src.common.utils import randomPoint,calcDelta,calcCenterPoint,buildModeStr
 from src.discrepancy.Global_Disc import *
+from src.discrepancy.PW_Discrepancy import PW_Bloat_to_tube
 
 def buildGraph(vertex, edge, guards, timeHorizon, resets):
 	g = Graph(directed = True)
@@ -86,6 +87,7 @@ def simulate(g, initCondition, timeHorizon, guard, simFuc, reseter, initialMode,
 
 		if DEBUG:
 			print NEWLINE
+			print curVertex, remainTime
 			print 'Current State', g.vs[curVertex]['label'], remainTime
 
 		if initCondition is None:
@@ -149,18 +151,20 @@ def simulate(g, initCondition, timeHorizon, guard, simFuc, reseter, initialMode,
 		# Get real transite time from truncked result
 		transiteTime = trunckedResult[-1][0]
 		retval[curLabel] += trunckedResult
+		simResult.append(curLabel)
 		for simRow in trunckedResult:
 			simRow[0] += curTime
 			simResult.append(simRow)
 
 		remainTime -= transiteTime
+		print "transit time", transiteTime, "remain time", remainTime
 		curTime += transiteTime
 		curVertex = curSuccessor
 
 	writeToFile(simResult, SIMRESULTOUTPUT)
 	return retval
 
-def clacBloatedTube(modeLabel, initialSet, timeHorizon, simFuc):
+def clacBloatedTube(modeLabel, initialSet, timeHorizon, simFuc, bloatingMethod, kvalue, guardChecker=None, guardStr=None):
 	# Taking modeLabel, initial set, time horizon information
 	# Calculate the bloated tube
 	curCenter = calcCenterPoint(initialSet[0], initialSet[1])
@@ -172,6 +176,29 @@ def clacBloatedTube(modeLabel, initialSet, timeHorizon, simFuc):
 		#print newInitPoint
 		traces.append(simFuc(modeLabel, newInitPoint, timeHorizon))
 
-	k, gamma = Global_Discrepancy(modeLabel, curDelta, 0, 2, traces)
-	curReachTube = bloatToTube(modeLabel, k, gamma, curDelta, traces)
+	if guardChecker is not None:
+		# pre truncked traces to get better bloat result
+		print guardStr
+		maxIdx = -1
+		for trace in traces:
+			retIdx = guardChecker.guardSimuTraceTime(trace, guardStr)
+			maxIdx = max(maxIdx, retIdx+1)
+		# 	for t in trace:
+		# 		print t
+		# print "max Idx is ", maxIdx
+		for i in range(len(traces)):
+			traces[i] = traces[i][:maxIdx]
+		#print traces
+
+	if bloatingMethod == GLOBAL:
+		if BLOATDEBUG:
+			k, gamma = Global_Discrepancy(modeLabel, curDelta, 1, 2, traces)
+		else:
+			k, gamma = Global_Discrepancy(modeLabel, curDelta, 0, 2, traces)
+		curReachTube = bloatToTube(modeLabel, k, gamma, curDelta, traces)
+	elif bloatingMethod == PW:
+		if BLOATDEBUG:
+			curReachTube = PW_Bloat_to_tube(curDelta, 1, 2, traces, kvalue)
+		else:
+			curReachTube = PW_Bloat_to_tube(curDelta, 0, 0, traces, kvalue)
 	return curReachTube

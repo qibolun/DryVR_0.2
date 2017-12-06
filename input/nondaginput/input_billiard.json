@@ -39,7 +39,7 @@
 	"initialMode":"NormalA",
 	"initialSet":[[1.5, 0.0, 1.0, 1.0],[1.51, 0.0, 1.0, 1.0]],
 	"unsafeSet":"@Allmode:posy>=12.0",
-	"timeHorizon":8,
+	"timeHorizon":16,
 	"directory":"examples/billiard",
 	"deterministic":true
 }

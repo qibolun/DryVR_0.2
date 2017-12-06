@@ -67,6 +67,35 @@ class Guard():
 		# No guard hits for current tube
 		return None, tube
 
+	def guardSimuTraceTime(self, tube, guardStr):
+		if not guardStr:
+			return None, tube
+		curSolver = self._buildGuard(guardStr)
+		guardSet = {}
+		# Implement new guard Algorithm for the simulation tube
+		for idx in range(len(tube)-1):
+			lower = tube[idx]
+			upper = tube[idx+1]
+			curSolver.push()
+			curSolver.add(self.varDic['t'] >= lower[0])
+			curSolver.add(self.varDic['t'] <= upper[0])
+			for i in range(1, len(lower)):
+				curSolver.add(self.varDic[self.variables[i-1]]>=min(lower[i],upper[i]))
+				curSolver.add(self.varDic[self.variables[i-1]]<=max(upper[i],lower[i]))
+			if curSolver.check() == sat:
+				curSolver.pop()
+				guardSet[idx] = upper
+			else:
+				curSolver.pop()
+				if guardSet:
+					# Find max idx
+					idx = max(guardSet.keys())
+					# Return idx
+					return idx+1
+		return len(tube)
+
+
+
 	def guardReachTube(self, tube, guardStr):
 		if not guardStr:
 			return None, tube
@@ -102,4 +131,18 @@ class Guard():
 							initUpper[k-1] = max(initUpper[k-1], guardSetUpper[j][k])
 					# Return next initial Set, the result tube, and the true transit time
 					return [initLower,initUpper], tube[:i], guardSetLower[0][0]
+
+		# Construct the guard if all later trace sat the guard condition
+		if guardSetLower:
+			# Guard set is not empty, build the next initial set and return
+			# At some point we might futher reduce the initial set for next mode
+			initLower = guardSetLower[0][1:]
+			initUpper = guardSetUpper[0][1:]
+			for j in range(1,len(guardSetLower)):
+				for k in range(1,len(guardSetLower[0])):
+					initLower[k-1] = min(initLower[k-1], guardSetLower[j][k])
+					initUpper[k-1] = max(initUpper[k-1], guardSetUpper[j][k])
+			# Return next initial Set, the result tube, and the true transit time
+			return [initLower,initUpper], tube[:i], guardSetLower[0][0]
+
 		return None, tube, tube[-1][0]

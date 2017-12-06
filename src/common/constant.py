@@ -9,7 +9,7 @@ PLOTGRAPH = True
 # Numeric constant
 SIMUTESTNUM = 1
 SIMTRACENUM = 10
-REFINETHRES = 4
+REFINETHRES = 10
 CHILDREFINETHRES = 2
 
 #Flag value
@@ -17,6 +17,7 @@ SAFE = 1
 UNSAFE = -1
 UNKNOWN = 0
 NOSTATUS = 99
+BLOATDEBUG = False
 
 # File Pathes
 GRAPHOUTPUT = 'output/curGraph.png'
@@ -27,6 +28,8 @@ RRTOUTPUT = 'output/rrtTube.txt'
 
 # Useful constant string
 NEWLINE = '----------------------------------------------'
+PW = "PW"
+GLOBAL = "GLOBAL"
 
 
 

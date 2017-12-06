@@ -1,0 +1,13 @@
+{
+	"vertex":["Default"],
+	"edge":[],
+	"variables":["x","y"],
+	"guards":[],
+	"initialMode":"Default",
+	"initialSet":[[0.8, 0],[1, 0.2]],
+	"unsafeSet":"@Allmode:Or(x<=-1.0,x>=2.3,y<=-1.2,y>=3)",
+	"timeHorizon":15.0,
+	"directory":"examples/Brusselator",
+  "bloatingMethod":"PW",
+  "kvalue":[10,10]
+}

@@ -30,9 +30,9 @@ traces_path = 'output/other_traces.txt'
 center_path = 'output/center_trace.txt'
 
 # Read in all the traces
-def read_data(Mode,traces):
+def read_data(traces):
 
-    error_thred_time = 1e-6
+    error_thred_time = 1e-3
 
     trace = traces[0]
     delta_time = trace[1][0] - trace[0][0]
@@ -82,7 +82,7 @@ def compute_diff(traces):
 
             # Iterate over the data of the trace
             for t in xrange(0, len(traces[i])):
-                diff = [abs(x_i - y_i) for x_i, y_i in zip(traces[i][t], 
+                diff = [abs(x_i - y_i) for x_i, y_i in zip(traces[i][t],
                     traces[j][t])]
                 trace_diff.append(diff[1:])
 
@@ -96,7 +96,7 @@ def compute_diff(traces):
  #               print(i,j)
                 write_file.write(str(traces_diff[i][j]) + '\n')
             write_file.write('\n')
-    return traces_diff      
+    return traces_diff
 
 # Compute the time intervals
 def find_time_intervals(traces_diff,dimensions_nt,end_time,trace_len,delta_time,K_value):
@@ -143,15 +143,15 @@ def find_time_intervals(traces_diff,dimensions_nt,end_time,trace_len,delta_time,
             # Compute ratios
             ratio = []
             for d_0, d_i in zip(diff_0, diff_i):
-                if d_i < 1E-5:
+                if d_i < 1E-3:
                     continue
-                elif d_0 < 1E-5:
+                elif d_0 < 1E-3:
                     continue
 
                 # NOTE not sure if this is right?
                 #ratio.append((1 / t) * math.log(d_i / d_0))
                 ratio.append(d_i / d_0)
-            
+
             # Check ratios if less than constant
             # new_int = all(r <= 2.0*K_value[i] for r in ratio)
             # new_int = all(r <= 2**(2*t)*K_value[i] for r in ratio)
@@ -183,7 +183,7 @@ def calculate_discrepancies(time_intervals,traces_diff,dimensions_nt,delta_time,
     discrepancies = []
     for nd in xrange(0, dimensions_nt):
     #for nd in xrange(0, P_DIM):
-        disc = [] 
+        disc = []
 
 
 
@@ -197,18 +197,18 @@ def calculate_discrepancies(time_intervals,traces_diff,dimensions_nt,delta_time,
             points = int((t_e - t_0) / delta_time + 0.5) + 1
             idx = int(t_0 / delta_time)
 
-            # try to find the best K and gamma 
+            # try to find the best K and gamma
             tmp_K_value = K_value[nd]
             # Iterate over all trace difference
             glpk_rows = []
             close_flag = 0
             for k in xrange(0, len(traces_diff)):
 
-                # Compute initial 
+                # Compute initial
                 diff_0 = traces_diff[k][0][nd]
-                if diff_0 <= 1E-6:
-                    print('Find two traces to be too closed!')
-                    print('use the default value!')
+                if diff_0 <= 1E-3:
+                    #print('Find two traces to be too closed!')
+                    #print('use the default value!')
                     close_flag = 1
                     break
                 ln_0 = math.log(diff_0)
@@ -221,10 +221,10 @@ def calculate_discrepancies(time_intervals,traces_diff,dimensions_nt,delta_time,
                     t_d = t_i - t_0
                     t_i += delta_time
                     diff_i = traces_diff[k][idx + r][nd]
-                    
-                    if diff_i < 1E-6:
+
+                    if diff_i < 1E-3:
                         continue
-                    
+
                     ln_i = math.log(diff_i)
 
                     #compute the existing previous time interval discrepancy
@@ -254,18 +254,18 @@ def calculate_discrepancies(time_intervals,traces_diff,dimensions_nt,delta_time,
 
         # Append discrepancies
         discrepancies.append(disc)
-    
+
     # Print discrepancies
     # print('Discrepancies:')
     # print(discrepancies)
     return discrepancies
 
 # Obtain bloated tube
-def generate_bloat_tube(Mode,traces, time_intervals,discrepancies,Initial_Delta,write_path,write_type,end_time,trace_len,dimensions_nt,delta_time,concatTime,K_value):
+def generate_bloat_tube(traces, time_intervals,discrepancies,Initial_Delta,end_time,trace_len,dimensions_nt,delta_time,K_value):
 
 
-    timeLow = concatTime[0]
-    timeUp = concatTime[1]
+    # timeLow = concatTime[0]
+    # timeUp = concatTime[1]
     #global end_time
 
     # Iterate over all dimensions
@@ -304,14 +304,14 @@ def generate_bloat_tube(Mode,traces, time_intervals,discrepancies,Initial_Delta,
 
             gamma = discrepancies[nd][ni]
 
-            
+
             # Iterate over all points in center trace
             for r in xrange(0, points):
 
                 current_idx = idx + r
 
                 if current_idx != previous_idx + 1:
-                    print('Index mismatch found!')
+                    # print('Index mismatch found!')
                     if current_idx == previous_idx:
                         idx += 1
                     elif current_idx == previous_idx+2:
@@ -322,14 +322,14 @@ def generate_bloat_tube(Mode,traces, time_intervals,discrepancies,Initial_Delta,
                 pnt_data = pnt[nd+1]
 
                 cur_delta = prev_delta * math.exp(gamma * delta_time)
-                max_delta = max(prev_delta, cur_delta)   
+                max_delta = max(prev_delta, cur_delta)
 
                 time_bloat.append(pnt_time)
                 low_bloat.append(pnt_data - max_delta*K_value[nd])
                 up_bloat.append(pnt_data + max_delta*K_value[nd])
                 #low_bloat.append(pnt_data - max_delta*1.0)
                 #up_bloat.append(pnt_data + max_delta*1.0)
-                
+
 
                 if nd == 0:
                     bloat_tube[2*(idx+r)].append(pnt_time)
@@ -350,32 +350,32 @@ def generate_bloat_tube(Mode,traces, time_intervals,discrepancies,Initial_Delta,
         #low_bloat = low_bloat[0:range]
         #up_bloat = up_bloat[0:range]
 
-        
+
         # Plot data
         # plt.plot(time_bloat, low_bloat, 'g')
         # plt.plot(time_bloat, up_bloat, 'g')
     #print(bloat_tube[58])
-    for i in range(0,len(bloat_tube),2):
-        bloat_tube[i].append(bloat_tube[i][0]+timeLow)
-        bloat_tube[i+1].append(bloat_tube[i+1][0]+timeUp)
+    # for i in range(0,len(bloat_tube),2):
+    #     bloat_tube[i].append(bloat_tube[i][0]+timeLow)
+    #     bloat_tube[i+1].append(bloat_tube[i+1][0]+timeUp)
 
-    if write_type == 'new':       
-        with open(write_path, 'w') as write_file:
-            write_file.write(Mode + '\n')
-            for i in range(len(bloat_tube)):
-                for j in range(len(bloat_tube[0])):
-     #               print(i,j)
-                    write_file.write(str(bloat_tube[i][j]) + ' ')
-                write_file.write('\n')
-    elif write_type == 'append':
-        with open(write_path, 'a') as write_file:
-            #write_file.write(Mode + '\n')
-            for i in range(len(bloat_tube)):
-                for j in range(len(bloat_tube[0])):
-                    write_file.write(str(bloat_tube[i][j]) + ' ')
-                write_file.write('\n')
-    else:
-        print('writing type wrong!')
+    # if write_type == 'new':
+    #     with open(write_path, 'w') as write_file:
+    #         write_file.write(Mode + '\n')
+    #         for i in range(len(bloat_tube)):
+    #             for j in range(len(bloat_tube[0])):
+    #  #               print(i,j)
+    #                 write_file.write(str(bloat_tube[i][j]) + ' ')
+    #             write_file.write('\n')
+    # elif write_type == 'append':
+    #     with open(write_path, 'a') as write_file:
+    #         #write_file.write(Mode + '\n')
+    #         for i in range(len(bloat_tube)):
+    #             for j in range(len(bloat_tube[0])):
+    #                 write_file.write(str(bloat_tube[i][j]) + ' ')
+    #             write_file.write('\n')
+    # else:
+    #     print('writing type wrong!')
     return bloat_tube
 
 
@@ -395,7 +395,7 @@ def write_to_file(time_intervals,discrepancies,write_path, type):
     #                     pdb.post_mortem(tb)
 
     #                 idx += 1
-    #                 write_file.write(str(b_ln[1]) + ' ' + str(c_pnt) + ' ' + 
+    #                 write_file.write(str(b_ln[1]) + ' ' + str(c_pnt) + ' ' +
     #                         str(b_ln[2]) + '\n')
 
     # Write discrepancy file
@@ -428,8 +428,8 @@ def plot_traces(traces,dim,bloat_tube):
             plt.plot(time, data, 'r')
 
     time = [row[0] for row in bloat_tube]
-    value = [row[dim] for row in bloat_tube] 
-    time_bloat = [time[i] for i in range(0,len(value),2)]      
+    value = [row[dim] for row in bloat_tube]
+    time_bloat = [time[i] for i in range(0,len(value),2)]
     lower_bound = [value[i] for i in range(0,len(value),2)]
     upper_bound = [value[i+1] for i in range(0,len(value),2)]
     plt.plot(time_bloat, lower_bound, 'g')
@@ -439,27 +439,27 @@ def plot_traces(traces,dim,bloat_tube):
 def print_int_disc(discrepancies,time_intervals):
     for nd in xrange(0, len(discrepancies)):
         for p in xrange(0, len(discrepancies[nd])):
-            print('idx: ' + str(p) + ' int: ' +str(time_intervals[nd][p]) 
-                + ' to ' + str(time_intervals[nd][p+1]) + ', disc: ' + 
+            print('idx: ' + str(p) + ' int: ' +str(time_intervals[nd][p])
+                + ' to ' + str(time_intervals[nd][p+1]) + ', disc: ' +
                 str(discrepancies[nd][p]))
         print('')
 
-def PW_Bloat_to_tube(Mode, Initial_Delta,write_path,write_type,plot_flag,plot_dim,concatTime,traces):
+def PW_Bloat_to_tube(Initial_Delta,plot_flag,plot_dim,traces, K_value):
     # Read data in
-    if Mode == 'Const':
-        K_value = [1.0,1.0,2.0]
-    elif Mode == 'Brake':
-        K_value = [1.0,1.0,7.0] 
+    # if Mode == 'Const':
+    #     K_value = [1.0,1.0,2.0]
+    # elif Mode == 'Brake':
+    #     K_value = [1.0,1.0,7.0]
 
     # if Mode == 'Const;Const':
     #     K_value = [1.0,1.0,2.0,1.0,1.0,2.0]
     # elif Mode == 'Brake;Const':
-    #     K_value = [1.0,1.0,2.0,1.0,1.0,2.0] 
+    #     K_value = [1.0,1.0,2.0,1.0,1.0,2.0]
 
     # elif Mode == 'Brake;Brake':
     #     K_value = [1.0,1.0,5.0,1.0,1.0,2.0]
 
-    traces,dimensions,dimensions_nt,trace_len,end_time,delta_time,start_time = read_data(Mode,traces) 
+    traces,dimensions,dimensions_nt,trace_len,end_time,delta_time,start_time = read_data(traces)
     # Compute difference between traces
     traces_diff =  compute_diff(traces)
     #print traces_diff
@@ -484,7 +484,7 @@ def PW_Bloat_to_tube(Mode, Initial_Delta,write_path,write_type,plot_flag,plot_di
 
 
     # Bloat the tube using time intervals
-    reach_tube = generate_bloat_tube(Mode,traces,time_intervals,discrepancies,Initial_Delta,write_path, write_type,end_time,trace_len,dimensions_nt,delta_time,concatTime,K_value)
+    reach_tube = generate_bloat_tube(traces,time_intervals,discrepancies,Initial_Delta,end_time,trace_len,dimensions_nt,delta_time,K_value)
 
     if plot_flag:
         plot_traces(traces,plot_dim,reach_tube)
@@ -493,20 +493,20 @@ def PW_Bloat_to_tube(Mode, Initial_Delta,write_path,write_type,plot_flag,plot_di
     return reach_tube
 
 
-  
 
-    
+
+
 
 # def For_Test(Mode, Initial_Delta):
 #     # Read data in
-#     traces,dimensions,dimensions_nt,trace_len,end_time,delta_time,start_time = read_data(Mode) 
+#     traces,dimensions,dimensions_nt,trace_len,end_time,delta_time,start_time = read_data(Mode)
 #     # Compute difference between traces
 #     traces_diff =  compute_diff(traces)
 
 #     # Find time intervals for discrepancy calculations
 #     time_intervals, num_ti = find_time_intervals(traces_diff,dimensions_nt,end_time,trace_len,delta_time)
-    
+
 #     # Discrepancy calculation
 #     discrepancies = calculate_discrepancies(time_intervals,traces_diff,dimensions_nt,delta_time)
-  
+
 #     return K_value, discrepancies, time_intervals

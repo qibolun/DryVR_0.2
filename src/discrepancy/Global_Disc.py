@@ -75,7 +75,7 @@ def read_data(traces):
     #reasign trace_len
     trace_len = len(trace_trim)
 
-    
+
     return traces_trim
 
 
@@ -121,7 +121,7 @@ def b_calc(traces,dim, init_delta):
                 #print(i)
                 #rint(len(trace1))
                 #print(len(trace2))
-                if abs(trace1[0][dim]-trace2[0][dim]) <= 1e-6:
+                if abs(trace1[0][dim]-trace2[0][dim]) <= 1e-3:
                     # print("Same trace detected! Algorithm stops!")
                     # print("These two traces are the same trace:")
                     # print("trace",j)
@@ -167,7 +167,7 @@ def k_gamma_calc(A, b, c):
     """
 
     # use glpk
-    
+
     lp = glpk.LPX()
     lp.name = 'logk_gamma'
     lp.obj.maximize = False             # set this as a minimization problem
@@ -184,7 +184,7 @@ def k_gamma_calc(A, b, c):
     lp.simplex()                        # solve this LP with the simplex method
     k = exp(lp.cols[0].primal)
     gamma = lp.cols[1].primal
-    
+
     return k, gamma
 
 #Main part
@@ -281,7 +281,7 @@ def Bloat_to_tube(Mode, k, gamma, init_delta_array, write_path, write_type, conc
         reach_tube.append(lower_rec)
         reach_tube.append(upper_rec)
 
-    if write_type == 'new':       
+    if write_type == 'new':
         with open(write_path, 'w') as write_file:
             write_file.write(Mode + '\n')
             for i in range(len(reach_tube)):
@@ -361,4 +361,3 @@ def bloatToTube(mode, k, gamma, init_delta_array, traces):
         reach_tube.append(lower_rec)
         reach_tube.append(upper_rec)
     return reach_tube
-

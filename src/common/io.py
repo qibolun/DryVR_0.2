@@ -10,7 +10,10 @@ def writeToFile(result, path):
 	# Write result to file
 	with open(path, 'w') as f:
 		for interval in result:
-			f.write(' '.join(map(str,interval))+'\n')
+			if isinstance(interval, str):
+				f.write(interval+'\n')
+			else:
+				f.write(' '.join(map(str,interval))+'\n')
 
 def readFromFile(path):
 	# Read result from file
@@ -53,9 +56,21 @@ def parseInputFile(path):
 		if not 'initialMode' in data:
 			data['initialMode'] = ""
 
-		# If deterministic is missing, defaultdict to non-deterministic
+		# If deterministic is missing, default to non-deterministic
 		if not 'deterministic' in data:
 			data['deterministic'] = False
+
+		# If bloating method is missing, default global descrepancy
+		if not 'bloatingMethod' in data:
+			data['bloatingMethod'] = 'GLOBAL'
+
+		# if kvalue is missing, default to 1.0
+		if not 'kvalue' in data:
+			data['kvalue'] = [1.0 for i in range(len(data['variables']))]
+			if data['bloatingMethod'] == "PW":
+				print "Warning: No kvalue provided when using PW descrepancy, default kvalue 1.0 for all variable."
+				raw_input("Press Enter to continue...")
+
 
 		return DryVRInput(
 			vertex=data["vertex"],
@@ -69,6 +84,8 @@ def parseInputFile(path):
 			resets=data["resets"],
 			initialMode=data["initialMode"],
 			deterministic=data["deterministic"],
+			bloatingMethod=data['bloatingMethod'],
+			kvalue=data['kvalue'],
 		)
 
 def parseRrtInputFile(path):

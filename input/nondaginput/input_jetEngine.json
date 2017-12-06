@@ -1,0 +1,13 @@
+{
+	"vertex":["Default"],
+	"edge":[],
+	"variables":["x","y"],
+	"guards":[],
+	"initialMode":"Default",
+	"initialSet":[[0.8, 0.8],[1.2, 1.2]],
+	"unsafeSet":"@Allmode:Or(x<=-2,x>=1.5,y<=-3.5,y>=1.5)",
+	"timeHorizon":10.0,
+	"directory":"examples/jet_engine",
+  "bloatingMethod":"PW",
+  "kvalue":[2,2]
+}

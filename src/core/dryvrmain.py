@@ -71,6 +71,7 @@ def verify(inputFile):
 		backwardFlag = SAFE
 		while curModeStack.stack:
 			print str(curModeStack)
+			print curModeStack.stack[-1]
 			if not curModeStack.isValid():
 				print curModeStack.mode, "is not valid anymore"
 				backwardFlag = UNKNOWN
@@ -83,9 +84,19 @@ def verify(inputFile):
 			curVertex = curModeStack.mode
 			curRemainTime = curModeStack.remainTime
 			curLabel = graph.vs[curVertex]['label']
+			print curLabel
 			curSuccessors = graph.successors(curVertex)
 			curInitial = [curStack[-1].lowerBound, curStack[-1].upperBound]
-			curBloatedTube = clacBloatedTube(curLabel, curInitial, curRemainTime, simFunction)
+
+			# Calculate the current bloated tube without considering the guard
+			curBloatedTube = clacBloatedTube(curLabel,
+				curInitial,
+				curRemainTime,
+				simFunction,
+				params.bloatingMethod,
+				params.kvalue
+			)
+
 
 			candidateTube = []
 			shortestTime = float("inf")
@@ -95,10 +106,24 @@ def verify(inputFile):
 				edgeID = graph.get_eid(curVertex, curSuccessor)
 				curGuardStr = graph.es[edgeID]['guards']
 				curResetStr = graph.es[edgeID]['resets']
+				# Calulcate the current bloated tube with guard involved
+				# Pre-check the simulation trace so we can get better bloated reset
+				curBloatedTube = clacBloatedTube(curLabel,
+					curInitial,
+					curRemainTime,
+					simFunction,
+					params.bloatingMethod,
+					params.kvalue,
+					guardChecker = guard,
+					guardStr = curGuardStr,
+				)
 				nextInit, trunckedResult, transiteTime = guard.guardReachTube(
 					curBloatedTube,
 					curGuardStr,
 				)
+				# for t in curBloatedTube:
+				# 	print t
+				print graph.vs[curSuccessor]['label'], transiteTime, nextInit, curGuardStr
 				if nextInit == None:
 					continue
 
@@ -121,6 +146,7 @@ def verify(inputFile):
 					shortestTube = trunckedResult
 
 			# Handle deterministic system
+			print "shortestTime is", shortestTime
 			if params.deterministic and len(curStack[-1].child)>0:
 				nextModesInfo = []
 				for nextMode in curStack[-1].child:
@@ -139,6 +165,8 @@ def verify(inputFile):
 				candidateTube = curBloatedTube
 
 			# Check the safety for current bloated tube
+			# for t in candidateTube:
+			# 	print t
 			safety = checker.checkReachTube(candidateTube, curLabel)
 			if safety == UNSAFE:
 				print "System is not safe in Mode ", curLabel

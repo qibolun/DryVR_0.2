@@ -114,25 +114,6 @@ def Car_simulate(Mode,initial,time_bound):
 			temp3 = sol[j,3]
 			temp4 = sol[j,4]
 
-		#if (sol[j,2]>=0.35) and Mode=="TurnRight" and not turn_lock: #this statement needs working if we want to decelerate while driving
-		#	sol[j,2] = 0.35
-		#	temp0 = sol[j, 0]
-		#	temp1 = sol[j, 1]
-		#	temp2 = sol[j, 2]
-		#	temp3 = sol[j, 3]
-		#	temp4 = sol[j, 4]
-		#	turn_lock = True
-
-		#if (sol[j,2]<=-0.35) and Mode=="TurnLeft" and not turn_lock: #this statement needs working if we want to decelerate while driving
-		#	sol[j,2] = -0.35
-		#	temp0 = sol[j, 0]
-		#	temp1 = sol[j, 1]
-		#	temp2 = sol[j, 2]
-		#	temp3 = sol[j, 3]
-		#	temp4 = sol[j, 4]
-		#	turn_lock = True
-
-
 		if(abs(sol[j,3])>=45.8 and not max_speed):
 			sol[j,3]=45.8
 			temp0 = sol[j, 0]

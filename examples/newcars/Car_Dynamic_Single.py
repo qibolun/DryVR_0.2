@@ -78,16 +78,13 @@ def Car_simulate(Mode,initial,time_bound):
 	elif Mode == 'TurnRight':
 		acc = 0.0
 		w = 0.2
-		print psi_initial
 		turntimelimit = (0.35-initial[4])/0.2
-		print turntimelimit	
 		time_bound = min(turntimelimit,time_bound)
 		#time_bound = float(format(time_bound, '.2f'))
 		number_points = int(np.ceil(time_bound/time_step))+1
 		#print numberpoints
 		t = [float(format(i*time_step,".2f")) for i in range(0,number_points)]
 		
-		print t
 	else:
 		print('Wrong Mode name!')
 

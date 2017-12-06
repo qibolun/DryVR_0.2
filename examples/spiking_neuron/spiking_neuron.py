@@ -17,7 +17,7 @@ def spiking_neuron_dynamic(y,t):
     b = 8
     k = 1
 
-    v_dot = (k * (v - (v_r)) * (v - v_t) - u + I)/C
+    v_dot = (k * (v - v_r) * (v - v_t) - u + I)/C
     u_dot = a * (b * (v - v_r) - u)
 
     dydt = [v_dot, u_dot]
@@ -25,7 +25,7 @@ def spiking_neuron_dynamic(y,t):
     return dydt
 
 def TC_Simulate(Mode,initialCondition,time_bound):
-    time_step = 0.01;
+    time_step = 0.1;
     time_bound = float(time_bound)
 
     number_points = int(np.ceil(time_bound/time_step))
@@ -42,7 +42,7 @@ def TC_Simulate(Mode,initialCondition,time_bound):
     # Construct the final output
     trace = []
     for j in range(len(t)):
-        #print t[j], current_psi
+
         tmp = []
         tmp.append(t[j])
         tmp.append(float(sol[j,0]))
@@ -52,7 +52,7 @@ def TC_Simulate(Mode,initialCondition,time_bound):
     
 if __name__ == "__main__":
 
-    sol = TC_Simulate("Default", [0.8, 0.8], 10.0)
+    sol = TC_Simulate("Default", [-50, 0.0], 10.0)
     #for s in sol:
 	#	print(s)
 

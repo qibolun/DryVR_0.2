@@ -68,6 +68,7 @@ def simulate(g, initCondition, timeHorizon, guard, simFuc, reseter, initialMode,
 	retval = defaultdict(list)
 
 	# If you do not delcare initialMode, then we will just use topological sort to find starting point
+	print type(initialMode)
 	if not initialMode:
 		computerOrder = g.topological_sorting(mode=OUT)
 		curVertex = computerOrder[0]

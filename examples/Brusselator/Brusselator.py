@@ -2,8 +2,11 @@ from scipy.integrate import odeint
 import numpy as np
 import matplotlib.pyplot as plt
 
+<<<<<<< 674668dd05ca45058cfbb45de8d7034c0cfe9426
 # Source: https://ths.rwth-aachen.de/research/projects/hypro/brusselator/
 
+=======
+>>>>>>> update
 def Brusselator_dynamic(y, t):
     a, b = y
     a = float(a)
@@ -16,7 +19,11 @@ def Brusselator_dynamic(y, t):
     return dydt
 
 def TC_Simulate(Mode,initialCondition,time_bound):
+<<<<<<< 674668dd05ca45058cfbb45de8d7034c0cfe9426
     time_step = 0.05;
+=======
+    time_step = 0.01;
+>>>>>>> update
     time_bound = float(time_bound)
 
     number_points = int(np.ceil(time_bound/time_step))
@@ -43,7 +50,11 @@ def TC_Simulate(Mode,initialCondition,time_bound):
 
 if __name__ == "__main__":
 
+<<<<<<< 674668dd05ca45058cfbb45de8d7034c0cfe9426
     sol = TC_Simulate("Default", [0.9, 0.15], 10.0)
+=======
+    sol = TC_Simulate("Default", [1.25, 2.25], 10.0)
+>>>>>>> update
     #for s in sol:
 	#	print(s)
 
@@ -58,3 +69,7 @@ if __name__ == "__main__":
     plt.show()
     plt.plot(a, b, "-r")
     plt.show()
+<<<<<<< 674668dd05ca45058cfbb45de8d7034c0cfe9426
+=======
+
+>>>>>>> update

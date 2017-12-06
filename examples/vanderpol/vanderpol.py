@@ -2,38 +2,17 @@ from scipy.integrate import odeint
 import numpy as np
 import matplotlib.pyplot as plt
 
-<<<<<<< 674668dd05ca45058cfbb45de8d7034c0cfe9426
-# Source: https://ths.rwth-aachen.de/research/projects/hypro/two-tank/
-
-=======
->>>>>>> update
-def two_tank_dynamic(y, t, Mode):
-    x1, x2 = y
-    x1 = float(x1)
-    x2 = float(x2)
-
-    if Mode == "off_off":
-        x1_dot = -x1 - 2
-        x2_dot = x1
-    elif Mode == "off_on":
-        x1_dot = -x1 - 2
-        x2_dot = x1 - x2 - 5
-    elif Mode == "on_off":
-        x1_dot = -x1 + 3
-        x2_dot = x1
-    elif Mode == "on_on":
-        x1_dot = -x1 + 3
-        x2_dot = x1 - x2 - 5
-
-    dydt = [x1_dot, x2_dot]
+def vanderpol_dynamic(y,t):
+    a, b = y
+    a = float(a)
+    b = float(b)
+    a_dot = b
+    b_dot = (1-a**2)*b - a
+    dydt = [a_dot, b_dot]
     return dydt
 
 def TC_Simulate(Mode,initialCondition,time_bound):
-<<<<<<< 674668dd05ca45058cfbb45de8d7034c0cfe9426
-    time_step = 0.05;
-=======
     time_step = 0.01;
->>>>>>> update
     time_bound = float(time_bound)
 
     number_points = int(np.ceil(time_bound/time_step))
@@ -45,7 +24,7 @@ def TC_Simulate(Mode,initialCondition,time_bound):
         newt.append(float(format(step, '.2f')))
     t = newt
 
-    sol = odeint(two_tank_dynamic,initialCondition,t, args=(Mode,),hmax = time_step)
+    sol = odeint(vanderpol_dynamic, initialCondition, t, hmax=time_step)
 
     # Construct the final output
     trace = []
@@ -59,7 +38,10 @@ def TC_Simulate(Mode,initialCondition,time_bound):
     return trace
 
 if __name__ == "__main__":
-    sol = TC_Simulate('on_on',[2.5,1.0],5)
+
+    sol = TC_Simulate("Default", [1.55, 2.35], 10.0)
+    #for s in sol:
+	#	print(s)
 
     time = [row[0] for row in sol]
 
@@ -72,3 +54,4 @@ if __name__ == "__main__":
     plt.show()
     plt.plot(a, b, "-r")
     plt.show()
+

@@ -1,0 +1,10 @@
+{
+	"vertex":["off_off","off_on","off_off","on_off","off_on","on_on"],
+	"edge":[[0,1],[1,2],[2,3],[3,4],[4,5]],
+	"variables":["x1", "x2"],
+	"guards":["And(x2>=1,x2<=1.1)", "And(x2>=0,x2<=0.1", "And(x1<=-1,x1>=-1.1)", "And(x2>=1,x2<=1.1)", "And(x1<=-1,x1>=-1.1"],
+	"initialSet":[[10.0, 0.0],[10.1, 0.0]],
+	"unsafeSet":"@Allmode:x<=-1.5",
+	"timeHorizon":4.0,
+	"directory":"examples/two_tank"
+}

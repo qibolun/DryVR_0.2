@@ -2,11 +2,8 @@ from scipy.integrate import odeint
 import numpy as np
 import matplotlib.pyplot as plt
 
-<<<<<<< 674668dd05ca45058cfbb45de8d7034c0cfe9426
 # Source: https://ths.rwth-aachen.de/research/projects/hypro/two-tank/
 
-=======
->>>>>>> update
 def two_tank_dynamic(y, t, Mode):
     x1, x2 = y
     x1 = float(x1)
@@ -29,11 +26,7 @@ def two_tank_dynamic(y, t, Mode):
     return dydt
 
 def TC_Simulate(Mode,initialCondition,time_bound):
-<<<<<<< 674668dd05ca45058cfbb45de8d7034c0cfe9426
     time_step = 0.05;
-=======
-    time_step = 0.01;
->>>>>>> update
     time_bound = float(time_bound)
 
     number_points = int(np.ceil(time_bound/time_step))

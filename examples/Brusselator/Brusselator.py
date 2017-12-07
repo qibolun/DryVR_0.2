@@ -43,11 +43,7 @@ def TC_Simulate(Mode,initialCondition,time_bound):
 
 if __name__ == "__main__":
 
-<<<<<<< 674668dd05ca45058cfbb45de8d7034c0cfe9426
     sol = TC_Simulate("Default", [0.9, 0.15], 10.0)
-=======
-    sol = TC_Simulate("Default", [1.25, 2.25], 10.0)
->>>>>>> update
     #for s in sol:
 	#	print(s)
 
@@ -62,7 +58,3 @@ if __name__ == "__main__":
     plt.show()
     plt.plot(a, b, "-r")
     plt.show()
-<<<<<<< 674668dd05ca45058cfbb45de8d7034c0cfe9426
-=======
-
->>>>>>> update

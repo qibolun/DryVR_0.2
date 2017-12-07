@@ -2,6 +2,8 @@ from scipy.integrate import odeint
 import numpy as np
 import matplotlib.pyplot as plt
 
+# Source: https://ths.rwth-aachen.de/research/projects/hypro/jet-engine/
+
 def jet_engine_dynamic(y, t):
     a, b = y
     a = float(a)

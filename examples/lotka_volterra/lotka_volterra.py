@@ -2,15 +2,15 @@ from scipy.integrate import odeint
 import numpy as np
 import matplotlib.pyplot as plt
 
-# Source: https://ths.rwth-aachen.de/research/projects/hypro/buckling-column/ 
+# Source: https://ths.rwth-aachen.de/research/projects/hypro/lotka-volterra/
 
-def buckling_column_dynamic(y, t):
+def lotka_volterra_dynamic(y, t):
     a, b = y
     a = float(a)
     b = float(b)
 
-    a_dot = b
-    b_dot = 2*a - a**3 - 0.2*b + 0.1
+    a_dot = a*(1.5 - y)
+    b_dot = -b*(3 - x)
 
     dydt = [a_dot, b_dot]
     return dydt
@@ -28,7 +28,7 @@ def TC_Simulate(Mode,initialCondition,time_bound):
         newt.append(float(format(step, '.2f')))
     t = newt
 
-    sol = odeint(buckling_column_dynamic, initialCondition, t, hmax=time_step)
+    sol = odeint(lotka_volterra_dynamic, initialCondition, t, hmax=time_step)
 
     # Construct the final output
     trace = []
@@ -43,7 +43,7 @@ def TC_Simulate(Mode,initialCondition,time_bound):
 
 if __name__ == "__main__":
 
-    sol = TC_Simulate("Default", [-0.5, -0.5], 10.0)
+    sol = TC_Simulate("Default", [5.0, 2.0], 5.0)
     #for s in sol:
 	#	print(s)
 

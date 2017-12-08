@@ -2,27 +2,17 @@ from scipy.integrate import odeint
 import numpy as np
 import matplotlib.pyplot as plt
 
-# Source: https://ths.rwth-aachen.de/research/projects/hypro/two-tank/ 
+# Source: https://ths.rwth-aachen.de/research/projects/hypro/buckling-column/ 
 
-def two_tank_dynamic(y, t, Mode):
-    x1, x2 = y
-    x1 = float(x1)
-    x2 = float(x2)
+def buckling_column_dynamic(y, t):
+    a, b = y
+    a = float(a)
+    b = float(b)
 
-    if Mode == "off_off":
-        x1_dot = -x1 - 2
-        x2_dot = x1
-    elif Mode == "off_on":
-        x1_dot = -x1 - 2
-        x2_dot = x1 - x2 - 5
-    elif Mode == "on_off":
-        x1_dot = -x1 + 3
-        x2_dot = x1
-    elif Mode == "on_on":
-        x1_dot = -x1 + 3
-        x2_dot = x1 - x2 - 5
+    a_dot = b
+    b_dot = 2*a - a**3 - 0.2*b + 0.1
 
-    dydt = [x1_dot, x2_dot]
+    dydt = [a_dot, b_dot]
     return dydt
 
 def TC_Simulate(Mode,initialCondition,time_bound):
@@ -38,9 +28,9 @@ def TC_Simulate(Mode,initialCondition,time_bound):
         newt.append(float(format(step, '.2f')))
     t = newt
 
-    sol = odeint(two_tank_dynamic,initialCondition,t, args=(Mode,),hmax = time_step)
+    sol = odeint(buckling_column_dynamic, initialCondition, t, hmax=time_step)
 
-    # Construct the final output
+        # Construct the final output
     trace = []
     for j in range(len(t)):
         #print t[j], current_psi
@@ -52,7 +42,10 @@ def TC_Simulate(Mode,initialCondition,time_bound):
     return trace
 
 if __name__ == "__main__":
-    sol = TC_Simulate('on_on',[2.5,1.0],5)
+
+    sol = TC_Simulate("Default", [-0.5, -0.5], 10.0)
+    #for s in sol:
+	#	print(s)
 
     time = [row[0] for row in sol]
 

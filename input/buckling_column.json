@@ -7,5 +7,7 @@
     "initialSet":[[-0.5,-0.5],[-0.4,-0.4]],
     "unsafeSet":"@Allmode:Or(x<=-3)",
     "timeHorizon":10.0,
-    "directory":"examples/buckling_column"
+    "directory":"examples/buckling_column",
+    "bloatingMethod":"PW",
+    "kvalue":[2,2]
 }

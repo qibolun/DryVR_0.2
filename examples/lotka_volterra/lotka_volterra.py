@@ -9,8 +9,8 @@ def lotka_volterra_dynamic(y, t):
     a = float(a)
     b = float(b)
 
-    a_dot = a*(1.5 - y)
-    b_dot = -b*(3 - x)
+    a_dot = a*(1.5 - b)
+    b_dot = -b*(3 - a)
 
     dydt = [a_dot, b_dot]
     return dydt

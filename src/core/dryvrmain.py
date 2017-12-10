@@ -170,6 +170,14 @@ def verify(inputFile):
 			safety = checker.checkReachTube(candidateTube, curLabel)
 			if safety == UNSAFE:
 				print "System is not safe in Mode ", curLabel
+				# Start back Tracking from this point and print tube to a file
+				# push current unsafeTube to unsafe tube holder
+				unsafeTube = [curModeStack.bloatedTube[0]] + candidateTube
+				while curModeStack.parent is not None:
+					prevModeStack = curModeStack.parent
+					unsafeTube = [prevModeStack.bloatedTube[0]] + prevModeStack.stack[-1].bloatedTube + unsafeTube
+					curModeStack = prevModeStack
+				writeReachTubeFile(unsafeTube, UNSAFEFILENAME)
 				exit()
 
 			elif safety == UNKNOWN:

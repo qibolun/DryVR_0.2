@@ -11,9 +11,11 @@
 		"x_two == 0"
 	],
 	"initialMode":"off_on",
-	"initialSet":[[1.5, 1.0],[1.55	, 1.0]],
+	"initialSet":[[1.5, 1.0],[1.55	, 1.2]],
 	"unsafeSet":"@Allmode:x_two<=-0.7",
 	"timeHorizon":5.0,
 	"directory":"examples/two_tank",
-	"deterministic":true
+	"deterministic":true,
+	"bloatingMethod":"PW",
+	"kvalue":[5,5]
 }

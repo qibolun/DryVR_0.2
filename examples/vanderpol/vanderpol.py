@@ -2,7 +2,11 @@ from scipy.integrate import odeint
 import numpy as np
 import matplotlib.pyplot as plt
 
+<<<<<<< HEAD
 # Source: https://ths.rwth-aachen.de/research/projects/hypro/van-der-pol-oscillator/ 
+=======
+# Source: https://ths.rwth-aachen.de/research/projects/hypro/van-der-pol-oscillator/
+>>>>>>> e19572918cbe48437bee9b1a1dc02278658141d0
 
 def vanderpol_dynamic(y,t):
     a, b = y
@@ -56,4 +60,7 @@ if __name__ == "__main__":
     plt.show()
     plt.plot(a, b, "-r")
     plt.show()
+<<<<<<< HEAD
 
+=======
+>>>>>>> e19572918cbe48437bee9b1a1dc02278658141d0

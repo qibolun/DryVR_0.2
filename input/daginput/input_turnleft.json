@@ -1,0 +1,21 @@
+{
+	"vertex":["Const;Acc","Const;TurnRight","Const;TurnLeft","Const;Acc"],
+	"edge":[[0,1],[1,2],[2,3]],
+	"variables":["car1_x","car1_y","car1_vx","car1_vy","car1_delta","car2_x","car2_y","car2_vx","car2_vy","car2_delta"],
+	"guards":[
+		"And(car1_y-car2_y<=12.0,car1_y-car2_y>=11.8)",
+        "And(car2_x>=1.5,car2_x<=1.7)",
+        "And(car2_vx>=-0.1,car2_vx<=0.1)"
+	],
+	"resets":[
+		"",
+		"",
+		"car2_delta=0;car2_vx=0"
+	],
+	"initialSet":[[0.0,0.0,0.0,1.0,0.0,0.0,-15.1,0.0,1.0,0.0],[0.0,0.0,0.0,1.0,0.0,0.0,-15.0,0.0,1.0,0.0]],
+	"unsafeSet":"@Allmode:And(car1_y-car2_y<=2,car2_x-car1_x<=2,car1_y-car2_y<=2,car2_y-car1_y<=2)",
+	"timeHorizon":15,
+	"directory":"examples/newcars",
+	"bloatingMethod":"PW",
+	"kvalue":[5.0,5.0,5.0,5.0,5.0,5.0,2.0,5.0,5.0,5.0]
+}

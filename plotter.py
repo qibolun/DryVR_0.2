@@ -26,6 +26,7 @@ ydim = eval(args.y)
 xdim = eval(args.x)
 # Using DFS algorithm to Draw image per Node
 stack = [initNode]
+# initNode.printTube()
 while stack:
 	curNode = stack.pop()
 	for c in curNode.child:

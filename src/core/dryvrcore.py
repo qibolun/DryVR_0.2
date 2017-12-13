@@ -196,10 +196,7 @@ def clacBloatedTube(modeLabel, initialSet, timeHorizon, simFuc, bloatingMethod, 
 			k, gamma = Global_Discrepancy(modeLabel, curDelta, 1, PLOTDIM, traces)
 		else:
 			k, gamma = Global_Discrepancy(modeLabel, curDelta, 0, PLOTDIM, traces)
-<<<<<<< HEAD
-=======
 		print curDelta
->>>>>>> e19572918cbe48437bee9b1a1dc02278658141d0
 		curReachTube = bloatToTube(modeLabel, k, gamma, curDelta, traces)
 	elif bloatingMethod == PW:
 		if BLOATDEBUG:

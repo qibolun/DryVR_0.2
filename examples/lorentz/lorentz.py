@@ -60,11 +60,7 @@ def TC_Simulate(Mode,initialCondition,time_bound):
 
 if __name__ == "__main__":
 
-<<<<<<< HEAD
-    sol = TC_Simulate("Default", [15, 15, 36], 10.0)
-=======
     sol = TC_Simulate("Default", [15.0, 15.0, 36.0], 10.0)
->>>>>>> e19572918cbe48437bee9b1a1dc02278658141d0
     #for s in sol:
 	#	print(s)
 

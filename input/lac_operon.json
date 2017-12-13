@@ -4,8 +4,8 @@
     "variables":["Ii","G"],
     "guards":[],
     "initialMode":"Default",
-    "initialSet":[[1,25],[2,26]],
+    "initialSet":[[1.0,25.0],[2.0,26.0]],
     "unsafeSet":"@Allmode:Or(G<20)",
-    "timeHorizon":150.0,
+    "timeHorizon":15.0,
     "directory":"examples/lac_operon"
 }

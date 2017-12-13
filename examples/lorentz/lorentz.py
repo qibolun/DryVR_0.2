@@ -11,8 +11,8 @@ def lorentz_dynamic(y,t):
     c = float(c)
 
     a_dot = 10*(b-a)
-    b_dot = a*(8/3 - c) - b
-    c_dot = a*b - 28*c
+    b_dot = a*(28 - c) - b
+    c_dot = a*b - 8/3*c
 
     dydt = [a_dot, b_dot, c_dot]
     return dydt

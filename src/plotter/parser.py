@@ -5,7 +5,7 @@ This file consist parser code for DryVR reachtube output
 from linkednode import LinkedNode
 
 def parse(data):
-	
+
 	initNode = None
 	prevNode = None
 	curNode = None
@@ -27,7 +27,10 @@ def parse(data):
 				curNode = prevNode.child.setdefault(modeList[-1], LinkedNode(modeList[-1], line))
 			else:
 				curNode = LinkedNode(line.strip(), line)
-				initNode = curNode
+				if not initNode:
+					initNode = curNode
+				else:
+					curNode = initNode
 			# Using dictionary becasue we want to concat data
 			lowerBound = {}
 			upperBound = {}
@@ -69,7 +72,7 @@ def insertData(node, lowerBound, upperBound):
 		if key in node.lowerBound:
 			for i in range(1,len(lowerBound[key])):
 				node.lowerBound[key][i] = min(node.lowerBound[key][i], lowerBound[key][i])
-		else:	
+		else:
 			node.lowerBound[key] = lowerBound[key]
 
 	for key in sorted(upperBound):

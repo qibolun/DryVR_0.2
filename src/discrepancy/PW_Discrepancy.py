@@ -466,8 +466,8 @@ def PW_Bloat_to_tube(Initial_Delta,plot_flag,plot_dim,traces, K_value):
 
     # Find time intervals for discrepancy calculations
     time_intervals, num_ti = find_time_intervals(traces_diff,dimensions_nt,end_time,trace_len,delta_time,K_value)
-    print('number of time intervals:')
-    print num_ti
+    # print('number of time intervals:')
+    # print num_ti
     # Discrepancy calculation
     discrepancies = calculate_discrepancies(time_intervals,traces_diff,dimensions_nt,delta_time,K_value)
     # print('The K values')

@@ -43,6 +43,11 @@ def randomPoint(lower, upper):
 def calcDelta(lower, upper):
     # Calculate the delta value between the lower and upper bound
     # The function only supports list since we assue initial set is always list
+
+    # Convert list into float in case they are int
+    lower = [float(val) for val in lower]
+    upper = [float(val) for val in upper]
+
     assert len(lower) == len(upper), "Delta calc List Range Error"
     return [(upper[i]-lower[i])/2 for i in range(len(upper))]
 

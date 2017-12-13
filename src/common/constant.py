@@ -18,7 +18,7 @@ UNSAFE = -1
 UNKNOWN = 0
 NOSTATUS = 99
 BLOATDEBUG = False
-PLOTDIM = 7
+PLOTDIM = 1
 
 # File Pathes
 GRAPHOUTPUT = 'output/curGraph.png'

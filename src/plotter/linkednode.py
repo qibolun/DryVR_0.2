@@ -8,3 +8,9 @@ class LinkedNode():
 		self.lowerBound = {}
 		self.upperBound = {}
 		self.child = {}
+
+	def printTube(self):
+		for key in sorted(self.lowerBound):
+			if key in self.upperBound:
+				print self.upperBound[key]
+			print self.lowerBound[key]

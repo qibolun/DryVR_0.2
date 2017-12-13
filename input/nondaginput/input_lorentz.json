@@ -1,0 +1,11 @@
+{
+    "vertex":["Default"],
+    "edge":[],
+    "variables":["x","y","z"],
+    "guards":[],
+    "initialMode":"Default",
+    "initialSet":[[14.999,14.999,35.999],[15.001,15.001,36.001]],
+    "unsafeSet":"@Allmode:Or(x<-20)",
+    "timeHorizon":6.5,
+    "directory":"examples/lorentz"
+}

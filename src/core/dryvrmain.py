@@ -84,11 +84,12 @@ def verify(inputFile):
 			curVertex = curModeStack.mode
 			curRemainTime = curModeStack.remainTime
 			curLabel = graph.vs[curVertex]['label']
-			print curLabel
+			print "current mode label:",curLabel
 			curSuccessors = graph.successors(curVertex)
 			curInitial = [curStack[-1].lowerBound, curStack[-1].upperBound]
 
 			# Calculate the current bloated tube without considering the guard
+
 			curBloatedTube = clacBloatedTube(curLabel,
 				curInitial,
 				curRemainTime,
@@ -96,7 +97,6 @@ def verify(inputFile):
 				params.bloatingMethod,
 				params.kvalue
 			)
-
 
 			candidateTube = []
 			shortestTime = float("inf")
@@ -123,7 +123,7 @@ def verify(inputFile):
 				)
 				# for t in curBloatedTube:
 				# 	print t
-				print graph.vs[curSuccessor]['label'], transiteTime, nextInit, curGuardStr
+				print graph.vs[curSuccessor]['label'], transiteTime, nextInit or "next initial not found", curGuardStr
 				if nextInit == None:
 					continue
 
@@ -146,7 +146,6 @@ def verify(inputFile):
 					shortestTube = trunckedResult
 
 			# Handle deterministic system
-			print "shortestTime is", shortestTime
 			if params.deterministic and len(curStack[-1].child)>0:
 				nextModesInfo = []
 				for nextMode in curStack[-1].child:
@@ -159,8 +158,10 @@ def verify(inputFile):
 						continue
 					curStack[-1].child.pop(nextMode)
 				candidateTube = shortestTube
-				print "Handle deterministic system, next mode", curStack[-1].child.keys()
+				print "Handle deterministic system, next mode", graph.vs[curStack[-1].child.keys()[0]]['label']
 
+			# for line in candidateTube:
+			# 	print line
 			if not candidateTube:
 				candidateTube = curBloatedTube
 

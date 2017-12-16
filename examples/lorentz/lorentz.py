@@ -6,33 +6,19 @@ import matplotlib.pyplot as plt
 
 def lorentz_dynamic(y,t):
     a, b, c = y
-<<<<<<< HEAD
     a = float(a)
     b = float(b)
     c = float(c)
 
-    a_dot = 10*(b-a)
-    b_dot = a*(28 - c) - b
-    c_dot = a*b - 8/3*c
-=======
-    #a = float(a)
-    #b = float(b)
-    #c = float(c)
-
     a_dot = 10.0*(b-a)
     b_dot = a*(28.0 - c) - b
     c_dot = a*b - 8.0/3*c
->>>>>>> e19572918cbe48437bee9b1a1dc02278658141d0
 
     dydt = [a_dot, b_dot, c_dot]
     return dydt
 
 def TC_Simulate(Mode,initialCondition,time_bound):
-<<<<<<< HEAD
-    time_step = 0.05;
-=======
     time_step = 0.003;
->>>>>>> e19572918cbe48437bee9b1a1dc02278658141d0
     time_bound = float(time_bound)
 
     number_points = int(np.ceil(time_bound/time_step))

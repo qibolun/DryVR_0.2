@@ -1,1 +1,1 @@
-from couple_vanderpol import *
+from coupled_vanderpol import *

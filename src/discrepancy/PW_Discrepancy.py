@@ -194,6 +194,7 @@ def calculate_discrepancies(time_intervals,traces_diff,dimensions_nt,delta_time,
             #t_i = t_0 + delta_time
 
             # FIXME (???)
+            print "note",delta_time
             points = int((t_e - t_0) / delta_time + 0.5) + 1
             idx = int(t_0 / delta_time)
 

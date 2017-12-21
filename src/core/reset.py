@@ -27,7 +27,7 @@ class Reset():
 
 	def resetSimTrace(self, rawEqus, point):
 		# Using reset Reachtube function to handle this case
-		
+
 		if point == [] or not point:
 			return point
 		ret, _ = self.resetReachTube(rawEqus, point, point)
@@ -76,7 +76,10 @@ class Reset():
 		target = sympy.sympify(lhs)
 		# Construct the equation
 		finalEqu = sympy.sympify(rhs)
-		rhsSymbols = list(sympy.sympify(rhs).free_symbols)
+		if not isinstance(finalEqu, list):
+			rhsSymbols = list(sympy.sympify(rhs).free_symbols)
+		else:
+			rhsSymbols = None
 		# print target, rhsSymbols
 		combos = self._buildAllCombo(rhsSymbols, lowerBound, upperBound)
 		# finalEqu = solve(equ, target)[0]
@@ -91,6 +94,9 @@ class Reset():
 					result = float(finalEqu.subs(combo))
 				minReset = min(minReset, float(result))
 				maxReset = max(maxReset, float(result))
+		elif isinstance(finalEqu, list):
+			minReset = float(finalEqu[0])
+			maxReset = float(finalEqu[1])
 		else:
 			minReset = float(finalEqu)
 			maxReset = float(finalEqu)

@@ -2,8 +2,8 @@ from sympy.solvers import solve
 from sympy import Symbol
 import sympy
 
-rawequ = "x=0.8*x"
-#rawequ = "x=3.5"
+rawequ = "x=[1.1,2.2]"
+#rawequ = "x=x+3.5"
 
 variableList = ['x', 'y', 'z', 'w']
 lowerBound = [1.0,2.0,3.0,4.0]
@@ -13,11 +13,10 @@ upperBound = [2.0,3.0,4.0,5.0]
 equ_split = rawequ.split('=')
 lhs, rhs = equ_split[0], equ_split[1]
 target = sympy.sympify(lhs)
-equ = sympy.Eq(sympy.sympify(lhs) - sympy.sympify(rhs), 0 )
-newequ = sympy.sympify(rhs)
-print newequ
-# # Find out what variable is used
-symbols = list(sympy.sympify(rhs).free_symbols) # set
+finalEqu = sympy.sympify(rhs)
+if isinstance(finalEqu, list):
+    
+symbols = list(sympy.sympify(rhs).free_symbols)
 # print symbols
 
 def buildAllCombo(symbols, variableList, lowerBound, upperBound):
@@ -48,7 +47,7 @@ maxReset = float("-inf")
 
 if combos:
     for combo in combos:
-        result = float(newequ.subs(combo))
+        result = float(finalEqu.subs(combo))
         minReset = min(minReset, float(result))
         maxReset = max(maxReset, float(result))
 else:

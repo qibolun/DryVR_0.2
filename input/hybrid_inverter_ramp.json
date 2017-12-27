@@ -1,6 +1,6 @@
 {
     "vertex":["Rampup_A","Rampup_B","Rampup_C","Rampup_D","Rampup_E","Rampup_F","Rampup_G","On_A","On_B","On_C","On_D","On_E","On_F","On_G","Rampdown_A","Rampdown_B","Rampdown_C","Rampdown_D","Rampdown_E","Rampdown_F","Rampdown_G","Off_A","Off_B","Off_C","Off_D","Off_E","Off_F","Off_G"],
-    "edge":[[0,7],[1,8],[2,9],[3,10],[4,11],[5,12],[6,13],[7,14],[8,15],[9,16],[10,17],[11,18],[12,19],[13,20],[14,21],[15,22],[16,23],[17,24],[18,25],[19,26],[20,27],[21,0],[22,1],[23,2],[24,3],[25,4],[26,5],[27,6]],
+    "edge":[[0,7],[1,8],[2,9],[3,10],[4,11],[5,12],[6,13],[7,14],[8,15],[9,16],[10,17],[11,18],[12,19],[13,20],[14,21],[15,22],[16,23],[17,24],[18,25],[19,26],[20,27],[21,0],[22,1],[23,2],[24,3],[25,4],[26,5],[27,6],[0,1],[7,8],[14,15],[21,22],[1,0],[8,7],[15,14],[22,21],[1,3],[8,10],[15,17],[22,24],[2,0],[9,7],[16,14],[23,21],[2,3],[9,10],[16,17],[23,24],[3,1],[10,8],[17,15],[24,22],[3,2],[10,9],[17,16],[24,23],[3,4],[10,11],[17,18],[24,25],[3,5],[10,12],[17,19],[24,26],[4,3],[11,10],[18,17],[25,24],[4,6],[11,13],[18,20],[25,27],[5,3],[12,10],[19,17],[26,24],[5,6],[12,13],[19,20],[26,27],[6,4],[13,11],[20,18],[27,25]],
     "variables":["v","stim_local"],
     "guards":["And(stim_local>=1.2)",
         "And(stim_local>=1.2)",
@@ -32,7 +32,78 @@
         "And(stim_local>=10.0)",
         "And(stim_local>=10.0)",
         "And(stim_local>=10.0)",
-        "And(stim_local>=10.0)"],
+        "And(stim_local>=10.0)",
+
+        "And(stim_local>=0.405)",
+        "And(stim_local>=0.405)",
+        "And(stim_local>=0.405)",
+        "And(stim_local>=0.405)",
+
+        "And(stim_local<=0.395)",
+        "And(stim_local<=0.395)",
+        "And(stim_local<=0.4)",
+        "And(stim_local<=0.395)",
+
+        "And(stim_local>=v-0.47)",
+        "And(stim_local>=v-0.47)",
+        "And(stim_local>=v-0.465)",
+        "And(stim_local>=v-0.47)",
+
+        "And(stim_local<=v-0.47)",
+        "And(stim_local<=v-0.47)",
+        "And(stim_local<=v-0.47)",
+        "And(stim_local<=v-0.47)",
+
+        "And(stim_local>=0.405)",
+        "And(stim_local>=0.405)",
+        "And(stim_local>=0.405)",
+        "And(stim_local>=0.405)",
+
+        "And(stim_local<=v-0.47)",
+        "And(stim_local<=v-0.47)",
+        "And(stim_local<=v-0.47)",
+        "And(stim_local<=v-0.47)",
+
+        "And(stim_local<=0.395)",
+        "And(stim_local<=0.395)",
+        "And(stim_local<=0.395)",
+        "And(stim_local<=0.395)",
+
+        "And(stim_local>=v+0.4)",
+        "And(stim_local>=v+0.4)",
+        "And(stim_local>=v+0.405)",
+        "And(stim_local>=v+0.4)",
+
+        "And(stim_local>=0.73)",
+        "And(stim_local>=0.73)",
+        "And(stim_local>=0.73)",
+        "And(stim_local>=0.73)",
+
+        "And(stim_local>=v+0.3)",
+        "And(stim_local>=v+0.395)",
+        "And(stim_local>=v+0.4)",
+        "And(stim_local>=v+0.395)",
+
+        "And(stim_local>=0.73)",
+        "And(stim_local>=0.73)",
+        "And(stim_local>=0.735)",
+        "And(stim_local>=0.73)",
+
+        "And(stim_local<=0.73)",
+        "And(stim_local<=0.73)",
+        "And(stim_local<=0.73)",
+        "And(stim_local<=0.73)",
+
+        "And(stim_local>=v+0.4)",
+        "And(stim_local>=v+0.4)",
+        "And(stim_local>=v+0.4)",
+        "And(stim_local>=v+0.4)",
+
+        "And(stim_local<=0.73)",
+        "And(stim_local<=0.73)",
+        "And(stim_local<=0.73)",
+        "And(stim_local<=0.73)"],
+
     "reset":["stim_local=1.2",
         "stim_local=1.2",
         "stim_local=1.2",
@@ -50,7 +121,22 @@
         "stim_local=1.2",
 
         "stim_local=0.0",
-    
+        "stim_local=0.0",
+        "stim_local=0.0",
+        "stim_local=0.0",
+        "stim_local=0.0",
+        "stim_local=0.0",
+        "stim_local=0.0",
+
+        "stim_local=0.0",
+        "stim_local=0.0",
+        "stim_local=0.0",
+        "stim_local=0.0",
+        "stim_local=0.0",
+        "stim_local=0.0",
+        "stim_local=0.0",
+        
+        "","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","",""
     ],
     "initialSet":[[1.19,0.0],[1.21,0.0]],
     "unsafeSet":"@Allmode:v>1.32",

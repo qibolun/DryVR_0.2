@@ -71,7 +71,7 @@
 
         "And(stim_local>=v+0.4,stim_local<=v+0.4)",
         "And(stim_local>=v+0.4,stim_local<=v+0.4)",
-        "And(stim_local>=v+0.405,stim_local<=v+0.4)",
+        "And(stim_local>=v+0.405,stim_local<=v+0.405)",
         "And(stim_local>=v+0.4,stim_local<=v+0.4)",
 
         "And(stim_local>=0.73,stim_local<=0.73)",

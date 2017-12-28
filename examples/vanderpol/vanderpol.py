@@ -56,7 +56,3 @@ if __name__ == "__main__":
     plt.show()
     plt.plot(a, b, "-r")
     plt.show()
-<<<<<<< HEAD
-
-=======
->>>>>>> e19572918cbe48437bee9b1a1dc02278658141d0

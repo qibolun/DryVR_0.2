@@ -39,12 +39,12 @@
         "And(stim_local>=0.405,stim_local<0.410)",
         "And(stim_local>=0.405,stim_local<0.410)",
 
-        "And(stim_local<=0.395,stim_local>=0.405)",
-        "And(stim_local<=0.395,stim_local>=0.405)",
+        "And(stim_local<=0.395,stim_local>=0.395)",
+        "And(stim_local<=0.395,stim_local>=0.395)",
         "And(stim_local<=0.4,stim_local>=0.4)",
-        "And(stim_local<=0.395,stim_local>=0.405)",
+        "And(stim_local<=0.395,stim_local>=0.395)",
 
-        "And(stim_local>=v-0.47),stim_local<=v-0.47",
+        "And(stim_local>=v-0.47,stim_local<=v-0.47)",
         "And(stim_local>=v-0.47,stim_local<=v-0.47)",
         "And(stim_local>=v-0.465,stim_local<=v-0.47)",
         "And(stim_local>=v-0.47,stim_local<=v-0.47)",

@@ -5,7 +5,7 @@
     "guards":["And(t>=3.2,t<=3.2)","And(t>=3.2,t<=3.2)"],
     "initialMode":"Inverter_Rampup",
     "initialSet":[[1.19,0.0],[1.2,0.0]],
-    "unsafeSet":"Allmode@:v>1.32",
+    "unsafeSet":"@Allmode:v>1.32",
     "timeHorizon":6.4,
     "directory":"examples/uniform_inverter_sigmoid"
 }

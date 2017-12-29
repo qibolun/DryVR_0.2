@@ -142,5 +142,7 @@
     "initialSet":[[1.19,0.0],[1.21,0.0]],
     "unsafeSet":"@Allmode:v>1.32",
     "timeHorizon":6.4,
-    "directory":"examples/hybrid_inverter_ramp"
+    "directory":"examples/hybrid_inverter_ramp",
+    "bloatingMethod":"PW",
+    "kvalue":[2,2]
 }

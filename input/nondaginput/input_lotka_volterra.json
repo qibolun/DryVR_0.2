@@ -1,0 +1,11 @@
+{
+    "vertex":["Default"],
+    "edge":[],
+    "variables":["x","y"],
+    "guards":[],
+    "initialMode":"Default",
+    "initialSet":[[4.8,1.8],[5.2,2.2]],
+    "unsafeSet":"@Allmode:y<0",
+    "timeHorizon":5.0,
+    "directory":"examples/lotka_volterra"
+}

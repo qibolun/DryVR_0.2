@@ -1,0 +1,11 @@
+{
+    "vertex":["Default"],
+    "edge":[],
+    "variables":["x","y","z"],
+    "guards":[],
+    "initialMode":"Default",
+    "initialSet":[[-0.2, -8.6, -0.2],[0.2, -8.2, 0.2]],
+    "unsafeSet":"@Allmode:z<-2",
+    "timeHorizon":6.0,
+    "directory":"examples/roessler"
+}

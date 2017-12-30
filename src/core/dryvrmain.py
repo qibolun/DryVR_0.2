@@ -117,6 +117,12 @@ def verify(inputFile):
 					guardChecker = guard,
 					guardStr = curGuardStr,
 				)
+				print "final reach tube"
+				for t in curBloatedTube:
+					print t
+
+				# print curGuardStr
+
 				nextInit, trunckedResult, transiteTime = guard.guardReachTube(
 					curBloatedTube,
 					curGuardStr,

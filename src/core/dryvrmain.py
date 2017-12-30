@@ -117,9 +117,9 @@ def verify(inputFile):
 					guardChecker = guard,
 					guardStr = curGuardStr,
 				)
-				print "final reach tube"
-				for t in curBloatedTube:
-					print t
+				# print "final reach tube"
+				# for t in curBloatedTube:
+				# 	print t
 
 				# print curGuardStr
 

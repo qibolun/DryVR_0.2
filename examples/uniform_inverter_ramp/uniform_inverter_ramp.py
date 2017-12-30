@@ -25,7 +25,7 @@ def uniform_inverter_ramp_dynamic(y,t,mode):
     return dydt
 
 def TC_Simulate(Mode,initialCondition,time_bound):
-    time_step = 0.05;
+    time_step = 0.0001;
     time_bound = float(time_bound)
 
     number_points = int(np.ceil(time_bound/time_step))
@@ -52,7 +52,7 @@ def TC_Simulate(Mode,initialCondition,time_bound):
 
 if __name__ == "__main__":
 
-    sol = TC_Simulate("Inverter_Rampup", [1.2,0.0], 6.4)
+    sol = TC_Simulate("Inverter_Rampup", [1.19,0.0], 6.4)
     #for s in sol:
 	#	print(s)
     time = [row[0] for row in sol]

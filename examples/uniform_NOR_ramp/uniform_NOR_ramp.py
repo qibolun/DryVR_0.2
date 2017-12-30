@@ -30,7 +30,7 @@ def uniform_NOR_ramp_dynamic(y,t,mode):
     return dydt
 
 def TC_Simulate(Mode,initialCondition,time_bound):
-    time_step = 0.05;
+    time_step = 0.00002;
     time_bound = float(time_bound)
 
     number_points = int(np.ceil(time_bound/time_step))

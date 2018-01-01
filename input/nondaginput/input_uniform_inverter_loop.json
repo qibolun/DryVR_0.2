@@ -1,0 +1,11 @@
+{
+	"vertex":["Default"],
+	"edge":[],
+	"variables":["v1_local","v2_local"],
+	"guards":[],
+	"initialMode":"Default",
+	"initialSet":[[1.0, 0.5],[1.2, 0.6]],
+	"unsafeSet":"@Allmode:v1_local>=1.32",
+	"timeHorizon":6.4,
+	"directory":"examples/uniform_inverter_loop"
+}

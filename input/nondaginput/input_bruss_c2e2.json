@@ -1,0 +1,13 @@
+{
+	"vertex":["Default"],
+	"edge":[],
+	"variables":["x","y"],
+	"guards":[],
+	"initialMode":"Default",
+	"initialSet":[[2.0, 1.0],[3.0, 1.5]],
+	"unsafeSet":"@Allmode:x>=10.0",
+	"timeHorizon":10.0,
+	"directory":"examples/bruss",
+  	"bloatingMethod":"PW",
+  	"kvalue":[10,10]
+}

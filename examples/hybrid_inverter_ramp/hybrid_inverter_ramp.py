@@ -124,7 +124,7 @@ def hybrid_inverter_ramp_dynamic(y,t,mode):
     return dydt
 
 def TC_Simulate(Mode,initialCondition,time_bound):
-    time_step = 0.05;
+    time_step = 0.0005;
     time_bound = float(time_bound)
 
     number_points = int(np.ceil(time_bound/time_step))
@@ -133,8 +133,9 @@ def TC_Simulate(Mode,initialCondition,time_bound):
         t.append(time_bound)
     newt = []
     for step in t:
-        newt.append(float(format(step, '.2f')))
+        newt.append(float(format(step, '.6f')))
     t = newt
+    # print t
 
     sol = odeint(hybrid_inverter_ramp_dynamic, initialCondition, t, args=(Mode,),hmax=time_step)
 

@@ -1,0 +1,22 @@
+{
+    "vertex":["rod_1", "no_rod", "rod_2"],
+    "edge":[[0,1],[1,0],[1,2],[2,1]],
+    "variables":["x","c1","c2"],
+    "guards":[ 
+        "And(x<510, x>=509)",
+        "And(x>=550, x<551, c1>=20)",
+        "And(x>=550, x<551, c2>=20)",
+        "And(x<510, x>=509)"
+    ],
+    "resets":[
+        "c1 = 0",
+        "",
+        "",
+        "c2 = 0"
+    ],
+    "initialMode":"no_rod",
+    "initialSet":[[510.0, 20.0, 20.0],[510.0, 20.0, 20.0]],
+    "unsafeSet":"@Allmode:And(x>=550, x<551, c1<20, c2<20)",
+    "timeHorizon":50.0,
+    "directory":"examples/rod_reactor"
+}

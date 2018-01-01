@@ -3,9 +3,9 @@
 	"edge":[[0,1],[1,2]],
 	"variables":["temp"],
 	"guards":["And(t>1.0,t<=1.1)","And(t>1.0,t<=1.1)"],
-	"resets":["temp=80", "temp=70"],
+	"resets":["temp=[79,80]", "temp=72"],
 	"initialSet":[[75.0],[76.0]],
-	"unsafeSet":"@Allmode:temp<71",
+	"unsafeSet":"@Allmode:temp<61",
 	"timeHorizon":3.5,
 	"directory":"examples/Thermostats"
 }

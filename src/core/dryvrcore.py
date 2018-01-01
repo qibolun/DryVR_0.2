@@ -179,13 +179,14 @@ def clacBloatedTube(modeLabel, initialSet, timeHorizon, simFuc, bloatingMethod, 
 
 	if guardChecker is not None:
 		# pre truncked traces to get better bloat result
-		print guardStr
+		# print guardStr, "trace check"
 		maxIdx = -1
 		for trace in traces:
+			# print "simulation trace"
+			# for t in trace:
+			# 	print t
 			retIdx = guardChecker.guardSimuTraceTime(trace, guardStr)
 			maxIdx = max(maxIdx, retIdx+1)
-		# 	for t in trace:
-		# 		print t
 		# print "max Idx is ", maxIdx
 		for i in range(len(traces)):
 			traces[i] = traces[i][:maxIdx]

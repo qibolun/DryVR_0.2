@@ -5,7 +5,7 @@
     "guards":["t==3.2","t==4"],
     "initialMode":"OR_Rampup",
     "initialSet":[[0.75, 1.199, 0.0, 0.0],[0.75, 1.201, 0.002, 0.0]],
-    "unsafeSet":"@Alllmode:Vout>1.32",
+    "unsafeSet":"@Allmode:Vout>=1.32",
     "timeHorizon":6.4,
     "directory":"examples/uniform_OR_sigmoid"
 }

@@ -1,0 +1,11 @@
+{
+    "vertex":["Default"],
+    "edge":[],
+    "variables":["V1","V2","V3","V4","V5","V6","V7","V8","V9"],
+    "guards":[],
+    "initialMode":"Default",
+    "initialSet":[[-0.0281,-0.0281,-0.0337,-0.0280,-0.0273,-0.0337,-0.0161,-0.0092,-0.0240]],
+    "unsafeSet":,
+    "timeHorizon":0.06,
+    "directory":"examples/neuron"
+}

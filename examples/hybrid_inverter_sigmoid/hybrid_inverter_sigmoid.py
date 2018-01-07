@@ -16,55 +16,27 @@ def TC_Simulate(Mode,initialCondition,time_bound):
         modenum = 6
     elif Mode == "Rampup_G":
         modenum = 7
-    elif Mode == "On_A":
-        modenum = 8
-    elif Mode == "On_B":
-        modenum = 9
-    elif Mode == "On_C":
-        modenum = 10
-    elif Mode == "On_D":
-        modenum = 11
-    elif Mode == "On_E":
-        modenum = 12
-    elif Mode == "On_F":
-        modenum = 13
-    elif Mode == "On_G":
-        modenum = 14
     elif Mode == "Rampdown_A":
-        modenum = 15
+        modenum = 8
     elif Mode == "Rampdown_B":
-        modenum = 16
+        modenum = 9
     elif Mode == "Rampdown_C":
-        modenum = 17
+        modenum = 10
     elif Mode == "Rampdown_D":
-        modenum = 18
+        modenum = 11
     elif Mode == "Rampdown_E":
-        modenum = 19
+        modenum = 12
     elif Mode == "Rampdown_F":
-        modenum = 20
+        modenum = 13
     elif Mode == "Rampdown_G":
-        modenum = 21
-    elif Mode == "Off_A":
-        modenum = 22
-    elif Mode == "Off_B":
-        modenum = 23
-    elif Mode == "Off_C":
-        modenum = 24
-    elif Mode == "Off_D":
-        modenum = 25
-    elif Mode == "Off_E":
-        modenum = 26
-    elif Mode == "Off_F":
-        modenum = 27
-    elif Mode == "Off_G":
-        modenum = 28
+        modenum = 14
 
     simfile = './examples/uniform_NOR_sigmoid/simu'
     timeStep = 0.00005
     # This model need some spcial handle 
     # This is because we want to discard the t in the simulator
     # Adding t to the simulation initial condition
-    initialCondition = [ initialCondition[0], 0.0, initialCondition[1]]
+    initialCondition = [0.0, initialCondition[0], initialCondition[1]]
     result = c2e2wrapper.invokeSimulator(
         modenum,
         simfile,
@@ -76,6 +48,6 @@ def TC_Simulate(Mode,initialCondition,time_bound):
     ret = []
     # Discard time info from the simulator and return to DRYVR
     for line in result:
-        ret.append([line[0], line[1], line[3])
+        ret.append([line[0], line[1], line[2])
     
     return ret

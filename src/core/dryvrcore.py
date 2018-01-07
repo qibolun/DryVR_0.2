@@ -173,6 +173,8 @@ def clacBloatedTube(modeLabel, initialSet, timeHorizon, simFuc, bloatingMethod, 
 	traces.append(simFuc(modeLabel, curCenter, timeHorizon))
 	for _ in range(SIMTRACENUM):
 		newInitPoint = randomPoint(initialSet[0], initialSet[1])
+		# print "========new rad point=========="
+		# print newInitPoint
 		#print newInitPoint
 		traces.append(simFuc(modeLabel, newInitPoint, timeHorizon))
 

@@ -1,0 +1,12 @@
+{	
+	"modes":["OFF", "ON_1", "ON_2", "ON_3"],
+	"initialMode":"ON_1",
+	"variables":["TEMP_1","TEMP_2","TEMP_3"],
+	"initialSet":[[19.5, 20.8, 22.6],[19.55, 20.85, 22.65]],
+	"unsafeSet":"",
+	"goalSet":"And(TEMP_1>=21.0, TEMP_1<=22.0, TEMP_2>=21.0, TEMP_2<=22.0, TEMP_3>=21.0, TEMP_3<=22.0)",
+	"timeHorizon":25.0,
+	"minTimeThres":2.0,
+	"directory":"examples/roomHeating",
+	"goal":[["TEMP_1","TEMP_2", "TEMP_3"],[21.0,21.0,21.0],[22.0,22.0,22.0]]
+}

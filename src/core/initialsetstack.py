@@ -58,6 +58,7 @@ class RrtSetStack():
 		ret += "Initial: "+str(self.initial)+"\n"
 		ret += "visited: "+str(self.visited)+"\n"
 		ret += "num candidates: "+str(len(self.candidates))+"\n"
+		ret += "remian time: "+str(self.remainTime)+"\n" 
 		if self.bloatedTube:
 			ret += "bloatedTube: True"+"\n"
 		else:

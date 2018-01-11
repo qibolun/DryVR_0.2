@@ -1,166 +1,55 @@
-from scipy.integrate import odeint
-import numpy as np
-import matplotlib.pyplot as plt
-
-def hybrid_inverter_ramp_dynamic(y,t,mode):
-    v, stim_local = y
-    v = float(v)
-    stim_local = float(stim_local)
-
-    if mode == "Rampup_A":
-        # = 1
-        stim_local_dot = 1
-        v_dot = (-5190.0*v + 6228.0)*(-stim_local + v/2 + 0.13)
-    elif mode == "Rampup_B":
-        # = 1
-        stim_local_dot = 1
-        v_dot = (-stim_local + 0.4)*(2295.0*stim_local - 918.0) + (-5190.0*v + 6228.0)*(-stim_local + v/2 + 0.13)
-    elif mode == "Rampup_C":
-        # = 1
-        stim_local_dot = 1
-        v_dot = (-1000000*stim_local + 730000.0)*(-0.002595*stim_local + 0.00189435)
-    elif mode == "Rampup_D":
-        # = 1
-        stim_local_dot = 1
-        v_dot = (-1000000*stim_local + 730000.0)*(-0.002595*stim_local + 0.00189435) - (stim_local - 0.4)*(2295.0*stim_local - 918.0)
-    elif mode == "Rampup_E":
-        # = 1
-        stim_local_dot = 1
-        v_dot = -4590.0*v*(stim_local - v/2 - 0.4) + (-1000000*stim_local + 730000.0)*(-0.002595*stim_local + 0.00189435)
-    elif mode == "Rampup_F":
-        # = 1
-        stim_local_dot = 1
-        v_dot = (-2295.0*stim_local + 918.0)*(stim_local - 0.4)
-    elif mode == "Rampup_G":
-        # = 1
-        stim_local_dot = 1
-        v_dot = -4590.0*v*(stim_local - v/2 - 0.4) 
-    elif mode == "On_A":
-        # = 1
-        stim_local_dot = 0
-        v_dot = (-5190.0*v + 6228.0)*(-stim_local + v/2 + 0.13)
-    elif mode == "On_B":
-        # = 1
-        stim_local_dot = 0
-        v_dot = (-stim_local + 0.4)*(2295.0*stim_local - 918.0) + (-5190.0*v + 6228.0)*(-stim_local + v/2 + 0.13)
-    elif mode == "On_C":
-        # = 1
-        stim_local_dot = 0
-        v_dot = (-1000000*stim_local + 730000.0)*(-0.002595*stim_local + 0.00189435)
-    elif mode == "On_D":
-        # = 1
-        stim_local_dot = 0
-        v_dot = (-1000000*stim_local + 730000.0)*(-0.002595*stim_local + 0.00189435) - (stim_local - 0.4)*(2295.0*stim_local - 918.0)
-    elif mode == "On_E":
-        # = 1
-        stim_local_dot = 0
-        v_dot = -4590.0*v*(stim_local - v/2 - 0.4) + (-1000000*stim_local + 730000.0)*(-0.002595*stim_local + 0.00189435)
-    elif mode == "On_F":
-        # = 1
-        stim_local_dot = 0
-        v_dot = (-2295.0*stim_local + 918.0)*(stim_local - 0.4)
-    elif mode == "On_G":
-        # = 1
-        stim_local_dot = 0
-        v_dot = -4590.0*v*(stim_local - v/2 - 0.4)
-    elif mode == "Rampdown_A":
-        # = 1
-        stim_local_dot = -1
-        v_dot = (-5190.0*v + 6228.0)*(-stim_local + v/2 + 0.13)
-    elif mode == "Rampdown_B":
-        # = 1
-        stim_local_dot = -1
-        v_dot = (-stim_local + 0.4)*(2295.0*stim_local - 918.0) + (-5190.0*v + 6228.0)*(-stim_local + v/2 + 0.13)
-    elif mode == "Rampdown_C":
-        # = 1
-        stim_local_dot = -1
-        v_dot = (-1000000*stim_local + 730000.0)*(-0.002595*stim_local + 0.00189435)
-    elif mode == "Rampdown_D":
-        # = 1
-        stim_local_dot = -1
-        v_dot = (-1000000*stim_local + 730000.0)*(-0.002595*stim_local + 0.00189435) - (stim_local - 0.4)*(2295.0*stim_local - 918.0)
-    elif mode == "Rampdown_E":
-        # = 1
-        stim_local_dot = -1
-        v_dot = -4590.0*v*(stim_local - v/2 - 0.4) + (-1000000*stim_local + 730000.0)*(-0.002595*stim_local + 0.00189435)
-    elif mode == "Rampdown_F":
-        # = 1
-        stim_local_dot = -1
-        v_dot = (-2295.0*stim_local + 918.0)*(stim_local - 0.4)
-    elif mode == "Rampdown_G":
-        # = 1
-        stim_local_dot = -1
-        v_dot = -4590.0*v*(stim_local - v/2 - 0.4)
-    elif mode == "Off_A":
-        # = 1
-        stim_local_dot = -1
-        v_dot = (-5190.0*v + 6228.0)*(-stim_local + v/2 + 0.13)
-    elif mode == "Off_B":
-        # = 1
-        stim_local_dot = -1
-        v_dot = (-stim_local + 0.4)*(2295.0*stim_local - 918.0) + (-5190.0*v + 6228.0)*(-stim_local + v/2 + 0.13)
-    elif mode == "Off_C":
-        # = 1
-        stim_local_dot = -1
-        v_dot = (-1000000*stim_local + 730000.0)*(-0.002595*stim_local + 0.00189435)
-    elif mode == "Off_D":
-        # = 1
-        stim_local_dot = -1
-        v_dot = (-1000000*stim_local + 730000.0)*(-0.002595*stim_local + 0.00189435) - (stim_local - 0.4)*(2295.0*stim_local - 918.0)
-    elif mode == "Off_E":
-        # = 1
-        stim_local_dot = -1
-        v_dot = -4590.0*v*(stim_local - v/2 - 0.4) + (-1000000*stim_local + 730000.0)*(-0.002595*stim_local + 0.00189435)
-    elif mode == "Off_F":
-        # = 1
-        stim_local_dot = -1
-        v_dot = (-2295.0*stim_local + 918.0)*(stim_local - 0.4)
-    elif mode == "Off_G":
-        # = 1
-        stim_local_dot = -1
-        v_dot = -4590.0*v*(stim_local - v/2 - 0.4)
-
-    dydt = [v_dot, stim_local_dot]
-    return dydt
+from examples import c2e2wrapper
+import math
 
 def TC_Simulate(Mode,initialCondition,time_bound):
-    time_step = 0.0005;
-    time_bound = float(time_bound)
+    # Map givien mode to int 1
+    modes = "Rampup_A, Rampup_B, Rampup_C, Rampup_D, Rampup_E, Rampup_F, Rampup_G, On_A, On_B, On_C, On_D, On_E, On_F, On_G, Rampdown_A, Rampdown_B, Rampdown_C, Rampdown_D, Rampdown_E, Rampdown_F, Rampdown_G, Off_A, Off_B, Off_C, Off_D, Off_E, Off_F, Off_G"
+    modes = modes.split(',')
+    allmodes = []
+    for mode in modes:
+        allmodes.append(mode.strip())
+    modenum = allmodes.index(Mode)+1
 
-    number_points = int(np.ceil(time_bound/time_step))
-    t = [i*time_step for i in range(0,number_points)]
-    if t[-1] != time_step:
-        t.append(time_bound)
-    newt = []
-    for step in t:
-        newt.append(float(format(step, '.6f')))
-    t = newt
-    # print t
+    simfile = './examples/hybrid_inverter_ramp/simu'
+    timeStep = 0.00002
+    # This model need some spcial handle 
+    # This is because we want to discard the t in the simulator
+    # Adding t to the simulation initial condition
+    initialCondition = [initialCondition[0], 0.0 ,initialCondition[1]]
+    result = c2e2wrapper.invokeSimulator(
+        modenum,
+        simfile,
+        initialCondition,
+        timeStep,
+        time_bound
+    )
 
-    sol = odeint(hybrid_inverter_ramp_dynamic, initialCondition, t, args=(Mode,),hmax=time_step)
+    ret = []
+    # Discard time info from the simulator and return to DRYVR
 
-    # Construct the final output
-    trace = []
-    for j in range(len(t)):
-        #print t[j], current_psi
-        tmp = []
-        tmp.append(t[j])
-        tmp.append(float(sol[j,0]))
-        tmp.append(float(sol[j,1]))
-        trace.append(tmp)
-    return trace
+    def checkinvalidnum(val):
+        # Avoid simulator out of boundary
+        if math.isnan(val):
+            return True
+
+        if val == float('inf') or val == float('-inf'):
+            return True
+
+        # The value cannot be larger than 10 or less than -10
+        if val > 10 or val <-10:
+            return True
+
+        return False
+
+
+    for line in result:
+        if checkinvalidnum(line[1]):
+            break
+        ret.append([line[0], line[1], line[3]])
+
+    print ret[-1]
+    return ret
+
 
 if __name__ == "__main__":
-
-    sol = TC_Simulate("Rampup_A", [1.2,0.0], 6.4)
-    #for s in sol:
-	#	print(s)
-    time = [row[0] for row in sol]
-
-    v = [row[1] for row in sol]
-
-    stim_local = [row[2] for row in sol]
-
-    plt.plot(v,stim_local,"-r")
-    plt.show()
-    
+    TC_Simulate("Rampup_A",1,1)

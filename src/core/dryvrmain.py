@@ -292,7 +292,9 @@ def rrtSimulation(inputFile):
  				curModeStack.mode,
  				curModeStack.initial,
  				curModeStack.remainTime,
- 				simFunction
+ 				simFunction,
+ 				params.bloatingMethod,
+				params.kvalue
  			)
  			curBloatedTube = checker.cutTubeTillUnsafe(curBloatedTube)
  			# we cannot stay in this mode for min thres time, back to the previous mode
@@ -313,7 +315,7 @@ def rrtSimulation(inputFile):
  			randomSections.sort(key=lambda x: distanceChecker.calcDistance(x[0], x[1]))
  			curModeStack.candidates = randomSections
  			print "Generate new bloated tube and candidate, with candidates length", len(curModeStack.candidates)
-
+ 			
 
  			# Check if the current tube reaches goal
  			result, tube = goalSetChecker.goalReachTube(curBloatedTube)

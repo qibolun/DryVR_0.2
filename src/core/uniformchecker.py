@@ -13,6 +13,10 @@ class UniformChecker():
 		self.solverDic = {}
 		for var in variables:
 			self.varDic[var] = Real(var)
+
+		if not unsafe:
+			return
+
 		unsafe = handleReplace(unsafe, self.varDic.keys())
 		unsafeList = unsafe[1:].split('@')
 		for unsafe in unsafeList:
@@ -68,6 +72,8 @@ class UniformChecker():
 		return safe
 
 	def cutTubeTillUnsafe(self, tube):
+		if not self.solverDic:
+			return tube
 		# Cut the reach tube till it intersect with unsafe
 		for i in range(0, len(tube), 2):
 			lower = tube[i]

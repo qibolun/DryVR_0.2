@@ -297,6 +297,10 @@ def rrtSimulation(inputFile):
 				params.kvalue
  			)
  			curBloatedTube = checker.cutTubeTillUnsafe(curBloatedTube)
+
+ 			# for t in curBloatedTube:
+ 			# 	print t
+ 			# exit()
  			# we cannot stay in this mode for min thres time, back to the previous mode
  			if not curBloatedTube or curBloatedTube[-1][0] < minTimeThres:
  				print "bloated tube is not long enough, discard the mode"

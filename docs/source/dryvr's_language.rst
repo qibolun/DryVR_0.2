@@ -61,7 +61,11 @@ The input for DryVR is of the form ::
       "unsafeSet":@[mode name]:[unsafe region]
       "timeHorizon":[Time bound for the verification]
       "directory": directory of the folder which contains the simulator for black-box system
+      "bloatingMethod": specify the bloating method, which can be either "PW" or "GLOBAL" # This is optional, if you don't have this field in input file, DryVR will use GLOBAL as default bloating method.
+      "kvalue": specify the k-value that used by piecewise bloating method # This field must be specified if you choose the bloatingMethod to "PW"
     }
+
+Some fields are optional in DryVR's input langauge such as resets, initialMode, bloatingMethod and kvalue under some conditions. Please read the comment.
 
 Example input for the Automatic Emergency Braking System ::
 
@@ -84,18 +88,28 @@ Example input for the Automatic Emergency Braking System ::
 Output Interpretation
 ^^^^^^^^^^^^^^^^^^^^^^^^^
 
-The tool will print background information like the current mode, transition time, initial set and discrepancy function information on the run. The final result about safe/unsafe will be printed at the bottom.
+The tool will print background information like the current mode, transition time, initial set on the run. The final result about goal reached/cannot find graph will be printed at the bottom.
 
-When the system is safe, the final result will look like ::
+When the system find transition graph, the final result will look like ::
 
     System is Safe!
 
-When the system is unsafe, the final result will look like ::
+When the system is unsafe from simulation, the final result will look like ::
 
     Current simulation is not safe. Program halt
 
-If the simulation result is not safe, the unsafe simulation trajectory will be stored in "Traj.txt" in the output folder.
+When the system is unsafe from verification, the final result will look like ::
+
+   System is not safe in Mode [Mode name]
+
+When the system is unknown from verification, the final result will look like ::
+
+   Hit refine threshold, system halt, result unknown
+
+If the simulation result is not safe, the unsafe simulation trajectory will be stored in "output/Traj.txt".
 Otherwise the last simulation result will be stored in "Traj.txt".
+
+If the verfication result is not safe, the counter example reachtube will be stored in "output/unsafeTube.txt".
 
 
 .. _advance-label:

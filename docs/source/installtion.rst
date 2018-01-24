@@ -14,7 +14,7 @@ To install packages indepently, the following will be required:
 - numpy
 - scipy
 - sympy
-- Matplotlib
+- matplotlib
 - python igraph
 - python Z3
 - glpk(4.39 or ealier eversion)

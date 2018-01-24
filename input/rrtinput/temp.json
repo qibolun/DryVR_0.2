@@ -1,0 +1,12 @@
+{	
+	"modes":["On", "Off"],
+	"initialMode":"On",
+	"variables":["temp"],
+	"initialSet":[[75.0],[76.0]],
+	"unsafeSet":"@Allmode:temp>90",
+	"goalSet":"And(temp>=68.0, temp<=72.0)",
+	"timeHorizon":4.0,
+	"minTimeThres":1.0,
+	"directory":"examples/Thermostats",
+	"goal":[["temp"],[68.0],[72.0]]
+}

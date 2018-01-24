@@ -6,20 +6,10 @@ import matplotlib.pyplot as plt
 
 def spiking_neuron_dynamic(y,t):
     v, u = y
-    v = float(v)
-    u = float(u)
+    
 
-    C = 100
-    v_r = -56
-    v_t = -42
-    I = 300
-    a = 0.03
-    b = 8
-    k = 1
-
-    v_dot = (k * (v - v_r) * (v - v_t) - u + I)/C
-    u_dot = a * (b * (v - v_r) - u)
-
+    v_dot = 0.01*((v + 56)*(v + 42) - u + 300)
+    u_dot = 0.03*(8*(v + 56) - u)
     dydt = [v_dot, u_dot]
 
     return dydt
@@ -47,24 +37,26 @@ def TC_Simulate(Mode,initialCondition,time_bound):
         tmp.append(t[j])
         tmp.append(float(sol[j,0]))
         tmp.append(float(sol[j,1]))
+        if tmp[1]>40:
+            break
         trace.append(tmp)
     return trace
     
 if __name__ == "__main__":
 
-    sol = TC_Simulate("Default", [-50, 0.0], 10.0)
-    #for s in sol:
-	#	print(s)
+    sol = TC_Simulate("Default", [-50, 0.0], 100.0)
+    for s in sol:
+		print(s)
 
-    time = [row[0] for row in sol]
+    # time = [row[0] for row in sol]
 
-    a = [row[1] for row in sol]
+    # a = [row[1] for row in sol]
 
-    b = [row[2] for row in sol]
+    # b = [row[2] for row in sol]
 
-    plt.plot(time, a, "-r")
-    plt.plot(time, b, "-g")
-    plt.show()
-    plt.plot(a, b, "-r")
-    plt.show()
+    # plt.plot(time, a, "-r")
+    # plt.plot(time, b, "-g")
+    # plt.show()
+    # plt.plot(a, b, "-r")
+    # plt.show()
 

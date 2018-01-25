@@ -31,5 +31,4 @@ pip2 install glpk
 export LD_LIBRARY_PATH=/usr/local/lib
 apt-get install python-cairo
 apt-get install -y python-tk
-pip2 install pygraphviz
-
+pip2 install pygraphviz --install-option="--include-path=/usr/include/graphviz" --install-option="--library-path=/usr/lib/graphviz/"

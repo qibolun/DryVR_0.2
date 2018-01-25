@@ -11,7 +11,7 @@ def TC_Simulate(Mode,initialCondition,time_bound):
     elif Mode == "OR_Off":
         modenum = 4
 	
-    simfile = './examples/uniform_NOR_ramp/simu'
+    simfile = './examples/uniform_OR_ramp/simu'
     timeStep = 0.00002
     # This model need some spcial handle 
     # This is because we want to discard the t in the simulator

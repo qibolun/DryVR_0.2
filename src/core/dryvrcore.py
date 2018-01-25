@@ -99,11 +99,12 @@ def simulate(g, initCondition, timeHorizon, guard, simFuc, reseter, initialMode,
 		transiteTime = remainTime
 		curLabel = g.vs[curVertex]['label']
 
+		curSimResult = simFuc(curLabel, initCondition, transiteTime)
+		if isinstance(curSimResult,numpy.ndarray):
+			curSimResult = curSimResult.tolist()
+
 		if len(curSuccessors) == 0:
-			curSimResult = simFuc(curLabel, initCondition, transiteTime)
 			# Some model return numpy array, convert to list
-			if isinstance(curSimResult,numpy.ndarray):
-				curSimResult = curSimResult.tolist()
 			initCondition, trunckedResult = guard.guardSimuTube(
 				curSimResult,
 				None
@@ -118,11 +119,8 @@ def simulate(g, initCondition, timeHorizon, guard, simFuc, reseter, initialMode,
 				edgeID = g.get_eid(curVertex,curSuccessor)
 				curGuardStr = g.es[edgeID]['guards']
 				curResetStr = g.es[edgeID]['resets']
-				curSimResult = simFuc(curLabel, initCondition, transiteTime)
-				# Some model return numpy array, convert to list
-				if isinstance(curSimResult,numpy.ndarray):
-					curSimResult = curSimResult.tolist()
 
+				print curGuardStr
 				nextInit, trunckedResult = guard.guardSimuTube(
 					curSimResult,
 					curGuardStr
@@ -174,6 +172,8 @@ def clacBloatedTube(modeLabel, initialSet, timeHorizon, simFuc, bloatingMethod, 
 	traces.append(simFuc(modeLabel, curCenter, timeHorizon))
 	for _ in range(SIMTRACENUM):
 		newInitPoint = randomPoint(initialSet[0], initialSet[1])
+		# print "========new rad point=========="
+		# print newInitPoint
 		#print newInitPoint
 		traces.append(simFuc(modeLabel, newInitPoint, timeHorizon))
 

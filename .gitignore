@@ -10,5 +10,6 @@
 **/*.eps
 **/*.png
 **/*.txt
+config
 output/unsafeSim
 

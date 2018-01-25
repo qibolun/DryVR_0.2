@@ -8,7 +8,7 @@ def TC_Simulate(Mode,initialCondition,time_bound):
         modenum = 2
 	
     simfile = './examples/uniform_OR_sigmoid/simu'
-    timeStep = 0.00002
+    timeStep = 0.00001
     # This model need some spcial handle 
     # This is because we want to discard the t in the simulator
     # Adding t to the simulation initial condition
@@ -22,6 +22,7 @@ def TC_Simulate(Mode,initialCondition,time_bound):
     )
 
     ret = []
+    #import pdb; pdb.set_trace()
     # Discard time info from the simulator and return to DRYVR
     for line in result:
         ret.append([line[0], line[1], line[2], line[3], line[5]])

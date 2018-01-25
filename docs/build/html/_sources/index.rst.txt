@@ -14,6 +14,7 @@ DryVR is a framework for verifying cyber-physical systems. It specifically handl
    installtion
    usage
    dryvr's_language
+   dryvr's_control_synthesis
    example
    publications
    contact

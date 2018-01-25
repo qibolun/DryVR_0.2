@@ -1,0 +1,11 @@
+{
+    "vertex":["l1", "l2"],
+    "edge":[[0,1],[1,0]],
+    "variables":["e1","eoneprime","a1","e2","etwoprime","a2","e3","ethreeprime","a3"],
+    "guards":["t==2.0", "t==2.0"],
+    "initialMode":"l1",
+    "initialSet":[[0.99,0.99,0.99,0.99,0.99,0.99,0.99,0.99,0.99],[1.01,1.01,1.01,1.01,1.01,1.01,1.01,1.01,1.01]],
+    "unsafeSet":"@Allmode:e1>=1.7",
+    "timeHorizon":12.0,
+    "directory":"examples/vehicle_platoon_3"
+}

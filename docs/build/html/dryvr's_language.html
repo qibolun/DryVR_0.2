@@ -36,7 +36,7 @@
               href="genindex.html"/>
         <link rel="search" title="Search" href="search.html"/>
     <link rel="top" title="DryVR 0.2 documentation" href="index.html"/>
-        <link rel="next" title="Examples" href="example.html"/>
+        <link rel="next" title="DryVR’s Control Synthesis" href="dryvr&#39;s_control_synthesis.html"/>
         <link rel="prev" title="Usage" href="usage.html"/> 
 
   
@@ -102,6 +102,7 @@
 <li class="toctree-l2"><a class="reference internal" href="#advanced-tricks-verify-your-own-black-box-system">Advanced Tricks: Verify your own black-box system</a></li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="dryvr's_control_synthesis.html">DryVR&#8217;s Control Synthesis</a></li>
 <li class="toctree-l1"><a class="reference internal" href="example.html">Examples</a></li>
 <li class="toctree-l1"><a class="reference internal" href="publications.html">Publications</a></li>
 <li class="toctree-l1"><a class="reference internal" href="contact.html">Contact</a></li>
@@ -211,9 +212,12 @@ as the simulation trajectory of the system in the given mode starting from <img 
   <span class="s2">&quot;unsafeSet&quot;</span><span class="p">:</span><span class="o">@</span><span class="p">[</span><span class="n">mode</span> <span class="n">name</span><span class="p">]:[</span><span class="n">unsafe</span> <span class="n">region</span><span class="p">]</span>
   <span class="s2">&quot;timeHorizon&quot;</span><span class="p">:[</span><span class="n">Time</span> <span class="n">bound</span> <span class="k">for</span> <span class="n">the</span> <span class="n">verification</span><span class="p">]</span>
   <span class="s2">&quot;directory&quot;</span><span class="p">:</span> <span class="n">directory</span> <span class="n">of</span> <span class="n">the</span> <span class="n">folder</span> <span class="n">which</span> <span class="n">contains</span> <span class="n">the</span> <span class="n">simulator</span> <span class="k">for</span> <span class="n">black</span><span class="o">-</span><span class="n">box</span> <span class="n">system</span>
+  <span class="s2">&quot;bloatingMethod&quot;</span><span class="p">:</span> <span class="n">specify</span> <span class="n">the</span> <span class="n">bloating</span> <span class="n">method</span><span class="p">,</span> <span class="n">which</span> <span class="n">can</span> <span class="n">be</span> <span class="n">either</span> <span class="s2">&quot;PW&quot;</span> <span class="ow">or</span> <span class="s2">&quot;GLOBAL&quot;</span> <span class="c1"># This is optional, if you don&#39;t have this field in input file, DryVR will use GLOBAL as default bloating method.</span>
+  <span class="s2">&quot;kvalue&quot;</span><span class="p">:</span> <span class="n">specify</span> <span class="n">the</span> <span class="n">k</span><span class="o">-</span><span class="n">value</span> <span class="n">that</span> <span class="n">used</span> <span class="n">by</span> <span class="n">piecewise</span> <span class="n">bloating</span> <span class="n">method</span> <span class="c1"># This field must be specified if you choose the bloatingMethod to &quot;PW&quot;</span>
 <span class="p">}</span>
 </pre></div>
 </div>
+<p>Some fields are optional in DryVR&#8217;s input langauge such as resets, initialMode, bloatingMethod and kvalue under some conditions. Please read the comment.</p>
 <p>Example input for the Automatic Emergency Braking System</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="p">{</span>
   <span class="s2">&quot;vertex&quot;</span><span class="p">:[</span><span class="s2">&quot;Const;Const&quot;</span><span class="p">,</span><span class="s2">&quot;Brk;Const&quot;</span><span class="p">,</span><span class="s2">&quot;Brk;Brk&quot;</span><span class="p">],</span>
@@ -233,17 +237,26 @@ as the simulation trajectory of the system in the given mode starting from <img 
 </div>
 <div class="section" id="output-interpretation">
 <h2>Output Interpretation<a class="headerlink" href="#output-interpretation" title="Permalink to this headline">¶</a></h2>
-<p>The tool will print background information like the current mode, transition time, initial set and discrepancy function information on the run. The final result about safe/unsafe will be printed at the bottom.</p>
-<p>When the system is safe, the final result will look like</p>
+<p>The tool will print background information like the current mode, transition time, initial set on the run. The final result about goal reached/cannot find graph will be printed at the bottom.</p>
+<p>When the system find transition graph, the final result will look like</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span>System is Safe!
 </pre></div>
 </div>
-<p>When the system is unsafe, the final result will look like</p>
+<p>When the system is unsafe from simulation, the final result will look like</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">Current</span> <span class="n">simulation</span> <span class="ow">is</span> <span class="ow">not</span> <span class="n">safe</span><span class="o">.</span> <span class="n">Program</span> <span class="n">halt</span>
 </pre></div>
 </div>
-<p>If the simulation result is not safe, the unsafe simulation trajectory will be stored in &#8220;Traj.txt&#8221; in the output folder.
+<p>When the system is unsafe from verification, the final result will look like</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">System</span> <span class="ow">is</span> <span class="ow">not</span> <span class="n">safe</span> <span class="ow">in</span> <span class="n">Mode</span> <span class="p">[</span><span class="n">Mode</span> <span class="n">name</span><span class="p">]</span>
+</pre></div>
+</div>
+<p>When the system is unknown from verification, the final result will look like</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">Hit</span> <span class="n">refine</span> <span class="n">threshold</span><span class="p">,</span> <span class="n">system</span> <span class="n">halt</span><span class="p">,</span> <span class="n">result</span> <span class="n">unknown</span>
+</pre></div>
+</div>
+<p>If the simulation result is not safe, the unsafe simulation trajectory will be stored in &#8220;output/Traj.txt&#8221;.
 Otherwise the last simulation result will be stored in &#8220;Traj.txt&#8221;.</p>
+<p>If the verfication result is not safe, the counter example reachtube will be stored in &#8220;output/unsafeTube.txt&#8221;.</p>
 </div>
 <div class="section" id="advanced-tricks-verify-your-own-black-box-system">
 <span id="advance-label"></span><h2>Advanced Tricks: Verify your own black-box system<a class="headerlink" href="#advanced-tricks-verify-your-own-black-box-system" title="Permalink to this headline">¶</a></h2>
@@ -371,7 +384,7 @@ Run the verification algorithm using the command:</p>
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="example.html" class="btn btn-neutral float-right" title="Examples" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="dryvr&#39;s_control_synthesis.html" class="btn btn-neutral float-right" title="DryVR’s Control Synthesis" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
         <a href="usage.html" class="btn btn-neutral" title="Usage" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>

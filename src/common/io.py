@@ -93,6 +93,17 @@ def parseRrtInputFile(path):
 	with open(path, 'r') as f:
 		data = json.load(f)
 
+		# If bloating method is missing, default global descrepancy
+		if not 'bloatingMethod' in data:
+			data['bloatingMethod'] = 'GLOBAL'
+
+		# if kvalue is missing, default to 1.0
+		if not 'kvalue' in data:
+			data['kvalue'] = [1.0 for i in range(len(data['variables']))]
+			if data['bloatingMethod'] == "PW":
+				print "Warning: No kvalue provided when using PW descrepancy, default kvalue 1.0 for all variable."
+				raw_input("Press Enter to continue...")
+
 		return RrtInput(
 			modes = data["modes"],
 			initialMode = data["initialMode"],
@@ -104,4 +115,6 @@ def parseRrtInputFile(path):
 			minTimeThres = data["minTimeThres"],
 			path = data["directory"],
 			goal = data["goal"],
+			bloatingMethod=data['bloatingMethod'],
+			kvalue=data['kvalue'],
 		)

@@ -5,6 +5,7 @@ This file contains reset class for DryVR
 import sympy
 
 from sympy.solvers import solve
+from src.common.utils import randomPoint
 
 class Reset():
 	def __init__(self, variables):
@@ -30,8 +31,8 @@ class Reset():
 
 		if point == [] or not point:
 			return point
-		ret, _ = self.resetReachTube(rawEqus, point, point)
-		return ret
+		lower, upper = self.resetReachTube(rawEqus, point, point)
+		return randomPoint(lower, upper)
 
 	def _mergeResult(self, lbList, ubList, lowerBound, upperBound):
 		# Merge all reset value
@@ -70,6 +71,30 @@ class Reset():
 			ret.append([curSymbol, up])
 		return ret
 
+
+	def _handleWrappedReset(self, rawEqu, lowerBound, upperBound):
+		# This is a function to handle reset such as 
+		# V = [0, V+1]
+		finalEqu = sympy.sympify(rawEqu)
+		rhsSymbols = list(finalEqu.free_symbols)
+		combos = self._buildAllCombo(rhsSymbols, lowerBound, upperBound)
+		minReset = float('inf')
+		maxReset = float('-inf')
+		if combos:
+			for combo in combos:
+				if len(combo) == 2:
+					result = float(finalEqu.subs(combo[0], combo[1]))
+				else:
+					result = float(finalEqu.subs(combo))
+				minReset = min(minReset, float(result))
+				maxReset = max(maxReset, float(result))
+		else:
+			minReset = float(finalEqu)
+			maxReset = float(finalEqu)
+		return (minReset, maxReset)
+
+
+
 	def _handleReset(self, rawEqu, lowerBound, upperBound):
 		equSplit = rawEqu.split('=')
 		lhs, rhs = equSplit[0], equSplit[1]
@@ -95,8 +120,8 @@ class Reset():
 				minReset = min(minReset, float(result))
 				maxReset = max(maxReset, float(result))
 		elif isinstance(finalEqu, list):
-			minReset = float(finalEqu[0])
-			maxReset = float(finalEqu[1])
+			minReset = min(self._handleWrappedReset(finalEqu[0], lowerBound, upperBound))
+			maxReset = max(self._handleWrappedReset(finalEqu[1], lowerBound, upperBound))
 		else:
 			minReset = float(finalEqu)
 			maxReset = float(finalEqu)

@@ -3,11 +3,11 @@ This file contains constant for DryVR
 """
 
 # Logic constant
-DEBUG = True
+DEBUG = False
 PLOTGRAPH = True
 
 # Numeric constant
-SIMUTESTNUM = 0
+SIMUTESTNUM = 1
 SIMTRACENUM = 10
 REFINETHRES = 50
 CHILDREFINETHRES = 2

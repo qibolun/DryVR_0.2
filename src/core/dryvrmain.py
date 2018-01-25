@@ -2,6 +2,7 @@
 This file contains a single function that verifies model
 """
 import random
+import time
 
 from src.common.constant import *
 from src.common.io import parseInputFile, writeReachTubeFile, parseRrtInputFile, writeRrtResultFile
@@ -31,7 +32,7 @@ def verify(inputFile):
 	checker = UniformChecker(params.unsafeSet, params.variables)
 	guard = Guard(params.variables)
 	reseter = Reset(params.variables)
-
+	startTime = time.time()
 	# Step 1) Simulation Test
 	# Random generate points, then simulate and check the result
 	for _ in range(SIMUTESTNUM):
@@ -54,7 +55,9 @@ def verify(inputFile):
 			safety = checker.checkSimuTube(simResult[mode], mode)
 			if safety == -1:
 				print 'Current simulation is not safe. Program halt'
+				print 'simulation time', time.time()-startTime
 				exit()
+	simEndTime = time.time()
 	# Step 2) Check Reach Tube
 	# Calculate the over approximation of the reach tube and check the result
 	print "Verification Begin"
@@ -159,7 +162,7 @@ def verify(inputFile):
 				# This mode gets transit first, only keep this mode
 				maxRemainTime, maxTimeMode = max(nextModesInfo)
 				# Pop other modes becuase of deterministic system
-				for time, nextMode in nextModesInfo:
+				for _, nextMode in nextModesInfo:
 					if nextMode == maxTimeMode:
 						continue
 					curStack[-1].child.pop(nextMode)
@@ -184,6 +187,8 @@ def verify(inputFile):
 					prevModeStack = curModeStack.parent
 					unsafeTube = [prevModeStack.bloatedTube[0]] + prevModeStack.stack[-1].bloatedTube + unsafeTube
 					curModeStack = prevModeStack
+				print 'simulation time', simEndTime-startTime
+				print 'verification time', time.time()-simEndTime
 				writeReachTubeFile(unsafeTube, UNSAFEFILENAME)
 				exit()
 
@@ -213,9 +218,13 @@ def verify(inputFile):
 			if backwardFlag == SAFE:
 				print "System is Safe!"
 				writeReachTubeFile(curModeStack.bloatedTube, REACHTUBEOUTPUT)
+				print 'simulation time', simEndTime-startTime
+				print 'verification time', time.time()-simEndTime
 				return
 			elif backwardFlag == UNKNOWN:
 				print "Hit refine threshold, system halt, result unknown"
+				print 'simulation time', simEndTime-startTime
+				print 'verification time', time.time()-simEndTime
 				exit()
 		else:
 			if backwardFlag == SAFE:
@@ -259,6 +268,7 @@ def rrtSimulation(inputFile):
  	curModeStack = RrtSetStack(initialMode, remainTime, minTimeThres, 0)
  	curModeStack.initial = (params.initialSet[0], params.initialSet[1])
 
+ 	startTime = time.time()
  	while True:
  		print str(curModeStack)
 		if not curModeStack:
@@ -292,9 +302,15 @@ def rrtSimulation(inputFile):
  				curModeStack.mode,
  				curModeStack.initial,
  				curModeStack.remainTime,
- 				simFunction
+ 				simFunction,
+ 				params.bloatingMethod,
+				params.kvalue
  			)
  			curBloatedTube = checker.cutTubeTillUnsafe(curBloatedTube)
+
+ 			# for t in curBloatedTube:
+ 			# 	print t
+ 			# exit()
  			# we cannot stay in this mode for min thres time, back to the previous mode
  			if not curBloatedTube or curBloatedTube[-1][0] < minTimeThres:
  				print "bloated tube is not long enough, discard the mode"
@@ -313,7 +329,7 @@ def rrtSimulation(inputFile):
  			randomSections.sort(key=lambda x: distanceChecker.calcDistance(x[0], x[1]))
  			curModeStack.candidates = randomSections
  			print "Generate new bloated tube and candidate, with candidates length", len(curModeStack.candidates)
-
+ 			
 
  			# Check if the current tube reaches goal
  			result, tube = goalSetChecker.goalReachTube(curBloatedTube)
@@ -345,6 +361,7 @@ def rrtSimulation(inputFile):
  		curModeStack = curModeStack.children[key]
 
  	# Back track to print out trace
+ 	print "RRT run time", time.time()-startTime
  	if goalReached:
  		print("goal reached")
  		traces = []
@@ -374,4 +391,4 @@ def rrtSimulation(inputFile):
 
  		writeRrtResultFile(modes, traces, RRTOUTPUT)
  	else:
- 		print("could not find trace")
+ 		print("could not find graph")

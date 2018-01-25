@@ -1,0 +1,24 @@
+{
+    "vertex":["Acc1;Const", "TurnLeft;Const", "Acc2;Const", "Dec;Const", "TurnRight;Const", "Const;Const", "Acc1;Acc1", "Dec;Acc1", "TurnRight;Acc1", "Acc1;Dec", "Const;Dec", "TurnRight;Const"],
+    "edge":[[0,1],[1,2],[2,3],[3,4],[4,5],[1,6],[6,7],[7,8],[8,5],[1,9],[9,10],[10,11],[11,5]],
+    "variables":["car1_x","car1_y","car1_vx","car1_vy","car2_x","car2_y","car2_vx","car2_vy"],
+    "guards":[
+        "And(t>5.0,t<=6.0)",
+        "And(t>10.0,t<=12.0)",
+        "And(t>5.0,t<=6.0)",
+        "And(t>5.0,t<=6.0)",
+        "And(t>10.0,t<=12.0)",
+        "And(t>10.0,t<=12.0)",
+        "And(t>5.0,t<=6.0)",
+        "And(t>14.0,t<16.0)",
+        "And(t>10.0,t<=12.0)",
+        "And(t>10.0,t<=12.0)",
+        "And(t>5.0,t<=6.0)",
+        "And(t>5.0,t<=6.0)",
+        "And(t>10.0,t<=12.0)"
+    ],
+    "initialSet":[[0.0,-1.0,0.0,1.0,0.0,-23.0,0.0,1.0],[0.0,1,0.0,1.0,0.0,-21.0,0.0,1.0]],
+    "unsafeSet":"@Allmode:And(car1_x-car2_x<1, car2_x-car1_x<1, car1_y-car2_y<1, car2_y-car1_y<1)",
+    "timeHorizon":50.0,
+	"directory":"examples/cars"
+}

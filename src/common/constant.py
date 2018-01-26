@@ -3,7 +3,7 @@ This file contains constant for DryVR
 """
 
 # Logic constant
-DEBUG = False
+DEBUG = True
 PLOTGRAPH = True
 
 # Numeric constant
@@ -17,8 +17,8 @@ SAFE = 1
 UNSAFE = -1
 UNKNOWN = 0
 NOSTATUS = 99
-BLOATDEBUG = False
-PLOTDIM = 1
+BLOATDEBUG = True
+PLOTDIM = 2
 
 # File Pathes
 GRAPHOUTPUT = 'output/curGraph.png'

@@ -18,6 +18,7 @@ except IOError:
 goal = [[4.0,0.0],[5.0,1.0]]
 unsafes = [[[0.0, 2.0],[1.0,5.0]], [[2.0,0.0],[3.0,3.0]], [[3.0,4.0],[4.0,5.0]], [[4.0,3.0],[5.0,5.0]], [[3.0,1.0],[4.0,2.0]]]
 regions = [[0,0],[5,5]]
+initial = [[0.4,0.4],[0.6,0.6]]
 
 dim = eval(args.d)
 
@@ -36,4 +37,4 @@ while initNode:
 	else:
 		initNode = None
 
-rrtPlot(lowerBound, upperBound, dim[0], dim[1], goal, unsafes, regions )
+rrtPlot(lowerBound, upperBound, dim[0], dim[1], goal, unsafes, regions, initial )

@@ -66,26 +66,18 @@ def handleReplace(unsafe, keys):
     idxes = []
     i = 0
 
-    while i < len(unsafe):
-        tempStr = ''
-        while unsafe[i].isalpha():
-            tempStr += unsafe[i]
-            i+=1
-        if tempStr in keys:
-            idxes.append((i-len(tempStr), i))
-            continue
-        elif tempStr:
-            while any([key.startswith(tempStr) for key in keys]):
-                tempStr += unsafe[i]
-                i+=1
+    original = unsafe
 
-                if tempStr in keys and [key.startswith(tempStr) for key in keys].count(True)==1:
-                    idxes.append((i-len(tempStr), i))
-                    i-=1
-                    break
+    keys = sorted(keys)[::-1]
+    for key in keys:
+        for i in range(len(unsafe)):
+            if unsafe[i:].startswith(key):
+                idxes.append((i, i+len(key)))
+                unsafe = unsafe[:i] + "@"*len(key) + unsafe[i+len(key):]
 
-        i+=1
+    idxes = sorted(idxes)
 
+    unsafe = original
     for idx in idxes[::-1]:
         key = unsafe[idx[0]:idx[1]]
         target = 'self.varDic["'+key+'"]'

@@ -8,4 +8,5 @@
     "unsafeSet":"@Allmode:G<20",
     "timeHorizon":150.0,
     "directory":"examples/lac_operon"
+
 }

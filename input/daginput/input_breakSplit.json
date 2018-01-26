@@ -1,0 +1,13 @@
+{
+    "vertex":["Const;Const","Brk;Const","Brk;Const"],
+    "edge":[[0,1],[0,2]],
+    "variables":["car1_x","car1_y","car1_vx","car1_vy","car2_x","car2_y","car2_vx","car2_vy"],
+    "guards":[
+        "And(t>1.0,t<=2.0)",
+        "And(t>2,5,t<=3.5)"
+    ],
+    "initialSet":[[0.0,-3.0,0.0,1.0,0.0,-23.0,0.0,0.0],[0.0,3.0,0.0,1.0,0.0,-14.0,0.0,0.0]],
+    "unsafeSet":"@Allmode:And(car1_y-car2_y<3)",
+    "timeHorizon":5.0,
+	"directory":"examples/cars"
+}

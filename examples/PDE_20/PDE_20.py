@@ -30,7 +30,7 @@ def PDE_20_dynamic(y,t,u1):
     return dydt
 
 def TC_Simulate(Mode,initialCondition,time_bound):
-    time_step = 0.001;
+    time_step = 0.005;
     time_bound = float(time_bound)
 
     number_points = int(np.ceil(time_bound/time_step))
@@ -54,6 +54,7 @@ def TC_Simulate(Mode,initialCondition,time_bound):
         tmp.append(t[j])
         tmp.append(float(sol[j,0]))
         tmp.append(float(sol[j,1]))
+        tmp.append(float(sol[j,2]))
         trace.append(tmp)
     return trace
 

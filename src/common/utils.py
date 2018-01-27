@@ -65,11 +65,10 @@ def buildModeStr(g, vertex):
 def handleReplace(unsafe, keys):
     idxes = []
     i = 0
-
     original = unsafe
 
-    keys = sorted(keys)[::-1]
-    for key in keys:
+    keys.sort(key=lambda s:len(s))
+    for key in keys[::-1]:
         for i in range(len(unsafe)):
             if unsafe[i:].startswith(key):
                 idxes.append((i, i+len(key)))

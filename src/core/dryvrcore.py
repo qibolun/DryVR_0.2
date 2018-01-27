@@ -119,11 +119,13 @@ def simulate(g, initCondition, timeHorizon, guard, simFuc, reseter, initialMode,
 				curGuardStr = g.es[edgeID]['guards']
 				curResetStr = g.es[edgeID]['resets']
 
-				print curGuardStr
 				nextInit, trunckedResult = guard.guardSimuTube(
 					curSimResult,
 					curGuardStr
 				)
+
+				# for line in trunckedResult:
+				# 	print line 
 				nextInit = reseter.resetSimTrace(curResetStr, nextInit)
 				# If there is a transition
 				if nextInit:
@@ -196,7 +198,7 @@ def clacBloatedTube(modeLabel, initialSet, timeHorizon, simFuc, bloatingMethod, 
 			k, gamma = Global_Discrepancy(modeLabel, curDelta, 1, PLOTDIM, traces)
 		else:
 			k, gamma = Global_Discrepancy(modeLabel, curDelta, 0, PLOTDIM, traces)
-		print curDelta
+		# print curDelta
 		curReachTube = bloatToTube(modeLabel, k, gamma, curDelta, traces)
 	elif bloatingMethod == PW:
 		if BLOATDEBUG:

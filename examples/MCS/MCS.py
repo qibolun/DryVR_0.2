@@ -51,6 +51,12 @@ def TC_Simulate(Mode,initialCondition,time_bound):
         tmp.append(t[j])
         tmp.append(float(sol[j,0]))
         tmp.append(float(sol[j,1]))
+        tmp.append(float(sol[j,2]))
+        tmp.append(float(sol[j,3]))
+        tmp.append(float(sol[j,4]))
+        tmp.append(float(sol[j,5]))
+        tmp.append(float(sol[j,6]))
+        tmp.append(float(sol[j,7]))
         trace.append(tmp)
     return trace
 

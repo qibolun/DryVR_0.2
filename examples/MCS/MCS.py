@@ -22,7 +22,7 @@ def MCS_dynamic(y,t,u1,u2):
     x7_dot = -2592.1459854271597578190267086*x5 - 21.1189934732246911153197288513*x6 - 698.91348655731417238712310791*x7 - 141389.781024056253954768180847*x8
     x8_dot = x5 - 1.0*u2
 
-    dydt = [x1_dot, x2_dot, x3_dot, x4_dot, x5_dot, x6_dot, x7_dot, x8_dot, y1, y2]
+    dydt = [x1_dot, x2_dot, x3_dot, x4_dot, x5_dot, x6_dot, x7_dot, x8_dot]
     return dydt
 
 def TC_Simulate(Mode,initialCondition,time_bound):
@@ -35,13 +35,13 @@ def TC_Simulate(Mode,initialCondition,time_bound):
         t.append(time_bound)
     newt = []
     for step in t:
-        newt.append(float(format(step, '.2f')))
+        newt.append(float(format(step, '.3f')))
     t = newt
 
     u1 = 0.2
     u2 = 0.3
 
-    sol = odeint(MCS_dynamic, initialCondition[0:10], t, args=(u1, u2), hmax = time_step)
+    sol = odeint(MCS_dynamic, initialCondition, t, args=(u1, u2), hmax = time_step)
 
     # Construct the final output
     trace = []
@@ -49,8 +49,8 @@ def TC_Simulate(Mode,initialCondition,time_bound):
         #print t[j], current_psi
         tmp = []
         tmp.append(t[j])
-        tmp.append(float(sol[j,8]))
-        tmp.append(float(sol[j,9]))
+        tmp.append(float(sol[j,0]))
+        tmp.append(float(sol[j,1]))
         trace.append(tmp)
     return trace
 

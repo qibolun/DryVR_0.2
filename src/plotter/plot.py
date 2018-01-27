@@ -34,7 +34,7 @@ def plot(node, dim, y_min, y_max, xdim):
 	fig1.savefig('output/'+node.fileName+'.png', format='png', dpi=200)
 
 
-def rrtPlot(lowerBound, upperBound, xDim, yDim, goal, unsafes, region):
+def rrtPlot(lowerBound, upperBound, xDim, yDim, goal, unsafes, region, initial):
 
 	fig1 = plt.figure()
 	ax1 = fig1.add_subplot('111')
@@ -55,6 +55,11 @@ def rrtPlot(lowerBound, upperBound, xDim, yDim, goal, unsafes, region):
 	if goal:
 		lb, ub = goal
 		rect = patches.Rectangle((lb[0], lb[1]), ub[0]-lb[0], ub[1]-lb[1], color='green', alpha=0.7)
+		ax1.add_patch(rect)
+
+	if initial:
+		lb, ub = initial
+		rect = patches.Rectangle((lb[0], lb[1]), ub[0]-lb[0], ub[1]-lb[1], color='yellow', alpha=0.7)
 		ax1.add_patch(rect)
 
 	# Draw the unsafe

@@ -92,14 +92,14 @@ def verify(inputFile):
 			curInitial = [curStack[-1].lowerBound, curStack[-1].upperBound]
 
 			# Calculate the current bloated tube without considering the guard
-
-			curBloatedTube = clacBloatedTube(curLabel,
-				curInitial,
-				curRemainTime,
-				simFunction,
-				params.bloatingMethod,
-				params.kvalue
-			)
+			if len(curSuccessors) == 0:
+				curBloatedTube = clacBloatedTube(curLabel,
+					curInitial,
+					curRemainTime,
+					simFunction,
+					params.bloatingMethod,
+					params.kvalue
+				)
 
 			candidateTube = []
 			shortestTime = float("inf")

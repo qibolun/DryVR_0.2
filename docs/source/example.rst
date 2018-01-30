@@ -111,6 +111,7 @@ The system is checked to be safe. We can also plot the reachtubes for different 
 
 Verification Peformance
 ^^^^^^^^^^^^^^^^^^^^^^^^^
+We have measured performance for examples come with DryVR 2.0.
 Peformance is measured using computer with i7 6600u, 16gb ram, Ubuntu 16.04 OS.
 
 +-------------------------------+-----------+-----------------+------------------+------------+------------+

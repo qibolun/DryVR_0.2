@@ -87,7 +87,7 @@ Run the graph search algorithm using the command: ::
 
     python rrt.py input/rrtinput/temp.json
 
-The system has been checked to be safe with the output: ::
+The graph has been found with the output: ::
 
     goal reached!
 

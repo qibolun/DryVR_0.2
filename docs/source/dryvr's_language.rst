@@ -215,7 +215,7 @@ The input file can be written as: ::
       "variables":["temp"],
       "guards":["And(t>1.0,t<=1.1)","And(t>1.0,t<=1.1)"],
       "initialSet":[[75.0],[76.0]],
-      "unsafeSet":"@On:temp>91@Off:temp>91",
+      "unsafeSet":"@Allmode:temp>91",
       "timeHorizon":3.5,
       "directory":"examples/Thermostats"
     }

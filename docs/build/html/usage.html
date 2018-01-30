@@ -182,7 +182,7 @@
 </div>
 <div class="section" id="run-dryvr-control-synthesis">
 <h2>Run DryVR Control Synthesis<a class="headerlink" href="#run-dryvr-control-synthesis" title="Permalink to this headline">¶</a></h2>
-<p>To run DryVR control synthesis, please run:</p>
+<p>To run DryVR graph search algorithm, please run:</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">python</span> <span class="n">rrt</span><span class="o">.</span><span class="n">py</span> <span class="nb">input</span><span class="o">/*/</span><span class="p">[</span><span class="n">input_file</span><span class="p">]</span>
 </pre></div>
 </div>
@@ -198,11 +198,10 @@
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">python</span> <span class="n">plotter</span><span class="o">.</span><span class="n">py</span> <span class="o">-</span><span class="n">x</span> <span class="p">[</span><span class="n">x</span> <span class="n">dimension</span> <span class="n">number</span><span class="p">]</span> <span class="o">-</span><span class="n">y</span> <span class="p">[</span><span class="n">y</span> <span class="n">dimension</span> <span class="n">number</span> <span class="nb">list</span><span class="p">]</span> <span class="o">-</span><span class="n">f</span> <span class="p">[</span><span class="nb">input</span> <span class="n">file</span> <span class="n">name</span><span class="p">]</span> <span class="o">-</span><span class="n">o</span> <span class="p">[</span><span class="n">output</span> <span class="n">file</span> <span class="n">name</span><span class="p">]</span>
 </pre></div>
 </div>
-<p>-x is x dimension number is the dimension for x-axis, the default value will be 0, which is the dimension of time.</p>
-<p>-y is Y dimension number list indicates the dimension you want to draw.It should be an array, For example -y [1,2]. The default value will be [1].</p>
+<p>-x is the dimension number for x-axis, the default value will be 0, which is the dimension of time.</p>
+<p>-y is dimension number lists indicates the dimension you want to draw for y-axis. For example -y [1,2]. The default value will be [1].</p>
 <p>-f is the file path for reach tube file that you want to plot, the default value will be output/reachtube.txt.</p>
-<p>-o is output file option
-, the default value is plotResult.png.</p>
+<p>-o is output file option, the default value is plotResult.png.</p>
 <p>To get help for plotter, please run:</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">python</span> <span class="n">plotter</span><span class="o">.</span><span class="n">py</span> <span class="o">-</span><span class="n">h</span>
 </pre></div>

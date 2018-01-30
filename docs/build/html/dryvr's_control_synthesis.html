@@ -170,7 +170,7 @@
   <div class="section" id="dryvr-s-control-synthesis">
 <h1>DryVR&#8217;s Control Synthesis<a class="headerlink" href="#dryvr-s-control-synthesis" title="Permalink to this headline">¶</a></h1>
 <p>In DryVR,  a hybrid system is modeled as a combination of a white-box that specifies the mode switches (<a class="reference internal" href="dryvr's_language.html#transition-graph-label"><span class="std std-ref">Transition Graph</span></a>) and a black-box that can simulate the continuous evolution in each mode (<a class="reference internal" href="dryvr's_language.html#black-box-label"><span class="std std-ref">Black-box Simulator</span></a>).</p>
-<p>The control synthesis problem for DryVR is to find a white-box transition graph given the goal and black-box simulator.</p>
+<p>The control synthesis problem for DryVR is to find a white-box transition graph given the black-box simulator with addition inputs listed in (<a class="reference internal" href="#input-format-control-label"><span class="std std-ref">Input Format</span></a>).</p>
 <div class="section" id="input-format">
 <span id="input-format-control-label"></span><h2>Input Format<a class="headerlink" href="#input-format" title="Permalink to this headline">¶</a></h2>
 <p>The input for DryVR control synthesis is of the form</p>
@@ -190,24 +190,24 @@
 </div>
 <p>Example input for the robot in maze example</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="p">{</span>
-  <span class="s2">&quot;modes&quot;</span><span class="p">:[</span><span class="s2">&quot;UP&quot;</span><span class="p">,</span> <span class="s2">&quot;DOWN&quot;</span><span class="p">,</span> <span class="s2">&quot;LEFT&quot;</span><span class="p">,</span> <span class="s2">&quot;RIGHT&quot;</span><span class="p">],</span>
-  <span class="s2">&quot;initialMode&quot;</span><span class="p">:</span><span class="s2">&quot;RIGHT&quot;</span><span class="p">,</span>
-  <span class="s2">&quot;variables&quot;</span><span class="p">:[</span><span class="s2">&quot;x&quot;</span><span class="p">,</span><span class="s2">&quot;y&quot;</span><span class="p">],</span>
-  <span class="s2">&quot;initialSet&quot;</span><span class="p">:[[</span><span class="mf">0.0</span><span class="p">,</span><span class="mf">0.0</span><span class="p">],[</span><span class="mf">0.1</span><span class="p">,</span><span class="mf">0.1</span><span class="p">]],</span>
-  <span class="s2">&quot;unsafeSet&quot;</span><span class="p">:</span><span class="s2">&quot;@Allmode:Or(x&lt;0, x&gt;5, y&lt;0, y&gt;5)&quot;</span><span class="p">,</span>
-  <span class="s2">&quot;goalSet&quot;</span><span class="p">:</span><span class="s2">&quot;And(x&gt;=3.5, x&lt;=4.5, y&gt;=3.5, y&lt;=4.5)&quot;</span><span class="p">,</span>
-  <span class="s2">&quot;timeHorizon&quot;</span><span class="p">:</span><span class="mf">25.0</span><span class="p">,</span>
+  <span class="s2">&quot;modes&quot;</span><span class="p">:[</span><span class="s2">&quot;0&quot;</span><span class="p">,</span> <span class="s2">&quot;1&quot;</span><span class="p">,</span> <span class="s2">&quot;2&quot;</span><span class="p">,</span> <span class="s2">&quot;3&quot;</span><span class="p">,</span> <span class="s2">&quot;4&quot;</span><span class="p">,</span> <span class="s2">&quot;5&quot;</span><span class="p">,</span> <span class="s2">&quot;6&quot;</span><span class="p">,</span> <span class="s2">&quot;7&quot;</span><span class="p">],</span>
+  <span class="s2">&quot;initialMode&quot;</span><span class="p">:</span><span class="s2">&quot;1&quot;</span><span class="p">,</span>
+  <span class="s2">&quot;variables&quot;</span><span class="p">:[</span><span class="s2">&quot;x&quot;</span><span class="p">,</span><span class="s2">&quot;y&quot;</span><span class="p">,</span><span class="s2">&quot;vx&quot;</span><span class="p">,</span><span class="s2">&quot;vy&quot;</span><span class="p">],</span>
+  <span class="s2">&quot;initialSet&quot;</span><span class="p">:[[</span><span class="mf">1.0</span><span class="p">,</span><span class="mf">1.0</span><span class="p">,</span><span class="mf">1.0</span><span class="p">,</span><span class="mf">1.0</span><span class="p">],[</span><span class="mf">1.1</span><span class="p">,</span><span class="mf">1.0</span><span class="p">,</span><span class="mf">1.0</span><span class="p">,</span><span class="mf">1.0</span><span class="p">]],</span>
+  <span class="s2">&quot;unsafeSet&quot;</span><span class="p">:</span><span class="s2">&quot;@Allmode:Or(And(x&gt;=2.0, x&lt;3.0, y&gt;=3.0, y&lt;=4.0), And(x&gt;=3.0, x&lt;=4.0, y&gt;=2.0, y&lt;3.0), x&lt;0, x&gt;5, y&lt;0, y&gt;5)&quot;</span><span class="p">,</span>
+  <span class="s2">&quot;goalSet&quot;</span><span class="p">:</span><span class="s2">&quot;And(x&gt;=3.0, x&lt;=4.0, y&gt;=3.0, y&lt;=4.0)&quot;</span><span class="p">,</span>
+  <span class="s2">&quot;timeHorizon&quot;</span><span class="p">:</span><span class="mf">10.0</span><span class="p">,</span>
   <span class="s2">&quot;minTimeThres&quot;</span><span class="p">:</span><span class="mf">1.0</span><span class="p">,</span>
-  <span class="s2">&quot;directory&quot;</span><span class="p">:</span><span class="s2">&quot;examples/robot&quot;</span><span class="p">,</span>
-  <span class="s2">&quot;goal&quot;</span><span class="p">:[[</span><span class="s2">&quot;x&quot;</span><span class="p">,</span><span class="s2">&quot;y&quot;</span><span class="p">],[</span><span class="mf">3.5</span><span class="p">,</span><span class="mf">3.5</span><span class="p">],[</span><span class="mf">4.5</span><span class="p">,</span><span class="mf">4.5</span><span class="p">]]</span>
+  <span class="s2">&quot;directory&quot;</span><span class="p">:</span><span class="s2">&quot;examples/carinmaze&quot;</span><span class="p">,</span>
+  <span class="s2">&quot;goal&quot;</span><span class="p">:[[</span><span class="s2">&quot;x&quot;</span><span class="p">,</span><span class="s2">&quot;y&quot;</span><span class="p">],[</span><span class="mf">3.0</span><span class="p">,</span><span class="mf">3.0</span><span class="p">],[</span><span class="mf">4.0</span><span class="p">,</span><span class="mf">4.0</span><span class="p">]]</span>
 <span class="p">}</span>
 </pre></div>
 </div>
 </div>
 <div class="section" id="output-interpretation">
 <h2>Output Interpretation<a class="headerlink" href="#output-interpretation" title="Permalink to this headline">¶</a></h2>
-<p>The tool will print background information like the current mode, transition time, initial set on the run. The final result about safe/unsafe will be printed at the bottom.</p>
-<p>When the system find the graph that statisfy the requirement, the final result will look like</p>
+<p>The tool will print background information like the current mode, transition time, initial set on the run. The final result about goal reached or not reached will be printed at the bottom.</p>
+<p>When the system find the transition graph that statisfy the requirement, the final result will look like</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">goal</span> <span class="n">reached</span>
 </pre></div>
 </div>
@@ -215,14 +215,15 @@
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">could</span> <span class="ow">not</span> <span class="n">find</span> <span class="n">graph</span>
 </pre></div>
 </div>
-<p>If the the system find the transition graph, the system will plot the transition graph and will be stored in &#8220;output/rrtGraph.png&#8221;</p>
+<p>Note that DryVR&#8217;s algorithm is searching the graph randomly, if the system cannot find the graph, it does not mean the graph is not exist with current input. You can try run the algorithm multiple times to get more accurate result.
+If the the system find the transition graph, the system will plot the transition graph and will be stored in &#8220;output/rrtGraph.png&#8221;</p>
 </div>
 <div class="section" id="advanced-tricks-making-control-synthesis-work-on-your-own-black-box-system">
 <h2>Advanced Tricks: Making control synthesis work on your own black-box system<a class="headerlink" href="#advanced-tricks-making-control-synthesis-work-on-your-own-black-box-system" title="Permalink to this headline">¶</a></h2>
 <p>Creating black box simulator is exactly same as we introduced in DryVR&#8217;s language page (<a class="reference internal" href="dryvr's_language.html#advance-label"><span class="std std-ref">Advanced Tricks: Verify your own black-box system</span></a>) up to Step 4.</p>
 <p>For the Step 5, instead of creating a verification input file, you need to create control synthesis input file we have discussed in <a class="reference internal" href="#input-format-control-label"><span class="std std-ref">Input Format</span></a>.</p>
-<p>Create a control synthesis problem that specifying the goal. For example, we want the temperature to start within the range <img class="math" src="_images/math/586d9f2d0bf8bd88a1ba56a8613540065633bec8.png" alt="[75,76]"/>, and we want to reach the goal temperature within the range <img class="math" src="_images/math/91ac51b19f354855517947bb3ecfea3be0ccb522.png" alt="[68,72]"/>, while avoiding temperature larger than <img class="math" src="_images/math/85dd92a01545069e5720b438fa43981e71f9f41e.png" alt="90"/>. We want to start our search from &#8220;On&#8221; mode to make it more interesting. We want to reach our goal in bounded time <img class="math" src="_images/math/27c3f84f870e3078bd73a6c0a6a73241652680d1.png" alt="4s"/>, and set the minimal staying time to <img class="math" src="_images/math/ae16ed0261178011876a45fd0f98f5c72f3307d2.png" alt="1s"/>.</p>
-<p>he input file can be written as:</p>
+<p>For example, Let&#8217;s set the intial temperature within the range <img class="math" src="_images/math/586d9f2d0bf8bd88a1ba56a8613540065633bec8.png" alt="[75,76]"/>, and we want to reach the target temperature within the range <img class="math" src="_images/math/91ac51b19f354855517947bb3ecfea3be0ccb522.png" alt="[68,72]"/>, while avoiding temperature that is larger than <img class="math" src="_images/math/85dd92a01545069e5720b438fa43981e71f9f41e.png" alt="90"/>. We want to start our search from &#8220;On&#8221; mode and reach our goal in bounded time <img class="math" src="_images/math/27c3f84f870e3078bd73a6c0a6a73241652680d1.png" alt="4s"/>, and set the minimal staying time to <img class="math" src="_images/math/ae16ed0261178011876a45fd0f98f5c72f3307d2.png" alt="1s"/>.</p>
+<p>the input file can be written as:</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="p">{</span>
   <span class="s2">&quot;modes&quot;</span><span class="p">:[</span><span class="s2">&quot;On&quot;</span><span class="p">,</span> <span class="s2">&quot;Off&quot;</span><span class="p">],</span>
   <span class="s2">&quot;initialMode&quot;</span><span class="p">:</span><span class="s2">&quot;On&quot;</span><span class="p">,</span>
@@ -238,7 +239,7 @@
 </pre></div>
 </div>
 <p>Save the input file in the folder input/rrtinput and name it as temp.json.</p>
-<p>Run the verification algorithm using the command:</p>
+<p>Run the graph search algorithm using the command:</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">python</span> <span class="n">rrt</span><span class="o">.</span><span class="n">py</span> <span class="nb">input</span><span class="o">/</span><span class="n">rrtinput</span><span class="o">/</span><span class="n">temp</span><span class="o">.</span><span class="n">json</span>
 </pre></div>
 </div>

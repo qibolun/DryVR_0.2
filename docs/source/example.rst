@@ -111,6 +111,8 @@ The system is checked to be safe. We can also plot the reachtubes for different 
 
 Verification Peformance
 ^^^^^^^^^^^^^^^^^^^^^^^^^
+Peformance is measured using computer with i7 6600u, 16gb ram, Ubuntu 16.04 OS.
+
 +-------------------------------+-----------+-----------------+------------------+------------+------------+
 | Model                         | Dimension | Simulation time | Verfication Time | Total Time | Flow* time |
 +-------------------------------+-----------+-----------------+------------------+------------+------------+
@@ -164,10 +166,15 @@ Verification Peformance
 +-------------------------------+-----------+-----------------+------------------+------------+------------+
 | International space station   | 25        | 79.99s          | 193.61s          | 243.60s    |            |
 +-------------------------------+-----------+-----------------+------------------+------------+------------+
+| Lane merge                    | 8         | 0.29s           | 563.23s          | 563.52s    |            |
++-------------------------------+-----------+-----------------+------------------+------------+------------+
 
 
 Graph Search Performance
 ^^^^^^^^^^^^^^^^^^^^^^^^^
+Peformance is measured using computer with i7 6600u, 16gb ram, Ubuntu 16.04 OS.
+Note the running time for graph search can be very different since the alogirthm is randomly search for the graph. It may also return nothing as well. Try to run algorithm multiple times if it does not return the graph.
+
 +-----------------------------+-----------+--------------+------------------+--------------+
 | Example                     | Dimension | Time horizon | Min staying time | Running Time |
 +-----------------------------+-----------+--------------+------------------+--------------+

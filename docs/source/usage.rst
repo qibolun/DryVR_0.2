@@ -16,7 +16,7 @@ for example: ::
 Run DryVR Control Synthesis
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-To run DryVR control synthesis, please run: ::
+To run DryVR graph search algorithm, please run: ::
 
 	python rrt.py input/*/[input_file]
 
@@ -34,14 +34,13 @@ To plot the reachtube, please run: ::
 
 	python plotter.py -x [x dimension number] -y [y dimension number list] -f [input file name] -o [output file name]
 
--x is x dimension number is the dimension for x-axis, the default value will be 0, which is the dimension of time. 
+-x is the dimension number for x-axis, the default value will be 0, which is the dimension of time. 
 
--y is Y dimension number list indicates the dimension you want to draw.It should be an array, For example -y [1,2]. The default value will be [1].
+-y is dimension number lists indicates the dimension you want to draw for y-axis. For example -y [1,2]. The default value will be [1].
 
 -f is the file path for reach tube file that you want to plot, the default value will be output/reachtube.txt. 
 
--o is output file option
-, the default value is plotResult.png.  
+-o is output file option, the default value is plotResult.png.  
 
 To get help for plotter, please run: ::
 
@@ -52,9 +51,6 @@ Note that the dimension 0 is local time and last dimension is global time. For e
 for example: ::
 
 	python plotter.py -y [1,2] -f output/reachtube.txt 
-
-
-
 
 
 More plot results can be found at the :ref:`example-label` page.

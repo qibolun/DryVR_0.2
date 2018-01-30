@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Examples &mdash; DryVR 0.2 documentation</title>
+  <title>Examples &mdash; DryVR 2.0 documentation</title>
   
 
   
@@ -35,7 +35,7 @@
         <link rel="index" title="Index"
               href="genindex.html"/>
         <link rel="search" title="Search" href="search.html"/>
-    <link rel="top" title="DryVR 0.2 documentation" href="index.html"/>
+    <link rel="top" title="DryVR 2.0 documentation" href="index.html"/>
         <link rel="next" title="Publications" href="publications.html"/>
         <link rel="prev" title="DryVR’s Control Synthesis" href="dryvr&#39;s_control_synthesis.html"/> 
 
@@ -66,7 +66,7 @@
             
             
               <div class="version">
-                0.2
+                2.0
               </div>
             
           
@@ -92,7 +92,7 @@
             
               <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="status.html">Status</a></li>
-<li class="toctree-l1"><a class="reference internal" href="installtion.html">Installtion</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installtion.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="usage.html">Usage</a></li>
 <li class="toctree-l1"><a class="reference internal" href="dryvr's_language.html">DryVR&#8217;s Language</a></li>
 <li class="toctree-l1"><a class="reference internal" href="dryvr's_control_synthesis.html">DryVR&#8217;s Control Synthesis</a></li>
@@ -102,12 +102,12 @@
 <li class="toctree-l3"><a class="reference internal" href="#verification-result-of-the-aeb-system">Verification Result of the AEB System</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="#the-autonomous-vehicle-benchmark">The Autonomous Vehicle Benchmark</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#other-examples">Other examples</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#verification-peformance">Verification Peformance</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#graph-search-performance">Graph Search Performance</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="publications.html">Publications</a></li>
-<li class="toctree-l1"><a class="reference internal" href="contact.html">Contact</a></li>
+<li class="toctree-l1"><a class="reference internal" href="contact.html">People Involved</a></li>
 </ul>
 
             
@@ -183,7 +183,7 @@
 Cars 1 and 2 are cruising down the highway with zero relative velocity and certain initial relative separation;  Car 1 suddenly switches to a braking mode and starts slowing down according, certain amount of time elapses,  before Car 2 switches to a braking mode. We are interested to analyze the severity (relative velocity) of any possible collisions.</p>
 <div class="section" id="safety-verification-of-the-aeb-system">
 <h3>Safety Verification of the AEB System<a class="headerlink" href="#safety-verification-of-the-aeb-system" title="Permalink to this headline">¶</a></h3>
-<p>The black-box of the vehicle dynamics is described in <a class="reference internal" href="#adas-label"><span class="std std-ref">The Autonomous Vehicle Benchmark</span></a>, and the transition graph of the above AEB is shown in <a class="reference internal" href="dryvr's_language.html#transition-graph-label"><span class="std std-ref">Transition Graph</span></a>. The unsafe region is that the relative distance between the two cars are too close (<img class="math" src="_images/math/60a1b194316a8347ea0de0d4133f28875b92cc3c.png" alt="|sy_1-sy_2|&lt;3"/>). The input files describing the hybrid system is shown in <a class="reference internal" href="dryvr's_language.html#input-format-label"><span class="std std-ref">Input Format</span></a>.</p>
+<p>The black-box of the vehicle dynamics is described in <span class="xref std std-ref">ADAS-label</span>, and the transition graph of the above AEB is shown in <a class="reference internal" href="dryvr's_language.html#transition-graph-label"><span class="std std-ref">Transition Graph</span></a>. The unsafe region is that the relative distance between the two cars are too close (<img class="math" src="_images/math/60a1b194316a8347ea0de0d4133f28875b92cc3c.png" alt="|sy_1-sy_2|&lt;3"/>). The input files describing the hybrid system is shown in <a class="reference internal" href="dryvr's_language.html#input-format-label"><span class="std std-ref">Input Format</span></a>.</p>
 </div>
 <div class="section" id="verification-result-of-the-aeb-system">
 <h3>Verification Result of the AEB System<a class="headerlink" href="#verification-result-of-the-aeb-system" title="Permalink to this headline">¶</a></h3>
@@ -198,56 +198,258 @@ Cars 1 and 2 are cruising down the highway with zero relative velocity and certa
 </div>
 </div>
 </div>
-<div class="section" id="the-autonomous-vehicle-benchmark">
-<span id="adas-label"></span><h2>The Autonomous Vehicle Benchmark<a class="headerlink" href="#the-autonomous-vehicle-benchmark" title="Permalink to this headline">¶</a></h2>
-<p>The hybrid system for a scenario is constructed by putting together several individual vehicles. The higher-level decisions (paths) followed by the vehicles are captured by the transition graphs discussed in <a class="reference internal" href="dryvr's_language.html#transition-graph-label"><span class="std std-ref">Transition Graph</span></a>.</p>
-<p>Each vehicle has the following modes</p>
-<ul class="simple">
-<li>Const: move forward at constant speed,</li>
-<li>Acc1: constant acceleration,</li>
-<li>Brk or Dec: constant (slow) deceleration,</li>
-<li>TurnLeft and TurnRight:  the acceleration and steering are controlled in such a manner that the vehicle switches to its left (resp. right) lane in a certain amount of time.</li>
-</ul>
-<p>The mode for the entire system consists of n vehicles are the mode of each vehicle separated by semicolon. For example, Const;Brk means the first car is in the const speed mode, while the second car is in the brake mode.
-For each vehicle, we mainly analyze four variables: absolute position
-(<img class="math" src="_images/math/fd6ecc3c8de21a8b9fa313de0689ccbab4eb89be.png" alt="sx"/>) and velocity (<img class="math" src="_images/math/9d56bbbc3f4be9472b38cbb6cba75877a4c49a00.png" alt="vx"/>) orthogonal to the road direction
-(<img class="math" src="_images/math/a59f68a4202623bb859a7093f0316bf466e6f75d.png" alt="x"/>-axis), and absolute position (<img class="math" src="_images/math/40a6b534f5e3fadfa3bf3bd9f1c25010346afb5b.png" alt="sy"/>) and velocity (<img class="math" src="_images/math/eac614ff2950b134eb3f03433d495c3700e14f66.png" alt="vy"/>) along the
-road direction (<img class="math" src="_images/math/276f7e256cbddeb81eee42e1efc348f3cb4ab5f8.png" alt="y"/>-axis). The throttle and steering is captured using the four variables.</p>
-<p>Due to the MATLAB license issue, we are not able to release the Simulink benchmarks we have used in the publications. We have since reproduced the ADAS and autonomous vehicle benchmark in Python and connect it with DryVR as a simulator. We are hoping to move more examples to Python in the near future.</p>
-<p>For more details, please refer to Section 2.5 of the CAV2017 paper.</p>
+<div class="section" id="verification-peformance">
+<h2>Verification Peformance<a class="headerlink" href="#verification-peformance" title="Permalink to this headline">¶</a></h2>
+<table border="1" class="docutils">
+<colgroup>
+<col width="31%" />
+<col width="11%" />
+<col width="17%" />
+<col width="18%" />
+<col width="12%" />
+<col width="12%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td>Model</td>
+<td>Dimension</td>
+<td>Simulation time</td>
+<td>Verfication Time</td>
+<td>Total Time</td>
+<td>Flow* time</td>
+</tr>
+<tr class="row-even"><td>Biological model I</td>
+<td>7</td>
+<td>0.01s</td>
+<td>0.03s</td>
+<td>0.04s</td>
+<td>66.4s</td>
+</tr>
+<tr class="row-odd"><td>Biological model II</td>
+<td>7</td>
+<td>0.01s</td>
+<td>0.03s</td>
+<td>0.04s</td>
+<td>223.4s</td>
+</tr>
+<tr class="row-even"><td>Coupled Vanderpol</td>
+<td>4</td>
+<td>0.03s</td>
+<td>0.11s</td>
+<td>0.14s</td>
+<td>1038.3s</td>
+</tr>
+<tr class="row-odd"><td>Spring pendulum</td>
+<td>4</td>
+<td>0.05s</td>
+<td>0.11s</td>
+<td>0.16s</td>
+<td>1377.5s</td>
+</tr>
+<tr class="row-even"><td>Roessler</td>
+<td>3</td>
+<td>0.02s</td>
+<td>0.34s</td>
+<td>0.36s</td>
+<td>17.1s</td>
+</tr>
+<tr class="row-odd"><td>Lorentz system</td>
+<td>3</td>
+<td>0.34s</td>
+<td>0.73s</td>
+<td>1.07s</td>
+<td>316.7s</td>
+</tr>
+<tr class="row-even"><td>Lac operon</td>
+<td>2</td>
+<td>0.47s</td>
+<td>170.88s</td>
+<td>171.35s</td>
+<td>44.2s</td>
+</tr>
+<tr class="row-odd"><td>Lotka-Volterra</td>
+<td>2</td>
+<td>0.02s</td>
+<td>0.08s</td>
+<td>0.10s</td>
+<td>3.9s</td>
+</tr>
+<tr class="row-even"><td>Buckling column</td>
+<td>2</td>
+<td>0.04s</td>
+<td>0.39s</td>
+<td>0.43s</td>
+<td>26.4s</td>
+</tr>
+<tr class="row-odd"><td>Jet engine</td>
+<td>2</td>
+<td>0.07s</td>
+<td>12.03s</td>
+<td>12.1s</td>
+<td>6.8s</td>
+</tr>
+<tr class="row-even"><td>Brusselator</td>
+<td>2</td>
+<td>0.10s</td>
+<td>2.92s</td>
+<td>3.02s</td>
+<td>5.2s</td>
+</tr>
+<tr class="row-odd"><td>Vanderpol</td>
+<td>2</td>
+<td>0.05s</td>
+<td>2.87s</td>
+<td>2.92s</td>
+<td>6.4s</td>
+</tr>
+<tr class="row-even"><td>Vehicle platoon 3</td>
+<td>9</td>
+<td>0.32s</td>
+<td>3.96s</td>
+<td>4.28s</td>
+<td>21.08s</td>
+</tr>
+<tr class="row-odd"><td>Uniform nor sigmoid</td>
+<td>3</td>
+<td>120.91s</td>
+<td>1193.31s</td>
+<td>1314.22s</td>
+<td>Exception</td>
+</tr>
+<tr class="row-even"><td>Uniform inverter loop</td>
+<td>2</td>
+<td>10.94s</td>
+<td>267.62</td>
+<td>278.56s</td>
+<td>Exception</td>
+</tr>
+<tr class="row-odd"><td>Uniform inverter sigmoid</td>
+<td>2</td>
+<td>24.87s</td>
+<td>221.94s</td>
+<td>246.76s</td>
+<td>Exception</td>
+</tr>
+<tr class="row-even"><td>Uniform nor ramp</td>
+<td>3</td>
+<td>173.77s</td>
+<td>1591.78s</td>
+<td>1765.55s</td>
+<td>Exception</td>
+</tr>
+<tr class="row-odd"><td>Uniform or ramp</td>
+<td>4</td>
+<td>176.70s</td>
+<td>1602.17s</td>
+<td>1778.87s</td>
+<td>Exception</td>
+</tr>
+<tr class="row-even"><td>Uniform or sigmoid</td>
+<td>4</td>
+<td>168.75s</td>
+<td>2017.25s</td>
+<td>2186.00s</td>
+<td>Exception</td>
+</tr>
+<tr class="row-odd"><td>Clamped beam</td>
+<td>348</td>
+<td>540.80s</td>
+<td>5176.83s</td>
+<td>5717.63s</td>
+<td>Time out</td>
+</tr>
+<tr class="row-even"><td>Building model</td>
+<td>48</td>
+<td>3.28s</td>
+<td>16.96s</td>
+<td>20.24s</td>
+<td>&#160;</td>
+</tr>
+<tr class="row-odd"><td>Partial differential equation</td>
+<td>20</td>
+<td>12.05s</td>
+<td>29.16s</td>
+<td>41.21s</td>
+<td>&#160;</td>
+</tr>
+<tr class="row-even"><td>FOM</td>
+<td>20</td>
+<td>12.18s</td>
+<td>28.79s</td>
+<td>40.9s</td>
+<td>&#160;</td>
+</tr>
+<tr class="row-odd"><td>Motor control system</td>
+<td>8</td>
+<td>5.22s</td>
+<td>12.67s</td>
+<td>17.89s</td>
+<td>&#160;</td>
+</tr>
+<tr class="row-even"><td>International space station</td>
+<td>25</td>
+<td>79.99s</td>
+<td>193.61s</td>
+<td>243.60s</td>
+<td>&#160;</td>
+</tr>
+</tbody>
+</table>
 </div>
-<div class="section" id="other-examples">
-<h2>Other examples<a class="headerlink" href="#other-examples" title="Permalink to this headline">¶</a></h2>
-<p>Next, we briefly introduce other examples included in the inputFile folder and their verification results. Note that as the algorithm uses nondeterministic method to generate traces, the verification result like refine times, running time may vary between different runs.</p>
-<p><strong>AutoPassing</strong></p>
-<p>Initial condition: Car1 is behind Car2 in the same lane, with Car1 in Acc1 and Car2 in Const.</p>
-<p>Transition graph: Car1 goes through the mode sequence TurnLeft, Acc1, Brk, and  TurnRight, Const with specified time intervals in each mode to complete the overtake maneuver. If Car2 switches to Acc1 before Car1 enters Acc1 then Car1 aborts and changes back to right lane. If Car2 switches to Dec before Car1 enters TurnLeft, then Car1 should adjust the time to switch to TurnLeft to avoid collision.</p>
-<p>Requirement: Car1 overtakes Car2 or abort the overtaking while maintaining minimal safe separation.</p>
-<p>Inputfiles:</p>
-<ul class="simple">
-<li>input_AutoPassingSafe: safe</li>
-<li>input_AutoPassingUnsafe: unsafe</li>
-<li>input_AutoPassingSimpleSafe: safe</li>
-<li>input_AutoPassingSimpleUnsafe: unsafe</li>
-</ul>
-<p><strong>Merge</strong></p>
-<p>Initial condition: Car1 is in left and Car2 is in the right lane; initial positions and speeds are in some range; Car1 is in Const mode, and Car2 is in Const mode.</p>
-<p>Transition graph:  Car1 goes through the mode Acc1, TurnRight, Const with specified intervals of time to transit from mode to another mode. Car2 goes through the mode Acc1 or Const, TurnRight, Const with specified intervals of time to transit from mode to another mode. Car1 will merge ahead of Car2 of behind of Car2 based on cars&#8217;s mode transition.</p>
-<p>Requirement: Car1 merges ahead or behind of Car2 and maintains at least a given safe separation.</p>
-<p>InputFiles:</p>
-<ul class="simple">
-<li>input_MergeSafe: safe</li>
-<li>input_MergeUnsafe: unsafe</li>
-</ul>
-<p><strong>MergeBetween</strong></p>
-<p>Initial condition: Car1, Car2, Car3 are all in the same lane, with Car1 behind Car2, Car2 behind Car3, and in the Const mode, initial positions and speeds are in some range.</p>
-<p>Transition graph: Car1 goes through the mode sequence TurnLeft, Acc1, Dec, and TurnRight, Const with specified time intervals in each mode to overtake Car2. Car3 transits from Const to Acc1 then transits back to Const, so Car3 is always ahead of Car1.</p>
-<p>Requirement: Car1 merges between Car2 and Car3 and any two vehicles maintain at least a given safe separation.</p>
-<p>InputFiles:</p>
-<ul class="simple">
-<li>input_MergeBetweenSafe: safe</li>
-<li>input_MergeBetweenUnsafe: unsafe</li>
-</ul>
+<div class="section" id="graph-search-performance">
+<h2>Graph Search Performance<a class="headerlink" href="#graph-search-performance" title="Permalink to this headline">¶</a></h2>
+<table border="1" class="docutils">
+<colgroup>
+<col width="34%" />
+<col width="13%" />
+<col width="16%" />
+<col width="21%" />
+<col width="16%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td>Example</td>
+<td>Dimension</td>
+<td>Time horizon</td>
+<td>Min staying time</td>
+<td>Running Time</td>
+</tr>
+<tr class="row-even"><td>vehicle collision avoidance</td>
+<td>4</td>
+<td>50.0s</td>
+<td>2.0s</td>
+<td>1896.26s</td>
+</tr>
+<tr class="row-odd"><td>robot in maze</td>
+<td>4</td>
+<td>10.0s</td>
+<td>1.0s</td>
+<td>98.93s</td>
+</tr>
+<tr class="row-even"><td>motion plan</td>
+<td>3</td>
+<td>6.0s</td>
+<td>1.0s</td>
+<td>4.55s</td>
+</tr>
+<tr class="row-odd"><td>DC motor</td>
+<td>2</td>
+<td>1.0s</td>
+<td>0.1s</td>
+<td>0.35s</td>
+</tr>
+<tr class="row-even"><td>room heating</td>
+<td>3</td>
+<td>25.0s</td>
+<td>2.0s</td>
+<td>2.66s</td>
+</tr>
+<tr class="row-odd"><td>inverted pendulum</td>
+<td>2</td>
+<td>2.0s</td>
+<td>0.2s</td>
+<td>6.06s</td>
+</tr>
+</tbody>
+</table>
 </div>
 </div>
 
@@ -295,7 +497,7 @@ road direction (<img class="math" src="_images/math/276f7e256cbddeb81eee42e1efc3
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'./',
-            VERSION:'0.2',
+            VERSION:'2.0',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
             HAS_SOURCE:  true,

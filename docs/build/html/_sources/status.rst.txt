@@ -1,6 +1,6 @@
 Status
 ==========
-Jan 24.2018. DryVR 0.2 is done. Adding state dependent transition and control synthesis.
+Jan 24.2018. DryVR 2.0 is done. Adding state dependent transition and control synthesis.
 
 April 18.2017. The installation is tested on Ubuntu 16.04 (64 bit version).
 

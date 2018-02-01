@@ -1,6 +1,5 @@
 
 
-
 <!DOCTYPE html>
 <!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
 <!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
@@ -9,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Index &mdash; DryVR 2.0 documentation</title>
+  <title>Parameters configuration &mdash; DryVR 2.0 documentation</title>
   
 
   
@@ -34,9 +33,11 @@
 
   
         <link rel="index" title="Index"
-              href="#"/>
+              href="genindex.html"/>
         <link rel="search" title="Search" href="search.html"/>
-    <link rel="top" title="DryVR 2.0 documentation" href="index.html"/> 
+    <link rel="top" title="DryVR 2.0 documentation" href="index.html"/>
+        <link rel="next" title="Publications" href="publications.html"/>
+        <link rel="prev" title="Examples and Performance Evaluation" href="example.html"/> 
 
   
   <script src="_static/js/modernizr.min.js"></script>
@@ -89,14 +90,14 @@
               
             
             
-              <ul>
+              <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="status.html">Status</a></li>
 <li class="toctree-l1"><a class="reference internal" href="installtion.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="usage.html">Usage</a></li>
 <li class="toctree-l1"><a class="reference internal" href="dryvr's_language.html">DryVR&#8217;s Verification Language</a></li>
 <li class="toctree-l1"><a class="reference internal" href="dryvr's_control_synthesis.html">DryVR&#8217;s Synthesis Language</a></li>
 <li class="toctree-l1"><a class="reference internal" href="example.html">Examples and Performance Evaluation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="parameters_configuration.html">Parameters configuration</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Parameters configuration</a></li>
 <li class="toctree-l1"><a class="reference internal" href="publications.html">Publications</a></li>
 <li class="toctree-l1"><a class="reference internal" href="contact.html">People Involved</a></li>
 </ul>
@@ -143,12 +144,14 @@
     
       <li><a href="index.html">Docs</a> &raquo;</li>
         
-      <li>Index</li>
+      <li>Parameters configuration</li>
     
     
       <li class="wy-breadcrumbs-aside">
         
             
+            <a href="_sources/parameters_configuration.rst.txt" rel="nofollow"> View page source</a>
+          
         
       </li>
     
@@ -160,11 +163,37 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
+  <div class="section" id="parameters-configuration">
+<span id="parameter-label"></span><h1>Parameters configuration<a class="headerlink" href="#parameters-configuration" title="Permalink to this headline">¶</a></h1>
+<p>Parameters in DryVR can be changed by user to get desire result for verification and synthesis.
+The configuration file is stored in</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">src</span><span class="o">/</span><span class="n">common</span><span class="o">/</span><span class="n">constant</span><span class="o">.</span><span class="n">py</span>
+</pre></div>
+</div>
+<p>The following parameters can be changed user</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="c1"># Verification constant</span>
+<span class="n">SIMUTESTNUM</span> <span class="o">=</span> <span class="mi">1</span>
+<span class="n">SIMTRACENUM</span> <span class="o">=</span> <span class="mi">10</span>
+<span class="n">REFINETHRES</span> <span class="o">=</span> <span class="mi">10</span>
+<span class="n">CHILDREFINETHRES</span> <span class="o">=</span> <span class="mi">2</span>
 
-<h1 id="index">Index</h1>
-
-<div class="genindex-jumpbox">
- 
+<span class="c1"># Synthesis Constant</span>
+<span class="n">RANDMODENUM</span> <span class="o">=</span> <span class="mi">3</span>
+<span class="n">RANDSECTIONNUM</span> <span class="o">=</span> <span class="mi">3</span>
+</pre></div>
+</div>
+<p>Verification constant:
+- SIMUTESTNUM is the number of hybrid simulation runs at beginning of the verification algorithm to find counter examples.</p>
+<ul class="simple">
+<li>SIMTRACENUM is number of sumulation traces generated to learn the sensitity (discrepancy function).</li>
+<li>REFINETHRES is the refine threshold for initial set given by user.</li>
+<li>CHILDREFINETHRES is the refine threshold for child node initial set. When DryVR runs verification algorithm, it uses DFS algorithm to go through the transition graph, and generate a child node for vertex in graph, this threshold is for child node.</li>
+</ul>
+<p>Synthesis Constant:</p>
+<ul class="simple">
+<li>RANDMODENUM is the number of random modes picked to precced synthesis algorithm</li>
+<li>RANDSECTIONNUM is number of time intervals picked as next set of candidate guards</li>
+</ul>
 </div>
 
 
@@ -174,6 +203,15 @@
            </div>
           </div>
           <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="publications.html" class="btn btn-neutral float-right" title="Publications" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="example.html" class="btn btn-neutral" title="Examples and Performance Evaluation" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
   
 
   <hr/>

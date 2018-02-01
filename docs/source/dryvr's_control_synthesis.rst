@@ -1,4 +1,4 @@
-DryVR's Control Synthesis
+DryVR's Synthesis Language
 =================================
 
 In DryVR,  a hybrid system is modeled as a combination of a white-box that specifies the mode switches (:ref:`transition-graph-label`) and a black-box that can simulate the continuous evolution in each mode (:ref:`black-box-label`).
@@ -54,7 +54,7 @@ When the system cannot find graph, the final result will look like ::
 
     could not find graph
 
-Note that DryVR's algorithm is searching the graph randomly, if the system cannot find the graph, it does not mean the graph is not exist with current input. You can try run the algorithm multiple times to get more accurate result.
+Note that DryVR's algorithm is searching the graph randomly, if the system cannot find the graph, it does not mean the graph is not exist with current input. You can try run the algorithm multiple times to get more accurate result. Increase RANDSECTIONNUM in DryVR's configuration will increase the chance of finding hte transition graph. (See {:ref:`parameter-label`}) 
 If the the system find the transition graph, the system will plot the transition graph and will be stored in "output/rrtGraph.png"
 
 Advanced Tricks: Making control synthesis work on your own black-box system

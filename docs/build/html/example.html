@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Examples &mdash; DryVR 2.0 documentation</title>
+  <title>Examples and Performance Evaluation &mdash; DryVR 2.0 documentation</title>
   
 
   
@@ -36,8 +36,8 @@
               href="genindex.html"/>
         <link rel="search" title="Search" href="search.html"/>
     <link rel="top" title="DryVR 2.0 documentation" href="index.html"/>
-        <link rel="next" title="Publications" href="publications.html"/>
-        <link rel="prev" title="DryVR’s Control Synthesis" href="dryvr&#39;s_control_synthesis.html"/> 
+        <link rel="next" title="Parameters configuration" href="parameters_configuration.html"/>
+        <link rel="prev" title="DryVR’s Synthesis Language" href="dryvr&#39;s_control_synthesis.html"/> 
 
   
   <script src="_static/js/modernizr.min.js"></script>
@@ -94,18 +94,22 @@
 <li class="toctree-l1"><a class="reference internal" href="status.html">Status</a></li>
 <li class="toctree-l1"><a class="reference internal" href="installtion.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="usage.html">Usage</a></li>
-<li class="toctree-l1"><a class="reference internal" href="dryvr's_language.html">DryVR&#8217;s Language</a></li>
-<li class="toctree-l1"><a class="reference internal" href="dryvr's_control_synthesis.html">DryVR&#8217;s Control Synthesis</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Examples</a><ul>
+<li class="toctree-l1"><a class="reference internal" href="dryvr's_language.html">DryVR&#8217;s Verification Language</a></li>
+<li class="toctree-l1"><a class="reference internal" href="dryvr's_control_synthesis.html">DryVR&#8217;s Synthesis Language</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Examples and Performance Evaluation</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#getting-started-simple-automatic-emergency-braking">Getting started: Simple Automatic Emergency Braking</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#safety-verification-of-the-aeb-system">Safety Verification of the AEB System</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#verification-result-of-the-aeb-system">Verification Result of the AEB System</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="#verification-peformance">Verification Peformance</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#graph-search-performance">Graph Search Performance</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#the-autonomous-vehicle-benchmark">The Autonomous Vehicle Benchmark</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#verification-examples">Verification Examples</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#verification-peformance-evaluation">Verification Peformance Evaluation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#synthesis-examples">Synthesis Examples</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#synthesis-performance-evaluation">Synthesis Performance Evaluation</a></li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="parameters_configuration.html">Parameters configuration</a></li>
 <li class="toctree-l1"><a class="reference internal" href="publications.html">Publications</a></li>
 <li class="toctree-l1"><a class="reference internal" href="contact.html">People Involved</a></li>
 </ul>
@@ -152,7 +156,7 @@
     
       <li><a href="index.html">Docs</a> &raquo;</li>
         
-      <li>Examples</li>
+      <li>Examples and Performance Evaluation</li>
     
     
       <li class="wy-breadcrumbs-aside">
@@ -171,8 +175,8 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <div class="section" id="examples">
-<span id="example-label"></span><h1>Examples<a class="headerlink" href="#examples" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="examples-and-performance-evaluation">
+<span id="example-label"></span><h1>Examples and Performance Evaluation<a class="headerlink" href="#examples-and-performance-evaluation" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="getting-started-simple-automatic-emergency-braking">
 <h2>Getting started: Simple Automatic Emergency Braking<a class="headerlink" href="#getting-started-simple-automatic-emergency-braking" title="Permalink to this headline">¶</a></h2>
 <div class="figure align-center" id="id1">
@@ -183,7 +187,7 @@
 Cars 1 and 2 are cruising down the highway with zero relative velocity and certain initial relative separation;  Car 1 suddenly switches to a braking mode and starts slowing down according, certain amount of time elapses,  before Car 2 switches to a braking mode. We are interested to analyze the severity (relative velocity) of any possible collisions.</p>
 <div class="section" id="safety-verification-of-the-aeb-system">
 <h3>Safety Verification of the AEB System<a class="headerlink" href="#safety-verification-of-the-aeb-system" title="Permalink to this headline">¶</a></h3>
-<p>The black-box of the vehicle dynamics is described in <span class="xref std std-ref">ADAS-label</span>, and the transition graph of the above AEB is shown in <a class="reference internal" href="dryvr's_language.html#transition-graph-label"><span class="std std-ref">Transition Graph</span></a>. The unsafe region is that the relative distance between the two cars are too close (<img class="math" src="_images/math/60a1b194316a8347ea0de0d4133f28875b92cc3c.png" alt="|sy_1-sy_2|&lt;3"/>). The input files describing the hybrid system is shown in <a class="reference internal" href="dryvr's_language.html#input-format-label"><span class="std std-ref">Input Format</span></a>.</p>
+<p>The black-box of the vehicle dynamics is described in <a class="reference internal" href="#adas-label"><span class="std std-ref">The Autonomous Vehicle Benchmark</span></a>, and the transition graph of the above AEB is shown in <a class="reference internal" href="dryvr's_language.html#transition-graph-label"><span class="std std-ref">Transition Graph</span></a>. The unsafe region is that the relative distance between the two cars are too close (<img class="math" src="_images/math/60a1b194316a8347ea0de0d4133f28875b92cc3c.png" alt="|sy_1-sy_2|&lt;3"/>). The input files describing the hybrid system is shown in <a class="reference internal" href="dryvr's_language.html#input-format-label"><span class="std std-ref">Input Format</span></a>.</p>
 </div>
 <div class="section" id="verification-result-of-the-aeb-system">
 <h3>Verification Result of the AEB System<a class="headerlink" href="#verification-result-of-the-aeb-system" title="Permalink to this headline">¶</a></h3>
@@ -198,8 +202,35 @@ Cars 1 and 2 are cruising down the highway with zero relative velocity and certa
 </div>
 </div>
 </div>
-<div class="section" id="verification-peformance">
-<h2>Verification Peformance<a class="headerlink" href="#verification-peformance" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="the-autonomous-vehicle-benchmark">
+<span id="adas-label"></span><h2>The Autonomous Vehicle Benchmark<a class="headerlink" href="#the-autonomous-vehicle-benchmark" title="Permalink to this headline">¶</a></h2>
+<p>The hybrid system for a scenario is constructed by putting together several individual vehicles. The higher-level decisions (paths) followed by the vehicles are captured by the transition graphs discussed in <a class="reference internal" href="dryvr's_language.html#transition-graph-label"><span class="std std-ref">Transition Graph</span></a>.</p>
+<p>Each vehicle has the following modes</p>
+<ul class="simple">
+<li>Const: move forward at constant speed,</li>
+<li>Acc1: constant acceleration,</li>
+<li>Brk or Dec: constant (slow) deceleration,</li>
+<li>TurnLeft and TurnRight:  the acceleration and steering are controlled in such a manner that the vehicle switches to its left (resp. right) lane in a certain amount of time.</li>
+</ul>
+<p>The mode for the entire system consists of n vehicles are the mode of each vehicle separated by semicolon. For example, Const;Brk means the first car is in the const speed mode, while the second car is in the brake mode.
+For each vehicle, we mainly analyze four variables: absolute position
+(<img class="math" src="_images/math/fd6ecc3c8de21a8b9fa313de0689ccbab4eb89be.png" alt="sx"/>) and velocity (<img class="math" src="_images/math/9d56bbbc3f4be9472b38cbb6cba75877a4c49a00.png" alt="vx"/>) orthogonal to the road direction
+(<img class="math" src="_images/math/a59f68a4202623bb859a7093f0316bf466e6f75d.png" alt="x"/>-axis), and absolute position (<img class="math" src="_images/math/40a6b534f5e3fadfa3bf3bd9f1c25010346afb5b.png" alt="sy"/>) and velocity (<img class="math" src="_images/math/eac614ff2950b134eb3f03433d495c3700e14f66.png" alt="vy"/>) along the
+road direction (<img class="math" src="_images/math/276f7e256cbddeb81eee42e1efc348f3cb4ab5f8.png" alt="y"/>-axis). The throttle and steering is captured using the four variables.</p>
+</div>
+<div class="section" id="verification-examples">
+<h2>Verification Examples<a class="headerlink" href="#verification-examples" title="Permalink to this headline">¶</a></h2>
+<p>DryVR now comes with more than two dozen interesting examples, including</p>
+<ul class="simple">
+<li>6 mixed-signal circuit models with hundreds of nonlinear terms in the dynamics and both time and state dependent transitions</li>
+<li>6 high dimensional linear system models (up to 384 dimensions)derived from fields such as civil engineering and robotics</li>
+<li>an 8-dimensional hybrid vehicle lane switch model modeling a vehicle switches its lane on highway if it get too close to another vehicle in front of it</li>
+<li>a set of standard 2-7 dimensional benchmarks</li>
+</ul>
+<p>The simulators for these models are also available in the folder &#8220;examples&#8221; under the root directory, and the input files are in the folder &#8220;input/daginput&#8221; and &#8220;input/nondaginput&#8221;.</p>
+</div>
+<div class="section" id="verification-peformance-evaluation">
+<h2>Verification Peformance Evaluation<a class="headerlink" href="#verification-peformance-evaluation" title="Permalink to this headline">¶</a></h2>
 <p>We have measured performance for examples come with DryVR 2.0.
 Peformance is measured using computer with i7 6600u, 16gb ram, Ubuntu 16.04 OS.</p>
 <table border="1" class="docutils">
@@ -376,8 +407,20 @@ Peformance is measured using computer with i7 6600u, 16gb ram, Ubuntu 16.04 OS.<
 </tbody>
 </table>
 </div>
-<div class="section" id="graph-search-performance">
-<h2>Graph Search Performance<a class="headerlink" href="#graph-search-performance" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="synthesis-examples">
+<h2>Synthesis Examples<a class="headerlink" href="#synthesis-examples" title="Permalink to this headline">¶</a></h2>
+<p>We provide 6 controller synthesis benchmarks examples, including:</p>
+<ul class="simple">
+<li>A vehicle collision avoidance model where a car driving on the highway is asked to avoid an obstacle in front of it.</li>
+<li>Robot find a path in a maze.</li>
+<li>Motion planning from synthesis tool Pessoa with specification similar to Example 2.</li>
+<li>DC motor where the velocity of a DC motor needs to be regulated.</li>
+<li>Room heating where the task is to control the temperature of 3 rooms and keep them around 21.</li>
+<li>Inverted pendulum as a classical reach-avoid problem.</li>
+</ul>
+</div>
+<div class="section" id="synthesis-performance-evaluation">
+<h2>Synthesis Performance Evaluation<a class="headerlink" href="#synthesis-performance-evaluation" title="Permalink to this headline">¶</a></h2>
 <p>Peformance is measured using computer with i7 6600u, 16gb ram, Ubuntu 16.04 OS.
 Note the running time for graph search can be very different since the alogirthm is randomly search for the graph. It may also return nothing as well. Try to run algorithm multiple times if it does not return the graph.</p>
 <table border="1" class="docutils">
@@ -446,10 +489,10 @@ Note the running time for graph search can be very different since the alogirthm
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="publications.html" class="btn btn-neutral float-right" title="Publications" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="parameters_configuration.html" class="btn btn-neutral float-right" title="Parameters configuration" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="dryvr&#39;s_control_synthesis.html" class="btn btn-neutral" title="DryVR’s Control Synthesis" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="dryvr&#39;s_control_synthesis.html" class="btn btn-neutral" title="DryVR’s Synthesis Language" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   

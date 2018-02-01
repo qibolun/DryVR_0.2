@@ -1,7 +1,7 @@
 .. _example-label:
 
-Examples
-==============
+Examples and Performance Evaluation
+======================================
 
 Getting started: Simple Automatic Emergency Braking
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -33,24 +33,24 @@ The system is checked to be safe. We can also plot the reachtubes for different 
 	Reachtube of the position sy of Car1 and Car2
 
 
-.. .. _ADAS-label:
+.. _ADAS-label:
 
-.. The Autonomous Vehicle Benchmark
-.. ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-.. The hybrid system for a scenario is constructed by putting together several individual vehicles. The higher-level decisions (paths) followed by the vehicles are captured by the transition graphs discussed in :ref:`transition-graph-label`.
+The Autonomous Vehicle Benchmark
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+The hybrid system for a scenario is constructed by putting together several individual vehicles. The higher-level decisions (paths) followed by the vehicles are captured by the transition graphs discussed in :ref:`transition-graph-label`.
 
-.. Each vehicle has the following modes
+Each vehicle has the following modes
 
-.. - Const: move forward at constant speed,
-.. - Acc1: constant acceleration,
-.. - Brk or Dec: constant (slow) deceleration,
-.. - TurnLeft and TurnRight:  the acceleration and steering are controlled in such a manner that the vehicle switches to its left (resp. right) lane in a certain amount of time.
+- Const: move forward at constant speed,
+- Acc1: constant acceleration,
+- Brk or Dec: constant (slow) deceleration,
+- TurnLeft and TurnRight:  the acceleration and steering are controlled in such a manner that the vehicle switches to its left (resp. right) lane in a certain amount of time.
 
-.. The mode for the entire system consists of n vehicles are the mode of each vehicle separated by semicolon. For example, Const;Brk means the first car is in the const speed mode, while the second car is in the brake mode.
-.. For each vehicle, we mainly analyze four variables: absolute position
-.. (:math:`sx`) and velocity (:math:`vx`) orthogonal to the road direction
-.. (:math:`x`-axis), and absolute position (:math:`sy`) and velocity (:math:`vy`) along the
-.. road direction (:math:`y`-axis). The throttle and steering is captured using the four variables.
+The mode for the entire system consists of n vehicles are the mode of each vehicle separated by semicolon. For example, Const;Brk means the first car is in the const speed mode, while the second car is in the brake mode.
+For each vehicle, we mainly analyze four variables: absolute position
+(:math:`sx`) and velocity (:math:`vx`) orthogonal to the road direction
+(:math:`x`-axis), and absolute position (:math:`sy`) and velocity (:math:`vy`) along the
+road direction (:math:`y`-axis). The throttle and steering is captured using the four variables.
 
 .. Due to the MATLAB license issue, we are not able to release the Simulink benchmarks we have used in the publications. We have since reproduced the ADAS and autonomous vehicle benchmark in Python and connect it with DryVR as a simulator. We are hoping to move more examples to Python in the near future.
 
@@ -106,11 +106,25 @@ The system is checked to be safe. We can also plot the reachtubes for different 
 .. - input\_MergeBetweenSafe: safe
 .. - input\_MergeBetweenUnsafe: unsafe
 
+Verification Examples 
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+DryVR now comes with more than two dozen interesting examples, including
+
+- 6 mixed-signal circuit models with hundreds of nonlinear terms in the dynamics and both time and state dependent transitions
+
+- 6 high dimensional linear system models (up to 384 dimensions)derived from fields such as civil engineering and robotics 
+
+- an 8-dimensional hybrid vehicle lane switch model modeling a vehicle switches its lane on highway if it get too close to another vehicle in front of it 
+
+- a set of standard 2-7 dimensional benchmarks 
+
+The simulators for these models are also available in the folder "examples" under the root directory, and the input files are in the folder "input/daginput" and "input/nondaginput".
 
 
 
-Verification Peformance
-^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Verification Peformance Evaluation
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 We have measured performance for examples come with DryVR 2.0.
 Peformance is measured using computer with i7 6600u, 16gb ram, Ubuntu 16.04 OS.
 
@@ -171,8 +185,26 @@ Peformance is measured using computer with i7 6600u, 16gb ram, Ubuntu 16.04 OS.
 +-------------------------------+-----------+-----------------------+------------+------------+
 
 
-Graph Search Performance
-^^^^^^^^^^^^^^^^^^^^^^^^^
+Synthesis Examples
+^^^^^^^^^^^^^^^^^^^^^
+
+We provide 6 controller synthesis benchmarks examples, including:
+
+- A vehicle collision avoidance model where a car driving on the highway is asked to avoid an obstacle in front of it.
+
+- Robot find a path in a maze. 
+
+- Motion planning from synthesis tool Pessoa with specification similar to Example 2.
+
+- DC motor where the velocity of a DC motor needs to be regulated.
+ 
+- Room heating where the task is to control the temperature of 3 rooms and keep them around 21.
+
+- Inverted pendulum as a classical reach-avoid problem.
+
+
+Synthesis Performance Evaluation
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 Peformance is measured using computer with i7 6600u, 16gb ram, Ubuntu 16.04 OS.
 Note the running time for graph search can be very different since the alogirthm is randomly search for the graph. It may also return nothing as well. Try to run algorithm multiple times if it does not return the graph.
 

@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>DryVR’s Control Synthesis &mdash; DryVR 2.0 documentation</title>
+  <title>DryVR’s Synthesis Language &mdash; DryVR 2.0 documentation</title>
   
 
   
@@ -36,8 +36,8 @@
               href="genindex.html"/>
         <link rel="search" title="Search" href="search.html"/>
     <link rel="top" title="DryVR 2.0 documentation" href="index.html"/>
-        <link rel="next" title="Examples" href="example.html"/>
-        <link rel="prev" title="DryVR’s Language" href="dryvr&#39;s_language.html"/> 
+        <link rel="next" title="Examples and Performance Evaluation" href="example.html"/>
+        <link rel="prev" title="DryVR’s Verification Language" href="dryvr&#39;s_language.html"/> 
 
   
   <script src="_static/js/modernizr.min.js"></script>
@@ -94,14 +94,15 @@
 <li class="toctree-l1"><a class="reference internal" href="status.html">Status</a></li>
 <li class="toctree-l1"><a class="reference internal" href="installtion.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="usage.html">Usage</a></li>
-<li class="toctree-l1"><a class="reference internal" href="dryvr's_language.html">DryVR&#8217;s Language</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">DryVR&#8217;s Control Synthesis</a><ul>
+<li class="toctree-l1"><a class="reference internal" href="dryvr's_language.html">DryVR&#8217;s Verification Language</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">DryVR&#8217;s Synthesis Language</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#input-format">Input Format</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#output-interpretation">Output Interpretation</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#advanced-tricks-making-control-synthesis-work-on-your-own-black-box-system">Advanced Tricks: Making control synthesis work on your own black-box system</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="example.html">Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="example.html">Examples and Performance Evaluation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="parameters_configuration.html">Parameters configuration</a></li>
 <li class="toctree-l1"><a class="reference internal" href="publications.html">Publications</a></li>
 <li class="toctree-l1"><a class="reference internal" href="contact.html">People Involved</a></li>
 </ul>
@@ -148,7 +149,7 @@
     
       <li><a href="index.html">Docs</a> &raquo;</li>
         
-      <li>DryVR&#8217;s Control Synthesis</li>
+      <li>DryVR&#8217;s Synthesis Language</li>
     
     
       <li class="wy-breadcrumbs-aside">
@@ -167,8 +168,8 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <div class="section" id="dryvr-s-control-synthesis">
-<h1>DryVR&#8217;s Control Synthesis<a class="headerlink" href="#dryvr-s-control-synthesis" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="dryvr-s-synthesis-language">
+<h1>DryVR&#8217;s Synthesis Language<a class="headerlink" href="#dryvr-s-synthesis-language" title="Permalink to this headline">¶</a></h1>
 <p>In DryVR,  a hybrid system is modeled as a combination of a white-box that specifies the mode switches (<a class="reference internal" href="dryvr's_language.html#transition-graph-label"><span class="std std-ref">Transition Graph</span></a>) and a black-box that can simulate the continuous evolution in each mode (<a class="reference internal" href="dryvr's_language.html#black-box-label"><span class="std std-ref">Black-box Simulator</span></a>).</p>
 <p>The control synthesis problem for DryVR is to find a white-box transition graph given the black-box simulator with addition inputs listed in (<a class="reference internal" href="#input-format-control-label"><span class="std std-ref">Input Format</span></a>).</p>
 <div class="section" id="input-format">
@@ -215,7 +216,7 @@
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">could</span> <span class="ow">not</span> <span class="n">find</span> <span class="n">graph</span>
 </pre></div>
 </div>
-<p>Note that DryVR&#8217;s algorithm is searching the graph randomly, if the system cannot find the graph, it does not mean the graph is not exist with current input. You can try run the algorithm multiple times to get more accurate result.
+<p>Note that DryVR&#8217;s algorithm is searching the graph randomly, if the system cannot find the graph, it does not mean the graph is not exist with current input. You can try run the algorithm multiple times to get more accurate result. Increase RANDSECTIONNUM in DryVR&#8217;s configuration will increase the chance of finding hte transition graph. (See {<a class="reference internal" href="parameters_configuration.html#parameter-label"><span class="std std-ref">Parameters configuration</span></a>})
 If the the system find the transition graph, the system will plot the transition graph and will be stored in &#8220;output/rrtGraph.png&#8221;</p>
 </div>
 <div class="section" id="advanced-tricks-making-control-synthesis-work-on-your-own-black-box-system">
@@ -265,10 +266,10 @@ If the the system find the transition graph, the system will plot the transition
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="example.html" class="btn btn-neutral float-right" title="Examples" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="example.html" class="btn btn-neutral float-right" title="Examples and Performance Evaluation" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="dryvr&#39;s_language.html" class="btn btn-neutral" title="DryVR’s Language" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="dryvr&#39;s_language.html" class="btn btn-neutral" title="DryVR’s Verification Language" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   

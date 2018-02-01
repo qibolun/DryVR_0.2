@@ -1,5 +1,5 @@
-DryVR's Language
-=======================
+DryVR's Verification Language
+===================================
 
 In DryVR,  a hybrid system is modeled as a combination of a white-box that specifies the mode switches (:ref:`transition-graph-label`) and a black-box that can simulate the continuous evolution in each mode (:ref:`black-box-label`).
 
@@ -88,17 +88,21 @@ Example input for the Automatic Emergency Braking System ::
 Output Interpretation
 ^^^^^^^^^^^^^^^^^^^^^^^^^
 
-The tool will print background information like the current mode, transition time, initial set on the run. The final result about goal reached/cannot find graph will be printed at the bottom.
+The tool will print background information like the current mode, transition time, initial set and discrepancy function information on the run. The final result about safe/unsafe will be printed at the bottom.
 
-When the system find transition graph, the final result will look like ::
+The whole verification algorithm will start from doing a few simulations to quickly find the counter-example. If the simulations are all safe, then the main verification process will start. The number of initial simulation can be changed by the user (See {:ref:`parameter-label`}) 
+
+When the system is safe, the final result will look like ::
 
     System is Safe!
 
-When the system is unsafe from simulation, the final result will look like ::
+If the verification result is safe, the cooresponding reachtubes are stored in "output/reachtube.txt"
+
+When the system is unsafe from the initial simulations, the final result will look like ::
 
     Current simulation is not safe. Program halt
 
-When the system is unsafe from verification, the final result will look like ::
+When the system is unsafe from the verification process, the final result will look like ::
 
    System is not safe in Mode [Mode name]
 
@@ -106,10 +110,9 @@ When the system is unknown from verification, the final result will look like ::
 
    Hit refine threshold, system halt, result unknown
 
-If the simulation result is not safe, the unsafe simulation trajectory will be stored in "output/Traj.txt".
-Otherwise the last simulation result will be stored in "Traj.txt".
+If the simulation result is not safe from the initial simulations, the unsafe simulation trajectory will be stored in "output/Traj.txt".
 
-If the verfication result is not safe, the counter example reachtube will be stored in "output/unsafeTube.txt".
+If the verfication result is not safe from the verification process, the counter example reachtube will be stored in "output/unsafeTube.txt".
 
 
 .. _advance-label:

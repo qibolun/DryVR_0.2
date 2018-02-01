@@ -165,12 +165,12 @@
             
   <div class="section" id="parameters-configuration">
 <span id="parameter-label"></span><h1>Parameters configuration<a class="headerlink" href="#parameters-configuration" title="Permalink to this headline">¶</a></h1>
-<p>Parameters in DryVR can be changed by user to get desire result for verification and synthesis.
+<p>Parameters in DryVR can be changed by users to get desire result for verification and synthesis.
 The configuration file is stored in</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">src</span><span class="o">/</span><span class="n">common</span><span class="o">/</span><span class="n">constant</span><span class="o">.</span><span class="n">py</span>
 </pre></div>
 </div>
-<p>The following parameters can be changed user</p>
+<p>The following parameters can be changed by users</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="c1"># Verification constant</span>
 <span class="n">SIMUTESTNUM</span> <span class="o">=</span> <span class="mi">1</span>
 <span class="n">SIMTRACENUM</span> <span class="o">=</span> <span class="mi">10</span>
@@ -182,17 +182,17 @@ The configuration file is stored in</p>
 <span class="n">RANDSECTIONNUM</span> <span class="o">=</span> <span class="mi">3</span>
 </pre></div>
 </div>
-<p>Verification constant:
-- SIMUTESTNUM is the number of hybrid simulation runs at beginning of the verification algorithm to find counter examples.</p>
+<p>Verification constant:</p>
 <ul class="simple">
-<li>SIMTRACENUM is number of sumulation traces generated to learn the sensitity (discrepancy function).</li>
+<li>SIMUTESTNUM is the number of hybrid simulation runs at beginning of the verification algorithm to find counter examples.</li>
+<li>SIMTRACENUM is the number of sumulation traces generated to learn the sensitity (discrepancy function).</li>
 <li>REFINETHRES is the refine threshold for initial set given by user.</li>
-<li>CHILDREFINETHRES is the refine threshold for child node initial set. When DryVR runs verification algorithm, it uses DFS algorithm to go through the transition graph, and generate a child node for vertex in graph, this threshold is for child node.</li>
+<li>CHILDREFINETHRES is threshold of the refinement times for non-initial vertices of the transition graph</li>
 </ul>
 <p>Synthesis Constant:</p>
 <ul class="simple">
-<li>RANDMODENUM is the number of random modes picked to precced synthesis algorithm</li>
-<li>RANDSECTIONNUM is number of time intervals picked as next set of candidate guards</li>
+<li>RANDMODENUM is the number of random modes picked at each time for each candidate guard</li>
+<li>RANDSECTIONNUM is number of time intervals picked as the next set of candidate guards</li>
 </ul>
 </div>
 

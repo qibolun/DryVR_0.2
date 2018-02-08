@@ -89,6 +89,22 @@ class UniformChecker():
 			if self._checkIntersection(lower, upper, mode):
 				if self._checkContainment(lower, upper, mode):
 					# The unsafe region is fully contained
+					# The unsafe region is fully contained
+					print "~~~ System is Unsafe @ t = " + str(self.unsafe_time) + " ~~~"
+					print "X Position: [" + str(lower[1]) + " , " + str(upper[1]) + "]"
+					print "Y Position: [" + str(lower[2]) + " , " + str(upper[2]) + "]"
+					print "Position: [" + str(np.sqrt(lower[1]**2 + lower[2]**2)) + " , " + str(np.sqrt(upper[1]**2 + upper[2]**2)) + "]"
+					print "X Velocity: [" + str(lower[3]) + " , " + str(upper[3]) + "]"
+					print "Y Velocity: [" + str(lower[4]) + " , " + str(upper[4]) + "]"
+					print "Velocity: [" + str(np.sqrt(lower[3]**2 + lower[4]**2)) + " , " + str(np.sqrt(upper[3]**2 + upper[4]**2)) + "]"
+					print "Force_x: [" + str(lower[7]) + " , " + str(upper[7]) + "]"
+					print "Force_y: [" + str(lower[8]) + " , " + str(upper[8]) + "]"
+					print "Force: [" + str(np.sqrt(lower[7]**2 + lower[8]**2)) + " , " + str(np.sqrt(upper[7]**2 + upper[8]**2)) + "]"
+					print "\n\n"
+					print upper
+					print lower
+
+					exit(1)
 					return -1
 				else:
 					# We do not know if it is truly unsafe or not

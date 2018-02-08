@@ -10,6 +10,7 @@ from igraph import *
 from src.common.constant import *
 from src.common.io import writeToFile,readFromFile
 from src.common.utils import randomPoint,calcDelta,calcCenterPoint,buildModeStr
+from src.common.plot_utils import separate_upper_and_lower_tubes
 from src.discrepancy.Global_Disc import *
 from src.discrepancy.PW_Discrepancy import PW_Bloat_to_tube
 
@@ -206,3 +207,32 @@ def clacBloatedTube(modeLabel, initialSet, timeHorizon, simFuc, bloatingMethod, 
 		else:
 			curReachTube = PW_Bloat_to_tube(curDelta, 0, PLOTDIM, traces, kvalue)
 	return curReachTube
+
+### Josh's functions in development to handle bloat tubes that blow up.
+def check_blowup(reach_tube):
+	print "Checking Blowup!"
+	upper, lower = separate_upper_and_lower_tubes(reach_tube)
+	dim = len(upper[0])
+	for i in range(1, dim):
+		init_width = 0
+		j = 0
+		while init_width == 0:
+			j += 1
+			if j > 100:
+				init_width = float('Inf')
+				break
+			init_width = abs(upper[j][i] - lower[j][i])
+		final_width = abs(upper[-2][i] - lower[-2][i])
+		print "Initial:", init_width, "Final:", final_width, "Ratio:", final_width / init_width
+		if final_width / init_width > 100:
+			print "Blowup!!"
+			return True
+	return False
+
+def get_new_set(reach_tube, time):
+	upper, lower = separate_upper_and_lower_tubes(reach_tube)
+	for i in range(len(upper)):
+		if upper[i][0] >= time:
+			return InitialSet(lower[i][1:], upper[i][1:])
+	print 'Error in get_new_set'
+	exit(1)

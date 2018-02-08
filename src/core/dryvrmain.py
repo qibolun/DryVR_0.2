@@ -193,11 +193,24 @@ def verify(inputFile):
 				exit()
 
 			elif safety == UNKNOWN:
-				print curModeStack.mode, "check bloated tube unknown"
-				discardInitial = curModeStack.stack.pop()
-				initOne, initTwo = discardInitial.refine()
-				curModeStack.stack.append(initOne)
-				curModeStack.stack.append(initTwo)
+				# flag = False
+				# print curModeStack.mode, "check bloated tube unknown"
+				# if check_blowup(candidateTube):
+				# 	safe_time = checker.unsafe_time / 4
+				# 	if safe_time > 10:
+				# 		print safe_time
+				# 		new_set = get_new_set(candidateTube, safe_time)
+				# 		print new_set.lowerBound, new_set.upperBound
+				# 		curModeStack.remainTime -= int(safe_time)
+				# 		curModeStack.stack.append(new_set)
+				# 	else:
+				# 		flag = True
+				if True: #flag
+					print curModeStack.mode, "check bloated tube unknown"
+					discardInitial = curModeStack.stack.pop()
+					initOne, initTwo = discardInitial.refine()
+					curModeStack.stack.append(initOne)
+					curModeStack.stack.append(initTwo)
 
 			elif safety == SAFE:
 				print "Mode", curModeStack.mode, "check bloated tube safe"

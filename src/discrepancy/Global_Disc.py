@@ -4,7 +4,7 @@ It is very messy. I will rewrite this part eventually!
 """
 
 from numpy import log, exp
-
+from src.common.utils import trim_traces
 import glpk
 import numpy as np
 import matplotlib.pyplot as plt
@@ -53,24 +53,24 @@ def read_data(traces):
 
     # Align all the traces
     for i in range (len(traces)):
-    	initial_time = traces[i][0][0]
-    	for j in range (len(traces[i])):
-    		traces[i][j][0] = traces[i][j][0] - initial_time
+        initial_time = traces[i][0][0]
+        for j in range (len(traces[i])):
+            traces[i][j][0] = traces[i][j][0] - initial_time
 
     #reasign the start time and end time
     start_time = 0;
     for i in range (len(traces)):
-    	end_time = min(end_time,traces[i][-1][0])
+        end_time = min(end_time,traces[i][-1][0])
 
     #trim all the points after the end time
     traces_trim = [];
     for i in range (len(traces)):
-    	trace_trim = [];
-    	for j in range (len(traces[i])):
-    		if traces[i][j][0] <= end_time + error_thred_time:
-    			trace_trim.append(traces[i][j])
-    	traces_trim.append(trace_trim)
-    	#print(len(trace_trim))
+        trace_trim = [];
+        for j in range (len(traces[i])):
+            if traces[i][j][0] <= end_time + error_thred_time:
+                trace_trim.append(traces[i][j])
+        traces_trim.append(trace_trim)
+        #print(len(trace_trim))
 
     #reasign trace_len
     trace_len = len(trace_trim)
@@ -198,6 +198,7 @@ def k_gamma_calc(A, b, c):
 def Global_Discrepancy(Mode, init_delta_array, plot_flag, plot_dim,traces):
     global dimensions
     read_data(traces)
+    traces = trim_traces(traces)
 
     # The returned value
     k_values = []
@@ -232,6 +233,7 @@ def Global_Discrepancy(Mode, init_delta_array, plot_flag, plot_dim,traces):
         k = k_values[plot_dim-1]
         gamma = gamma_values[plot_dim-1]
         init_delta = init_delta_array[plot_dim-1]
+        traces = trim_traces(traces)
         center_trace = traces[0]
         minval = float('Inf')
         maxval = -float('Inf')
@@ -245,12 +247,19 @@ def Global_Discrepancy(Mode, init_delta_array, plot_flag, plot_dim,traces):
             lower_bound_trace.append(center_trace[i+1][plot_dim]-delta)
 
         #print(upper_bound_trace[-1]-lower_bound_trace[-1])
+        traces = trim_traces(traces)
         center_trace = traces[0]
         time = [row[0] for row in center_trace]
         plt.plot(time,[row[plot_dim] for row in center_trace],'-r',label="center trace") # center trace in color red
         for i in range(1,num_traces):
             trace = traces[i]
             plt.plot(time,[row[plot_dim] for row in trace],'-b') # other traces in color blue
+
+        min_len = min(len(upper_bound_trace), len(lower_bound_trace), len(time))
+        time = time[:min_len]
+        upper_bound_trace = upper_bound_trace[:min_len]
+        lower_bound_trace = lower_bound_trace[:min_len]
+
         plt.plot(time,upper_bound_trace,'-y',label="reach tube bound") # upper bound trace in color yellow
         plt.plot(time,lower_bound_trace,'-y') # lower bound trace in color yellow
         plt.title("k = "+str(k)+"; gamma = "+str(gamma))
@@ -346,6 +355,7 @@ def Bloat_to_tubeNoIO(Mode, k, gamma, init_delta_array, concatTime, traces):
 def bloatToTube(mode, k, gamma, init_delta_array, traces):
     global dimensions
     read_data(traces)
+    traces = trim_traces(traces)
     center_trace = traces[0]
     reach_tube = []
 

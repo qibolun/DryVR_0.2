@@ -82,3 +82,16 @@ def handleReplace(unsafe, keys):
         target = 'self.varDic["'+key+'"]'
         unsafe = unsafe[:idx[0]] + target + unsafe[idx[1]:]
     return unsafe
+
+def trim_traces(traces):
+    ret_traces = []
+    trace_lengths = []
+    for trace in traces:
+        trace_lengths.append(len(trace))
+    trace_len = min(trace_lengths)
+
+
+    for trace in traces:
+        ret_traces.append(trace[:trace_len])
+
+    return ret_traces

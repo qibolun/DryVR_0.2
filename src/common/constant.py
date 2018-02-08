@@ -3,7 +3,7 @@ This file contains constant for DryVR
 """
 
 # Logic constant
-DEBUG = True
+DEBUG = False
 PLOTGRAPH = True
 
 #Flag value
@@ -30,7 +30,7 @@ GLOBAL = "GLOBAL"
 
 # Verification constant
 SIMUTESTNUM = 1
-SIMTRACENUM = 10
+SIMTRACENUM = 4
 REFINETHRES = 10
 CHILDREFINETHRES = 2
 

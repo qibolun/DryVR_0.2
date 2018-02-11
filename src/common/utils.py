@@ -21,17 +21,37 @@ RrtInput = namedtuple(
 )
 
 def importSimFunction(path):
-    # Import simulation function from examples directory
-    # Note the folder in the examples directory must have __init__
-    # And the simulation function must be named TC_Simulate
-    # This is beacuse we treat example as a python package
+    """
+    Load simulation function from given file path
+    Note the folder in the examples directory must have __init__.py
+    And the simulation function must be named TC_Simulate
+    The function should looks like following:
+        TC_Simulate(Mode, initialCondition, time_bound)
+    
+    Args:
+        path (str): Similator directory.
+
+    Returns:
+        simulation function
+
+    """
     path = path.replace('/', '.')
     module = importlib.import_module(path)
     return module.TC_Simulate
 
 def randomPoint(lower, upper):
-    # Pick a random Point between lower and upper bound
-    # This function supports both int or list
+    """
+    Pick a random point between lower and upper bound
+    This function supports both int or list
+    
+    Args:
+        lower (list or int or float): lowerbound.
+        upper (list or int or float): upperbound.
+
+    Returns:
+        random point (either float or list of float)
+
+    """
     if isinstance(lower, int) or isinstance(lower, float):
         return random.uniform(lower, upper)
 
@@ -41,9 +61,18 @@ def randomPoint(lower, upper):
         return [random.uniform(lower[i], upper[i]) for i in range(len(lower))]
 
 def calcDelta(lower, upper):
-    # Calculate the delta value between the lower and upper bound
-    # The function only supports list since we assue initial set is always list
+    """
+    Calculate the delta value between the lower and upper bound
+    The function only supports list since we assue initial set is always list
+    
+    Args:
+        lower (list): lowerbound.
+        upper (list): upperbound.
 
+    Returns:
+        delta (list of float)
+
+    """
     # Convert list into float in case they are int
     lower = [float(val) for val in lower]
     upper = [float(val) for val in upper]
@@ -52,38 +81,88 @@ def calcDelta(lower, upper):
     return [(upper[i]-lower[i])/2 for i in range(len(upper))]
 
 def calcCenterPoint(lower, upper):
-    # Calculate the center point between the lower and upper bound
-    # The function only supports list since we assue initial set is always list
+    """
+    Calculate the center point between the lower and upper bound
+    The function only supports list since we assue initial set is always list
+    
+    Args:
+        lower (list): lowerbound.
+        upper (list): upperbound.
+
+    Returns:
+        delta (list of float)
+
+    """
+
+    # Convert list into float in case they are int
+    lower = [float(val) for val in lower]
+    upper = [float(val) for val in upper]
     assert len(lower) == len(upper), "Center Point List Range Error"
     return [(upper[i]+lower[i])/2 for i in range(len(upper))]
 
 def buildModeStr(g, vertex):
-    # Build a unique string to represent a mode
-    # This should be something like "modeName,modeNum"
+    """
+    Build a unique string to represent a mode
+    This should be something like "modeName,modeNum"
+    
+    Args:
+        g (obj): Graph object.
+        vertex (int): vetex number.
+
+    Returns:
+        a string to represent a mode
+
+    """
     return g.vs[vertex]['label']+','+str(vertex)
 
-def handleReplace(unsafe, keys):
+def handleReplace(inputStr, keys):
+    """
+    Replace variable in inputStr to self.varDic["variable"]
+    For example:
+        input
+            And(y<=0,t>=0.2,v>=-0.1)
+        output: 
+            And(self.varDic["y"]<=0,self.varDic["t"]>=0.2,self.varDic["v"]>=-0.1)
+    
+    Args:
+        inputStr (str): original string need to be replaced
+        keys (list): list of variable strings
+
+    Returns:
+        a string that all variables have been replaced into a desire form
+
+    """
     idxes = []
     i = 0
-    original = unsafe
+    original = inputStr
 
     keys.sort(key=lambda s:len(s))
     for key in keys[::-1]:
-        for i in range(len(unsafe)):
-            if unsafe[i:].startswith(key):
+        for i in range(len(inputStr)):
+            if inputStr[i:].startswith(key):
                 idxes.append((i, i+len(key)))
-                unsafe = unsafe[:i] + "@"*len(key) + unsafe[i+len(key):]
+                inputStr = inputStr[:i] + "@"*len(key) + inputStr[i+len(key):]
 
     idxes = sorted(idxes)
 
-    unsafe = original
+    inputStr = original
     for idx in idxes[::-1]:
-        key = unsafe[idx[0]:idx[1]]
+        key = inputStr[idx[0]:idx[1]]
         target = 'self.varDic["'+key+'"]'
-        unsafe = unsafe[:idx[0]] + target + unsafe[idx[1]:]
-    return unsafe
+        inputStr = inputStr[:idx[0]] + target + inputStr[idx[1]:]
+    return inputStr
 
 def trim_traces(traces):
+    """
+    trim all traces to the same length
+    
+    Args:
+        traces (list): list of traces generated by simulator
+    Returns:
+        traces (list) after trim to the same length
+
+    """
+
     ret_traces = []
     trace_lengths = []
     for trace in traces:

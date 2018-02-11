@@ -8,7 +8,7 @@ import random
 from collections import defaultdict
 from igraph import *
 from src.common.constant import *
-from src.common.io import writeToFile,readFromFile
+from src.common.io import writeReachTubeFile
 from src.common.utils import randomPoint,calcDelta,calcCenterPoint,buildModeStr
 from src.discrepancy.Global_Disc import *
 from src.discrepancy.PW_Discrepancy import PW_Bloat_to_tube
@@ -161,7 +161,7 @@ def simulate(g, initCondition, timeHorizon, guard, simFuc, reseter, initialMode,
 		curTime += transiteTime
 		curVertex = curSuccessor
 
-	writeToFile(simResult, SIMRESULTOUTPUT)
+	writeReachTubeFile(simResult, SIMRESULTOUTPUT)
 	return retval
 
 def clacBloatedTube(modeLabel, initialSet, timeHorizon, simFuc, bloatingMethod, kvalue, guardChecker=None, guardStr=None):

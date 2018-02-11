@@ -5,7 +5,7 @@ import random
 import time
 
 from src.common.constant import *
-from src.common.io import parseInputFile, writeReachTubeFile, parseRrtInputFile, writeRrtResultFile
+from src.common.io import parseVerificationInputFile, writeReachTubeFile, parseRrtInputFile, writeRrtResultFile
 from src.common.utils import importSimFunction, randomPoint, buildModeStr
 from src.core.distance import DistChecker
 from src.core.dryvrcore import *
@@ -17,7 +17,7 @@ from src.core.reset import Reset
 from src.core.uniformchecker import UniformChecker
 
 def verify(inputFile):
-	params = parseInputFile(inputFile)
+	params = parseVerificationInputFile(inputFile)
 	graph = buildGraph(
 		params.vertex,
 		params.edge,

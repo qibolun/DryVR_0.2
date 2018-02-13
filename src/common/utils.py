@@ -152,6 +152,24 @@ def handleReplace(inputStr, keys):
         inputStr = inputStr[:idx[0]] + target + inputStr[idx[1]:]
     return inputStr
 
+def neg(orig):
+    """
+    Neg the original condition
+    For example:
+        input
+            And(y<=0,t>=0.2,v>=-0.1)
+        output: 
+            Not(And(y<=0,t>=0.2,v>=-0.1))
+    
+    Args:
+        orig (str): original string need to be neg
+
+    Returns:
+        a neg condition string
+
+    """
+    return 'Not('+orig+')'
+
 def trim_traces(traces):
     """
     trim all traces to the same length

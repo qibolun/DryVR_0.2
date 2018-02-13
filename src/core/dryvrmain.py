@@ -22,7 +22,6 @@ def verify(inputFile):
 		params.vertex,
 		params.edge,
 		params.guards,
-		params.timeHorizon,
 		params.resets
 	)
 

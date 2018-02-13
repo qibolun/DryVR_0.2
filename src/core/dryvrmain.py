@@ -17,7 +17,21 @@ from src.core.reset import Reset
 from src.core.uniformchecker import UniformChecker
 
 def verify(inputFile):
+	"""
+    DryVR verification algorithm.
+    It does the verification and print out the verify result.
+    
+    Args:
+        inputFile (str): input file path
+
+    Returns:
+        None
+
+    """
+
+    # Parse the input json file and read out the parameters
 	params = parseVerificationInputFile(inputFile)
+	# Build the graph object
 	graph = buildGraph(
 		params.vertex,
 		params.edge,
@@ -25,13 +39,18 @@ def verify(inputFile):
 		params.resets
 	)
 
+	# Make sure the initial mode is specfieid if the graph is dag
+	# FIXME should move this part to input check
+	# Bolun 02/12/2018
 	assert graph.is_dag()==True or params.initialMode!="", "Graph is not DAG and you do not have initial mode!"
 
+	# Import simulation function and build objects
 	simFunction = importSimFunction(params.path)
 	checker = UniformChecker(params.unsafeSet, params.variables)
 	guard = Guard(params.variables)
 	reseter = Reset(params.variables)
 	startTime = time.time()
+
 	# Step 1) Simulation Test
 	# Random generate points, then simulate and check the result
 	for _ in range(SIMUTESTNUM):
@@ -40,6 +59,7 @@ def verify(inputFile):
 		if DEBUG:
 			print 'Random checking round ', _, 'at point ', randInit
 
+		# Do a full hybrid simulation
 		simResult = simulate(
 			graph,
 			randInit,
@@ -50,6 +70,8 @@ def verify(inputFile):
 			params.initialMode,
 			params.deterministic
 		)
+
+		# Check the traces for each mode
 		for mode in simResult:
 			safety = checker.checkSimuTube(simResult[mode], mode)
 			if safety == -1:
@@ -57,30 +79,64 @@ def verify(inputFile):
 				print 'simulation time', time.time()-startTime
 				exit()
 	simEndTime = time.time()
+
 	# Step 2) Check Reach Tube
 	# Calculate the over approximation of the reach tube and check the result
 	print "Verification Begin"
+
+	# Get the initial mode
 	if not params.initialMode:
 		computeOrder =  graph.topological_sorting(mode=OUT)
 		initialMode = computeOrder[0]
 	else:
 		initialMode = graph.vs.find(label=params.initialMode).index
 
+	# Build the initial set stack
 	curModeStack = InitialSetStack(initialMode, REFINETHRES, params.timeHorizon)
 	curModeStack.stack.append(InitialSet(params.initialSet[0], params.initialSet[1]))
 	curModeStack.bloatedTube.append(buildModeStr(graph, initialMode))
 	while True:
+		# backwardFlag can be SAFE, UNSAFE or UNKNWON
+		# If the backwardFlag is SAFE/UNSAFE, means that the children nodes
+		# of current nodes are all SAFE/UNSAFE. If one of the child node is
+		# UNKNWON, then the backwardFlag is UNKNWON.
 		backwardFlag = SAFE
+
 		while curModeStack.stack:
 			print str(curModeStack)
 			print curModeStack.stack[-1]
+
 			if not curModeStack.isValid():
+				# A stack will be invalid if number of initial sets 
+				# is more than refine threshold we set for each stack.
+				# Thus we declare this stack is UNKNOWN
 				print curModeStack.mode, "is not valid anymore"
 				backwardFlag = UNKNOWN
 				break
 
+			# This is condition check to make sure the reach tube output file 
+			# will be readable. Let me try to explain this.
+			# A reachtube outout will be something like following
+			# MODEA->MODEB
+			# [0.0, 1.0, 1.1]
+			# [0.1, 1.1, 1.2]
+			# .....
+			# Once we have refinement, we will add mutiple reach tube to 
+			# this curModeStack.bloatedTube
+			# However, we want to copy MODEA->MODEB so we know thats two different
+			# reach tube from two different refined initial set
+			# The result will be look like following
+			# MODEA->MODEB
+			# [0.0, 1.0, 1.1]
+			# [0.1, 1.1, 1.2]
+			# .....
+			# MODEA->MODEB (this one gets copied!)
+			# [0.0, 1.5, 1.6]
+			# [0.1, 1.6, 1.7]
+			# .....
 			if isinstance(curModeStack.bloatedTube[-1], list):
 				curModeStack.bloatedTube.append(curModeStack.bloatedTube[0])
+
 
 			curStack = curModeStack.stack
 			curVertex = curModeStack.mode
@@ -90,8 +146,9 @@ def verify(inputFile):
 			curSuccessors = graph.successors(curVertex)
 			curInitial = [curStack[-1].lowerBound, curStack[-1].upperBound]
 
-			# Calculate the current bloated tube without considering the guard
 			if len(curSuccessors) == 0:
+				# If there is not successor
+				# Calculate the current bloated tube without considering the guard
 				curBloatedTube = clacBloatedTube(curLabel,
 					curInitial,
 					curRemainTime,
@@ -109,7 +166,7 @@ def verify(inputFile):
 				curGuardStr = graph.es[edgeID]['guards']
 				curResetStr = graph.es[edgeID]['resets']
 				# Calulcate the current bloated tube with guard involved
-				# Pre-check the simulation trace so we can get better bloated reset
+				# Pre-check the simulation trace so we can get better bloated result
 				curBloatedTube = clacBloatedTube(curLabel,
 					curInitial,
 					curRemainTime,
@@ -119,24 +176,22 @@ def verify(inputFile):
 					guardChecker = guard,
 					guardStr = curGuardStr,
 				)
-				# print "final reach tube"
-				# for t in curBloatedTube:
-				# 	print t
 
-				# print curGuardStr
-
+				# Use the guard to calculate the next initial set
 				nextInit, trunckedResult, transiteTime = guard.guardReachTube(
 					curBloatedTube,
 					curGuardStr,
 				)
-				# for t in curBloatedTube:
-				# 	print t
+
 				print graph.vs[curSuccessor]['label'], transiteTime, nextInit or "next initial not found", curGuardStr
+				
 				if nextInit == None:
 					continue
 
+				# Reset the next initial set
 				nextInit = reseter.resetReachTube(curResetStr, nextInit[0], nextInit[1])
 
+				# Build next mode stack
 				nextModeStack = InitialSetStack(
 					curSuccessor,
 					CHILDREFINETHRES,
@@ -149,11 +204,14 @@ def verify(inputFile):
 				if len(trunckedResult)>len(candidateTube):
 					candidateTube = trunckedResult
 
+				# In case of must transition
+				# We need to record shortest tube
+				# As shortest tube is the tube invoke transition
 				if trunckedResult[-1][0] < shortestTime:
 					shortestTime = trunckedResult[-1][0]
 					shortestTube = trunckedResult
 
-			# Handle deterministic system
+			# Handle must transition
 			if params.deterministic and len(curStack[-1].child)>0:
 				nextModesInfo = []
 				for nextMode in curStack[-1].child:
@@ -168,14 +226,10 @@ def verify(inputFile):
 				candidateTube = shortestTube
 				print "Handle deterministic system, next mode", graph.vs[curStack[-1].child.keys()[0]]['label']
 
-			# for line in candidateTube:
-			# 	print line
 			if not candidateTube:
 				candidateTube = curBloatedTube
 
 			# Check the safety for current bloated tube
-			# for t in candidateTube:
-			# 	print t
 			safety = checker.checkReachTube(candidateTube, curLabel)
 			if safety == UNSAFE:
 				print "System is not safe in Mode ", curLabel
@@ -192,6 +246,7 @@ def verify(inputFile):
 				exit()
 
 			elif safety == UNKNOWN:
+				# Refine the current initial set
 				print curModeStack.mode, "check bloated tube unknown"
 				discardInitial = curModeStack.stack.pop()
 				initOne, initTwo = discardInitial.refine()
@@ -209,12 +264,11 @@ def verify(inputFile):
 					curModeStack.bloatedTube += candidateTube
 					curModeStack.stack.pop()
 					print "No child in mode initial, pop"
-			else:
-				print "Something bad happen in Mode ", curLabel
-				exit()
 
 		if curModeStack.parent is None:
+			# We are at head now
 			if backwardFlag == SAFE:
+				# All the nodes are safe
 				print "System is Safe!"
 				writeReachTubeFile(curModeStack.bloatedTube, REACHTUBEOUTPUT)
 				print 'simulation time', simEndTime-startTime
@@ -251,8 +305,23 @@ def verify(inputFile):
 				curModeStack = prevModeStack
 
 
-def rrtSimulation(inputFile):
+def graphSearch(inputFile):
+	"""
+    DryVR controller synthesis algorithm.
+    It does the controller synthesis and print out the search result.
+    tube and transition graph will be stored in ouput folder if algorithm finds one
+    
+    Args:
+        inputFile (str): input file path
+
+    Returns:
+        None
+
+    """
+
+    # Parse the input json file and read out the parameters
 	params = parseRrtInputFile(inputFile)
+	# Get simulation function
 	simFunction = importSimFunction(params.path)
 	checker = UniformChecker(params.unsafeSet, params.variables)
 	goalSetChecker = GoalChecker(params.goalSet, params.variables)
@@ -307,9 +376,6 @@ def rrtSimulation(inputFile):
  			)
  			curBloatedTube = checker.cutTubeTillUnsafe(curBloatedTube)
 
- 			# for t in curBloatedTube:
- 			# 	print t
- 			# exit()
  			# we cannot stay in this mode for min thres time, back to the previous mode
  			if not curBloatedTube or curBloatedTube[-1][0] < minTimeThres:
  				print "bloated tube is not long enough, discard the mode"

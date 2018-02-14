@@ -73,7 +73,7 @@ def verify(inputFile):
 
 		# Check the traces for each mode
 		for mode in simResult:
-			safety = checker.checkSimuTube(simResult[mode], mode)
+			safety = checker.checkSimuTrace(simResult[mode], mode)
 			if safety == -1:
 				print 'Current simulation is not safe. Program halt'
 				print 'simulation time', time.time()-startTime

@@ -36,7 +36,11 @@ def importSimFunction(path):
 
     """
     path = path.replace('/', '.')
-    module = importlib.import_module(path)
+    try:
+        module = importlib.import_module(path)
+    except:
+        print("Import simulation function failed!")
+    
     return module.TC_Simulate
 
 def randomPoint(lower, upper):

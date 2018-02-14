@@ -53,7 +53,7 @@ class UniformChecker():
 				symbolsIdx['t'] = 0
 			self.solverDic[mode].append(symbolsIdx)
 
-	def checkSimuTube(self, traces, mode):
+	def checkSimuTrace(self, traces, mode):
 		"""
 		Check the simulation trace
 

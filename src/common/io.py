@@ -4,7 +4,7 @@ This file contains IO functions for DryVR
 
 import json
 
-from utils import DryVRInput, RrtInput
+from utils import DryVRInput, RrtInput, checkVerificationInput
 
 def writeReachTubeFile(result, path):
     """
@@ -84,14 +84,11 @@ def parseVerificationInputFile(path):
         if not 'bloatingMethod' in data:
             data['bloatingMethod'] = 'GLOBAL'
 
-        # if kvalue is missing, default to 1.0
-        if not 'kvalue' in data:
+        # set a fake kvalue since kvalue is not used in this case
+        if data['bloatingMethod'] == "GLOBAL":
             data['kvalue'] = [1.0 for i in range(len(data['variables']))]
-            if data['bloatingMethod'] == "PW":
-                print "Warning: No kvalue provided when using PW descrepancy, default kvalue 1.0 for all variable."
-                raw_input("Press Enter to continue...")
 
-
+        checkVerificationInput(data)
         return DryVRInput(
             vertex=data["vertex"],
             edge=data["edge"],

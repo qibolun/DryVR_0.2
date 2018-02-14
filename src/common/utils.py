@@ -192,3 +192,27 @@ def trim_traces(traces):
         ret_traces.append(trace[:trace_len])
 
     return ret_traces
+
+def checkVerificationInput(data):
+    """
+    Check verification input to make sure it is valid
+    
+    Args:
+        data (obj): json data object
+    Returns:
+        None
+
+    """
+    assert len(data['variables']) == len(data['initialSet'][0]), "Initial set dimension mismatch"
+
+    assert len(data['variables']) == len(data['initialSet'][1]), "Initial set dimension mismatch"
+
+    assert len(data['edge']) == len(data["guards"]), "guard number mismatch"
+
+    assert len(data['edge']) == len(data["resets"]), "reset number mismatch"
+
+    if data["bloatingMethod"] == "PW":
+        assert 'kvalue' in data, "kvalue need to be provided when bloating method set to PW"
+
+    for i in range(len(data['variables'])):
+        assert data['initialSet'][0][i] < data['initialSet'][1][i], "initial set lowerbound is larger than upperbound"

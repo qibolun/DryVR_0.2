@@ -165,7 +165,7 @@ def simulate(g, initCondition, timeHorizon, guard, simFuc, reseter, initialMode,
 					curGuardStr
 				)
 
-				nextInit = reseter.resetSimTrace(curResetStr, nextInit)
+				nextInit = reseter.resetPoint(curResetStr, nextInit)
 				# If there is a transition
 				if nextInit:
 					nextModes.append((curSuccessor, nextInit, trunckedResult))

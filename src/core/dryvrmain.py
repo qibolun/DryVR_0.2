@@ -189,7 +189,7 @@ def verify(inputFile):
 					continue
 
 				# Reset the next initial set
-				nextInit = reseter.resetReachTube(curResetStr, nextInit[0], nextInit[1])
+				nextInit = reseter.resetSet(curResetStr, nextInit[0], nextInit[1])
 
 				# Build next mode stack
 				nextModeStack = InitialSetStack(

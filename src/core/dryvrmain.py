@@ -263,7 +263,7 @@ def verify(inputFile):
 				else:
 					curModeStack.bloatedTube += candidateTube
 					curModeStack.stack.pop()
-					print "No child in mode initial, pop"
+					print "No child exist in current initial, pop"
 
 		if curModeStack.parent is None:
 			# We are at head now

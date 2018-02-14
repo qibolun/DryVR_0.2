@@ -12,7 +12,7 @@ from src.core.dryvrcore import *
 from src.core.goalchecker import GoalChecker
 from src.core.guard import Guard
 from src.core.initialset import InitialSet
-from src.core.initialsetstack import InitialSetStack, RrtSetStack
+from src.core.initialsetstack import InitialSetStack, GraphSearchNode
 from src.core.reset import Reset
 from src.core.uniformchecker import UniformChecker
 
@@ -333,7 +333,7 @@ def graphSearch(inputFile):
 	minTimeThres = params.minTimeThres
 
  	goalReached = False
- 	curModeStack = RrtSetStack(initialMode, remainTime, minTimeThres, 0)
+ 	curModeStack = GraphSearchNode(initialMode, remainTime, minTimeThres, 0)
  	curModeStack.initial = (params.initialSet[0], params.initialSet[1])
 
  	startTime = time.time()
@@ -412,7 +412,7 @@ def graphSearch(inputFile):
  			randomSections = curModeStack.randomPicker(RANDSECTIONNUM)
  			for mode in randomModes:
  				candidate = curModeStack.candidates[0]
- 				curModeStack.children[mode] = RrtSetStack(mode, curModeStack.remainTime-candidate[1][0], minTimeThres, curModeStack.level+1)
+ 				curModeStack.children[mode] = GraphSearchNode(mode, curModeStack.remainTime-candidate[1][0], minTimeThres, curModeStack.level+1)
  				curModeStack.children[mode].initial = (candidate[0][1:], candidate[1][1:])
  				curModeStack.children[mode].parent = curModeStack
 

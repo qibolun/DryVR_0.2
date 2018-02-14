@@ -18,6 +18,13 @@ class InitialSet():
         self.lowerBound = lower
         self.upperBound = upper
         self.delta = [(upper[i]-lower[i])/2.0 for i in range(len(upper))]
+        # Child point points to children InitialSetStack obj
+        # This it how it works
+        # Since a initial set can generate a reach tube that intersect
+        # with different guards
+        # So there can be multiple children pointers
+        # Therefore this is a dictionary obj
+        # self.child["MODEA"] = InitialSetStack for MODEA
         self.child = {}
         self.bloatedTube = []
     

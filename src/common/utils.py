@@ -219,7 +219,7 @@ def checkVerificationInput(data):
         assert 'kvalue' in data, "kvalue need to be provided when bloating method set to PW"
 
     for i in range(len(data['variables'])):
-        assert data['initialSet'][0][i] < data['initialSet'][1][i], "initial set lowerbound is larger than upperbound"
+        assert data['initialSet'][0][i] <= data['initialSet'][1][i], "initial set lowerbound is larger than upperbound"
 
 
 def checkSynthesisInput(data):
@@ -237,7 +237,7 @@ def checkSynthesisInput(data):
     assert len(data['variables']) == len(data['initialSet'][1]), "Initial set dimension mismatch"
 
     for i in range(len(data['variables'])):
-        assert data['initialSet'][0][i] < data['initialSet'][1][i], "initial set lowerbound is larger than upperbound"
+        assert data['initialSet'][0][i] <= data['initialSet'][1][i], "initial set lowerbound is larger than upperbound"
 
     assert data["minTimeThres"] < data["timeHorizon"], "min time threshold is too large!"
 

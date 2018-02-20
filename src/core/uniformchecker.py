@@ -161,9 +161,14 @@ class UniformChecker():
 			curSolver.add(self.varDic[symbol] >= lower[symbols[symbol]])
 			curSolver.add(self.varDic[symbol] <= upper[symbols[symbol]])
 
-		if curSolver.check() == sat:
+		checkResult = curSolver.check()
+
+		if checkResult == sat:
 			curSolver.pop()
 			return True
+		if checkResult == unknown:
+			print "Z3 return unknown result"
+			exit()
 		else:
 			curSolver.pop()
 			return False
@@ -191,10 +196,14 @@ class UniformChecker():
 		for symbol in symbols:
 			curSolver.add(self.varDic[symbol] >= lower[symbols[symbol]])
 			curSolver.add(self.varDic[symbol] <= upper[symbols[symbol]])
+		checkResult = curSolver.check()
 
-		if curSolver.check() == sat:
+		if checkResult == sat:
 			curSolver.pop()
 			return False
+		if checkResult == unknown:
+			print "Z3 return unknown result"
+			exit()
 		else:
 			curSolver.pop()
 			return True

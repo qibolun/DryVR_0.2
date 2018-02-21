@@ -323,30 +323,48 @@ def graphSearch(inputFile):
 	params = parseRrtInputFile(inputFile)
 	# Get simulation function
 	simFunction = importSimFunction(params.path)
+	# Construct objects
 	checker = UniformChecker(params.unsafeSet, params.variables)
 	goalSetChecker = GoalChecker(params.goalSet, params.variables)
 	distanceChecker = DistChecker(params.goal, params.variables)
 	simFunction = importSimFunction(params.path)
+	# Read the important param
 	availableModes = params.modes
 	initialMode = params.initialMode
 	remainTime = params.timeHorizon
 	minTimeThres = params.minTimeThres
 
+	# Set goal rach flag to False
+	# Once the flag is set to True, It means we find a transition Graph
  	goalReached = False
+
+ 	# Build the initial mode stack
+ 	# Current Method is ugly, we need to get rid of the initial Mode for GraphSearch
+ 	# It helps us to achieve the full automate search
+ 	# TODO Get rid of the initial Mode thing
  	curModeStack = GraphSearchNode(initialMode, remainTime, minTimeThres, 0)
  	curModeStack.initial = (params.initialSet[0], params.initialSet[1])
 
  	startTime = time.time()
  	while True:
+
  		print str(curModeStack)
+
 		if not curModeStack:
 			break
 
+		# Keep check the remain time, if the remain time is less than minTime
+		# It means it is impossible to stay in one mode more than minTime
+		# Therefore, we have to go back to parents
  		if curModeStack.remainTime < minTimeThres:
  			print "Back to previous mode because we cannot stay longer than the min time thres"
  			curModeStack = curModeStack.parent
  			continue
 
+ 		# If we have visit all available modes
+ 		# We should select a new candidate point to proceed
+ 		# If there is no candidates available,
+ 		# Then we can say current node is not valid and go back to parent
  		if len(curModeStack.visited) == len(availableModes):
  			if len(curModeStack.candidates)<2:
  				print "Back to previous mode because we do not have any other modes to pick"
@@ -363,7 +381,7 @@ def graphSearch(inputFile):
 	 			continue
 
 
- 		# Generate bloated tube if we have not done so
+ 		# Generate bloated tube if we haven't done so
  		if not curModeStack.bloatedTube:
  			print "no bloated tube find in this mode, generate one"
  			curBloatedTube = clacBloatedTube(
@@ -374,16 +392,19 @@ def graphSearch(inputFile):
  				params.bloatingMethod,
 				params.kvalue
  			)
+
+ 			# Cut the bloated tube once it intersect with the unsafe set
  			curBloatedTube = checker.cutTubeTillUnsafe(curBloatedTube)
 
- 			# we cannot stay in this mode for min thres time, back to the previous mode
+ 			# If the tube time horizon is less than minTime, it means
+ 			# we cannot stay in this mode for min thres time, back to the parent node
  			if not curBloatedTube or curBloatedTube[-1][0] < minTimeThres:
  				print "bloated tube is not long enough, discard the mode"
  				curModeStack = curModeStack.parent
  				continue
  			curModeStack.bloatedTube = curBloatedTube
 
- 			# Generate candidates point for next mode
+ 			# Generate candidates points for next node
  			randomSections = curModeStack.randomPicker(RANDSECTIONNUM)
 
  			if not randomSections:
@@ -391,6 +412,7 @@ def graphSearch(inputFile):
  				curModeStack = curModeStack.parent
  				continue
 
+ 			# Sort random points based on the distance to the goal set
  			randomSections.sort(key=lambda x: distanceChecker.calcDistance(x[0], x[1]))
  			curModeStack.candidates = randomSections
  			print "Generate new bloated tube and candidate, with candidates length", len(curModeStack.candidates)
@@ -404,6 +426,11 @@ def graphSearch(inputFile):
  				break
 
  		# We have visited all next mode we have, generate some thing new
+ 		# This is acutally not necssary, just shuffle all modes would be enough
+ 		# There should not be RANDMODENUM things since it does not make any difference
+ 		# Anyway, for each candidate point, we will try to visit all modes eventually
+ 		# Therefore, using RANDMODENUM to get some random modes visit first is useless
+ 		# TODO, fix this part
  		if len(curModeStack.visited) == len(curModeStack.children):
  			leftMode = set(availableModes) - set(curModeStack.children.keys())
  			randomModes = random.sample(leftMode, min(len(leftMode), RANDMODENUM))

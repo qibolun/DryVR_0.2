@@ -1,9 +1,9 @@
-DryVR's Control Synthesis
+DryVR's Synthesis Language
 =================================
 
 In DryVR,  a hybrid system is modeled as a combination of a white-box that specifies the mode switches (:ref:`transition-graph-label`) and a black-box that can simulate the continuous evolution in each mode (:ref:`black-box-label`).
 
-The control synthesis problem for DryVR is to find a white-box transition graph given the goal and black-box simulator.
+The control synthesis problem for DryVR is to find a white-box transition graph given the black-box simulator with addition inputs listed in (:ref:`input-format-control-label`). 
 
 .. _input-format-control-label:
 
@@ -28,24 +28,25 @@ The input for DryVR control synthesis is of the form ::
 Example input for the robot in maze example ::
 
     {
-      "modes":["UP", "DOWN", "LEFT", "RIGHT"],
-      "initialMode":"RIGHT",
-      "variables":["x","y"],
-      "initialSet":[[0.0,0.0],[0.1,0.1]],
-      "unsafeSet":"@Allmode:Or(x<0, x>5, y<0, y>5)",
-      "goalSet":"And(x>=3.5, x<=4.5, y>=3.5, y<=4.5)",
-      "timeHorizon":25.0,
+      "modes":["0", "1", "2", "3", "4", "5", "6", "7"],
+      "initialMode":"1",
+      "variables":["x","y","vx","vy"],
+      "initialSet":[[1.0,1.0,1.0,1.0],[1.1,1.0,1.0,1.0]],
+      "unsafeSet":"@Allmode:Or(And(x>=2.0, x<3.0, y>=3.0, y<=4.0), And(x>=3.0, x<=4.0, y>=2.0, y<3.0), x<0, x>5, y<0, y>5)",
+      "goalSet":"And(x>=3.0, x<=4.0, y>=3.0, y<=4.0)",
+      "timeHorizon":10.0,
       "minTimeThres":1.0,
-      "directory":"examples/robot",
-      "goal":[["x","y"],[3.5,3.5],[4.5,4.5]]
+      "directory":"examples/carinmaze",
+      "goal":[["x","y"],[3.0,3.0],[4.0,4.0]]
     }
+
 
 Output Interpretation
 ^^^^^^^^^^^^^^^^^^^^^^^^^
 
-The tool will print background information like the current mode, transition time, initial set on the run. The final result about safe/unsafe will be printed at the bottom.
+The tool will print background information like the current mode, transition time, initial set on the run. The final result about goal reached or not reached will be printed at the bottom.
 
-When the system find the graph that statisfy the requirement, the final result will look like ::
+When the system find the transition graph that statisfy the requirement, the final result will look like ::
 
     goal reached
 
@@ -53,6 +54,7 @@ When the system cannot find graph, the final result will look like ::
 
     could not find graph
 
+Note that DryVR's algorithm is searching the graph randomly, if the system cannot find the graph, it does not mean the graph is not exist with current input. You can try run the algorithm multiple times to get more accurate result. Increase RANDSECTIONNUM in DryVR's configuration will increase the chance of finding hte transition graph. (See {:ref:`parameter-label`}) 
 If the the system find the transition graph, the system will plot the transition graph and will be stored in "output/rrtGraph.png"
 
 Advanced Tricks: Making control synthesis work on your own black-box system
@@ -62,9 +64,9 @@ Creating black box simulator is exactly same as we introduced in DryVR's languag
 
 For the Step 5, instead of creating a verification input file, you need to create control synthesis input file we have discussed in :ref:`input-format-control-label`.
 
-Create a control synthesis problem that specifying the goal. For example, we want the temperature to start within the range :math:`[75,76]`, and we want to reach the goal temperature within the range :math:`[68,72]`, while avoiding temperature larger than :math:`90`. We want to start our search from "On" mode to make it more interesting. We want to reach our goal in bounded time :math:`4s`, and set the minimal staying time to :math:`1s`. 
+For example, Let's set the intial temperature within the range :math:`[75,76]`, and we want to reach the target temperature within the range :math:`[68,72]`, while avoiding temperature that is larger than :math:`90`. We want to start our search from "On" mode and reach our goal in bounded time :math:`4s`, and set the minimal staying time to :math:`1s`. 
 
-he input file can be written as: ::
+the input file can be written as: ::
 
     {	
       "modes":["On", "Off"],
@@ -81,11 +83,11 @@ he input file can be written as: ::
 
 Save the input file in the folder input/rrtinput and name it as temp.json.
 
-Run the verification algorithm using the command: ::
+Run the graph search algorithm using the command: ::
 
     python rrt.py input/rrtinput/temp.json
 
-The system has been checked to be safe with the output: ::
+The graph has been found with the output: ::
 
     goal reached!
 

@@ -3,12 +3,23 @@ This file contains uniform checker class for DryVR
 """
 import sympy
 
-from src.common.utils import handleReplace
+from src.common.constant import *
+from src.common.utils import handleReplace, neg
 from z3 import *
 
 
 class UniformChecker():
+	"""
+    This is class for check unsafe checking
+    """
 	def __init__(self, unsafe, variables):
+		"""
+		Reset class initialization function.
+
+        Args:
+        	unsafe (str): unsafe constraint
+            variables (list): list of varibale name
+        """
 		self.varDic = {'t':Real('t')}
 		self.variables = variables
 		self.solverDic = {}
@@ -26,7 +37,7 @@ class UniformChecker():
 			mode, cond = unsafe.split(':')
 			self.solverDic[mode] = [Solver(), Solver()]
 			self.solverDic[mode][0].add(eval(cond))
-			self.solverDic[mode][1].add(eval(self._neg(cond)))
+			self.solverDic[mode][1].add(eval(neg(cond)))
 
 		unsafeList = original[1:].split('@')
 		for unsafe in unsafeList:
@@ -42,14 +53,17 @@ class UniformChecker():
 				symbolsIdx['t'] = 0
 			self.solverDic[mode].append(symbolsIdx)
 
+	def checkSimuTrace(self, traces, mode):
+		"""
+		Check the simulation trace
 
+        Args:
+            traces (list): simulation traces
+            mode (str): mode need to be checked
 
-	def _neg(self, orig):
-		# Neg the original condition
-		return 'Not('+orig+')'
-
-	def checkSimuTube(self, tube, mode):
-		# Check the simulation trace result
+        Returns:
+            An int for checking result SAFE = 1, UNSAFE = -1
+        """
 		if mode in self.solverDic:
 			curSolver = self.solverDic[mode][0]
 			symbols = self.solverDic[mode][2]
@@ -58,44 +72,58 @@ class UniformChecker():
 			symbols = self.solverDic['Allmode'][2]
 		else:
 			# Return True if we do not check this mode
-			return 1
+			return SAFE
 
-		for t in tube:
+		for t in traces:
 			curSolver.push()
 			for symbol in symbols:
 				curSolver.add(self.varDic[symbol] == t[symbols[symbol]])
-			# curSolver.add(self.varDic['t'] == t[0])
-			# for i in range(1, len(t)):
-			# 	if self.variables[i-1] in symbols:
-			# 		curSolver.add(self.varDic[self.variables[i-1]]==t[i])
 
 			if curSolver.check() == sat:
 				curSolver.pop()
-				return -1
+				return UNSAFE
 			else:
 				curSolver.pop()
-		return 1
+		return SAFE
 
 	def checkReachTube(self, tube, mode):
-		# Check the reach tube result
+		"""
+		Check the bloated reach tube
+
+        Args:
+            tube (list): reach tube
+            mode (str): mode need to be checked
+
+        Returns:
+            An int for checking result SAFE = 1, UNSAFE = -1, UNKNOWN = 0
+        """
 		if not mode in self.solverDic and not 'Allmode' in self.solverDic:
 			# Return True if we do not check this mode
-			return 1
+			return SAFE
 
-		safe = 1
+		safe = SAFE
 		for i in range(0, len(tube), 2):
 			lower = tube[i]
 			upper = tube[i+1]
 			if self._checkIntersection(lower, upper, mode):
 				if self._checkContainment(lower, upper, mode):
 					# The unsafe region is fully contained
-					return -1
+					return UNSAFE
 				else:
 					# We do not know if it is truly unsafe or not
-					safe = 0
+					safe = UNKNOWN
 		return safe
 
 	def cutTubeTillUnsafe(self, tube):
+		"""
+		Truncated the tube before it intersect with unsafe set
+
+        Args:
+            tube (list): reach tube
+
+        Returns:
+            truncated tube
+        """
 		if not self.solverDic:
 			return tube
 		# Cut the reach tube till it intersect with unsafe
@@ -110,7 +138,17 @@ class UniformChecker():
 
 
 	def _checkIntersection(self, lower, upper, mode):
-		# Check if the reach tube intersect with the unsafe region
+		"""
+		Check if current set intersect with the unsafe set
+
+        Args:
+            lower (list): lowerbound of the current set
+            upper (list): upperbound of the current set
+            mode (str): the mode need to be checked
+
+        Returns:
+            Return a bool to indicate if the set intersect with the unsafe set
+        """
 		if mode in self.solverDic:
 			curSolver = self.solverDic[mode][0]
 			symbols = self.solverDic[mode][2]
@@ -123,23 +161,30 @@ class UniformChecker():
 			curSolver.add(self.varDic[symbol] >= lower[symbols[symbol]])
 			curSolver.add(self.varDic[symbol] <= upper[symbols[symbol]])
 
-		# curSolver.add(self.varDic["t"]>=lower[0])
-		# curSolver.add(self.varDic["t"]<=upper[0])
+		checkResult = curSolver.check()
 
-		# for i in range (1,len(lower)):
-		# 	if self.variables[i-1] in symbols:
-		# 		curSolver.add(self.varDic[self.variables[i-1]]>=lower[i])
-		# 		curSolver.add(self.varDic[self.variables[i-1]]<=upper[i])
-
-		if curSolver.check() == sat:
+		if checkResult == sat:
 			curSolver.pop()
 			return True
+		if checkResult == unknown:
+			print "Z3 return unknown result"
+			exit()
 		else:
 			curSolver.pop()
 			return False
 
 	def _checkContainment(self, lower, upper, mode):
-		# Check if the reach tube is fully contained in unsafe region
+		"""
+		Check if the current set is fully contained in unsafe region
+
+        Args:
+            lower (list): lowerbound of the current set
+            upper (list): upperbound of the current set
+            mode (str): the mode need to be checked
+
+        Returns:
+            Return a bool to indicate if the set is fully contained in unsafe region
+        """
 		if mode in self.solverDic:
 			curSolver = self.solverDic[mode][1]
 			symbols = self.solverDic[mode][2]
@@ -151,18 +196,14 @@ class UniformChecker():
 		for symbol in symbols:
 			curSolver.add(self.varDic[symbol] >= lower[symbols[symbol]])
 			curSolver.add(self.varDic[symbol] <= upper[symbols[symbol]])
+		checkResult = curSolver.check()
 
-		# curSolver.add(self.varDic["t"]>=lower[0])
-		# curSolver.add(self.varDic["t"]<=upper[0])
-
-		# for i in range (1,len(lower)):
-		# 	if self.variables[i-1] in symbols:
-		# 		curSolver.add(self.varDic[self.variables[i-1]]>=lower[i])
-		# 		curSolver.add(self.varDic[self.variables[i-1]]<=upper[i])
-
-		if curSolver.check() == sat:
+		if checkResult == sat:
 			curSolver.pop()
 			return False
+		if checkResult == unknown:
+			print "Z3 return unknown result"
+			exit()
 		else:
 			curSolver.pop()
 			return True

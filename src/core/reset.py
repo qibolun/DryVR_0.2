@@ -8,10 +8,30 @@ from sympy.solvers import solve
 from src.common.utils import randomPoint
 
 class Reset():
+	"""
+    This is class for resetting the initial set
+    """
 	def __init__(self, variables):
+		"""
+		Reset class initialization function.
+
+        Args:
+            variables (list): list of varibale name
+        """
 		self.variables = variables
 
-	def resetReachTube(self, rawEqus, lowerBound, upperBound):
+	def resetSet(self, rawEqus, lowerBound, upperBound):
+		"""
+		Reset the initial set based on reset expressions
+
+        Args:
+            rawEqus (list): list of reset expression
+            lowerBound (list): lower bound of the initial set
+            upperBound (list): upper bound of the initial set
+
+        Returns:
+            lower bound and upper bound of the initial set after reset
+        """
 		if not rawEqus:
 			return lowerBound, upperBound
 
@@ -26,18 +46,38 @@ class Reset():
 		return self._mergeResult(lbList, ubList, lowerBound, upperBound)
 
 
-	def resetSimTrace(self, rawEqus, point):
-		# Using reset Reachtube function to handle this case
+	def resetPoint(self, rawEqus, point):
+		"""
+		Reset the initial point based on reset expressions
 
+        Args:
+            rawEqus (list): list of reset expression
+            point (list): the initial point need to be reset
+
+        Returns:
+            a point after reset
+        """
 		if point == [] or not point:
 			return point
-		lower, upper = self.resetReachTube(rawEqus, point, point)
+		lower, upper = self.resetSet(rawEqus, point, point)
 		return randomPoint(lower, upper)
 
 	def _mergeResult(self, lbList, ubList, lowerBound, upperBound):
-		# Merge all reset value
+		"""
+		Merge the a list of reset result
+		Since we allow multiple reset per transition,
+		we get list of reset result, each result corresponding to one reset expression
+		We need to merge all reset result together
 
-		# Copy the list
+        Args:
+            lbList (list): list of reset lowerbound results
+            ubList (list): list of reset upperbound results
+            lowerBound(list): original lowerbound
+			upperBound(list): original upperbound
+
+        Returns:
+            Upperbound and lowerbound after merge the reset result
+        """
 		retLb = list(lowerBound)
 		retUb = list(upperBound)
 
@@ -52,7 +92,24 @@ class Reset():
 		return retLb, retUb
 
 	def _buildAllCombo(self, symbols, lowerBound, upperBound):
-		# This function allows us to build all combination given vars in symbol
+		"""
+		This function allows us to build all combination given symbols
+		For example, if we have a 2-dimension set for dim A and B.
+		symbols = [A,B]
+		lowerBound = [1.0, 2.0]
+		upperBound = [3.0, 4.0]
+		Then the result shold be all possible combination of the value of A and B
+		result:
+			[[1.0, 2.0], [3.0, 4.0], [3.0, 2.0], [1.0, 4.0]] 
+
+        Args:
+            symbols (list): symbols we use to create combo
+            lowerBound (list): lowerbound of the set
+			upperBound (list): upperbound of the set
+
+        Returns:
+            List of combination value
+        """
 		if not symbols:
 			return []
 
@@ -73,8 +130,17 @@ class Reset():
 
 
 	def _handleWrappedReset(self, rawEqu, lowerBound, upperBound):
-		# This is a function to handle reset such as 
-		# V = [0, V+1]
+		"""
+		This is a function to handle reset such as V = [0, V+1]
+
+        Args:
+            rawEqu (str): reset equation
+            lowerBound (list): lowerbound of the set
+			upperBound (list): upperbound of the set
+
+        Returns:
+            Upperbound and lowerbound after the reset
+        """
 		finalEqu = sympy.sympify(rawEqu)
 		rhsSymbols = list(finalEqu.free_symbols)
 		combos = self._buildAllCombo(rhsSymbols, lowerBound, upperBound)
@@ -96,6 +162,17 @@ class Reset():
 
 
 	def _handleReset(self, rawEqu, lowerBound, upperBound):
+		"""
+		Handle the reset with single reset expression
+
+        Args:
+            rawEqu (str): reset equation
+            lowerBound (list): lowerbound of the set
+			upperBound (list): upperbound of the set
+
+        Returns:
+            Upperbound and lowerbound after the reset
+        """
 		equSplit = rawEqu.split('=')
 		lhs, rhs = equSplit[0], equSplit[1]
 		target = sympy.sympify(lhs)

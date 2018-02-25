@@ -8,12 +8,25 @@ import random
 from collections import defaultdict
 from igraph import *
 from src.common.constant import *
-from src.common.io import writeToFile,readFromFile
+from src.common.io import writeReachTubeFile
 from src.common.utils import randomPoint,calcDelta,calcCenterPoint,buildModeStr
 from src.discrepancy.Global_Disc import *
 from src.discrepancy.PW_Discrepancy import PW_Bloat_to_tube
 
-def buildGraph(vertex, edge, guards, timeHorizon, resets):
+def buildGraph(vertex, edge, guards, resets):
+	"""
+    Build graph object using given parameters
+    
+    Args:
+        vertex (list): list of vertex with mode name
+        edge (list): list of edge that connects vertex
+        guards (list): list of guard corresponding to each edge
+        resets (list): list of reset corresponding to each edge
+
+    Returns:
+        graph object
+
+    """
 	g = Graph(directed = True)
 	g.add_vertices(len(vertex))
 	g.add_edges(edge)
@@ -39,7 +52,20 @@ def buildGraph(vertex, edge, guards, timeHorizon, resets):
 	return g
 
 def buildRrtGraph(modes, traces):
-	# Build Rrt Graph based on modes and traces
+	"""
+    Build controller synthesis graph object using given modes and traces.
+    Note this function is very different from buildGraph function.
+    This is white-box transition graph learned from controller synthesis algorithm
+    The reason to build it is to output the transition graph to file
+    
+    Args:
+        modes (list): list of mode name
+        traces (list): list of trace corresponding to each mode
+
+    Returns:
+        None
+
+    """
 	g = Graph(directed = True)
 	g.add_vertices(len(modes))
 	edges = []
@@ -62,9 +88,24 @@ def buildRrtGraph(modes, traces):
 
 
 def simulate(g, initCondition, timeHorizon, guard, simFuc, reseter, initialMode, deterministic):
-	# Taken graph, initial condition, simulate time, guard
-	# simFuc is the simulation function
-	# which takes label, initial condition and simulation time
+	"""
+    This function does a full hybrid simulation
+
+    Args:
+        g (obj): graph object
+        initCondition (list): initial point
+        timeHorizon (float): time horizon to simulate
+        guard (list): list of guard string corresponding to each transition
+        simFuc (function): simulation function
+        reseter (list): list of reset corresponding to each transition
+        initialMode (str): initial mode that simulation starts
+        deterministic (bool) : enable or disable must transition
+
+    Returns:
+        A dictionary obj contains simulation result.
+        Key is mode name and value is the simulation trace.
+
+    """
 
 	retval = defaultdict(list)
 
@@ -125,9 +166,7 @@ def simulate(g, initCondition, timeHorizon, guard, simFuc, reseter, initialMode,
 					curGuardStr
 				)
 
-				# for line in trunckedResult:
-				# 	print line 
-				nextInit = reseter.resetSimTrace(curResetStr, nextInit)
+				nextInit = reseter.resetPoint(curResetStr, nextInit)
 				# If there is a transition
 				if nextInit:
 					nextModes.append((curSuccessor, nextInit, trunckedResult))
@@ -162,44 +201,50 @@ def simulate(g, initCondition, timeHorizon, guard, simFuc, reseter, initialMode,
 		curTime += transiteTime
 		curVertex = curSuccessor
 
-	writeToFile(simResult, SIMRESULTOUTPUT)
+	writeReachTubeFile(simResult, SIMRESULTOUTPUT)
 	return retval
 
 def clacBloatedTube(modeLabel, initialSet, timeHorizon, simFuc, bloatingMethod, kvalue, guardChecker=None, guardStr=None):
-	# Taking modeLabel, initial set, time horizon information
-	# Calculate the bloated tube
+	"""
+    This function calculate the reach tube for single given mode
+
+    Args:
+        modeLabel (str): mode name
+        initialSet (list): a list contains upper and lower bound of the initial set
+        timeHorizon (float): time horizon to simulate
+        simFuc (function): simulation function
+        bloatingMethod (str): determine the bloating method for reach tube, either GLOBAL or PW
+        kvalue (list): list of float used when bloating method set to PW
+        guardChecker (obj): guard check object
+        guardStr (str): guard string
+       
+    Returns:
+        Bloated reach tube
+
+    """
 	curCenter = calcCenterPoint(initialSet[0], initialSet[1])
 	curDelta = calcDelta(initialSet[0], initialSet[1])
 	traces = []
 	traces.append(simFuc(modeLabel, curCenter, timeHorizon))
+	# Simulate SIMTRACENUM times to learn the sensitivity
 	for _ in range(SIMTRACENUM):
 		newInitPoint = randomPoint(initialSet[0], initialSet[1])
-		# print "========new rad point=========="
-		# print newInitPoint
-		#print newInitPoint
 		traces.append(simFuc(modeLabel, newInitPoint, timeHorizon))
 
 	if guardChecker is not None:
 		# pre truncked traces to get better bloat result
-		# print guardStr, "trace check"
 		maxIdx = -1
 		for trace in traces:
-			# print "simulation trace"
-			# for t in trace:
-			# 	print t
 			retIdx = guardChecker.guardSimuTraceTime(trace, guardStr)
 			maxIdx = max(maxIdx, retIdx+1)
-		# print "max Idx is ", maxIdx
 		for i in range(len(traces)):
 			traces[i] = traces[i][:maxIdx]
-		#print traces
 
 	if bloatingMethod == GLOBAL:
 		if BLOATDEBUG:
 			k, gamma = Global_Discrepancy(modeLabel, curDelta, 1, PLOTDIM, traces)
 		else:
 			k, gamma = Global_Discrepancy(modeLabel, curDelta, 0, PLOTDIM, traces)
-		# print curDelta
 		curReachTube = bloatToTube(modeLabel, k, gamma, curDelta, traces)
 	elif bloatingMethod == PW:
 		if BLOATDEBUG:

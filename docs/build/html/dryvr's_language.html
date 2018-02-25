@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>DryVR’s Language &mdash; DryVR 0.2 documentation</title>
+  <title>DryVR’s Verification Language &mdash; DryVR 2.0 documentation</title>
   
 
   
@@ -35,8 +35,8 @@
         <link rel="index" title="Index"
               href="genindex.html"/>
         <link rel="search" title="Search" href="search.html"/>
-    <link rel="top" title="DryVR 0.2 documentation" href="index.html"/>
-        <link rel="next" title="DryVR’s Control Synthesis" href="dryvr&#39;s_control_synthesis.html"/>
+    <link rel="top" title="DryVR 2.0 documentation" href="index.html"/>
+        <link rel="next" title="DryVR’s Synthesis Language" href="dryvr&#39;s_control_synthesis.html"/>
         <link rel="prev" title="Usage" href="usage.html"/> 
 
   
@@ -66,7 +66,7 @@
             
             
               <div class="version">
-                0.2
+                2.0
               </div>
             
           
@@ -92,9 +92,9 @@
             
               <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="status.html">Status</a></li>
-<li class="toctree-l1"><a class="reference internal" href="installtion.html">Installtion</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installtion.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="usage.html">Usage</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">DryVR&#8217;s Language</a><ul>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">DryVR&#8217;s Verification Language</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#black-box-simulator">Black-box Simulator</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#transition-graph">Transition Graph</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#input-format">Input Format</a></li>
@@ -102,10 +102,11 @@
 <li class="toctree-l2"><a class="reference internal" href="#advanced-tricks-verify-your-own-black-box-system">Advanced Tricks: Verify your own black-box system</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="dryvr's_control_synthesis.html">DryVR&#8217;s Control Synthesis</a></li>
-<li class="toctree-l1"><a class="reference internal" href="example.html">Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="dryvr's_control_synthesis.html">DryVR&#8217;s Synthesis Language</a></li>
+<li class="toctree-l1"><a class="reference internal" href="example.html">Examples and Performance Evaluation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="parameters_configuration.html">Parameters configuration</a></li>
 <li class="toctree-l1"><a class="reference internal" href="publications.html">Publications</a></li>
-<li class="toctree-l1"><a class="reference internal" href="contact.html">Contact</a></li>
+<li class="toctree-l1"><a class="reference internal" href="contact.html">People Involved</a></li>
 </ul>
 
             
@@ -150,7 +151,7 @@
     
       <li><a href="index.html">Docs</a> &raquo;</li>
         
-      <li>DryVR&#8217;s Language</li>
+      <li>DryVR&#8217;s Verification Language</li>
     
     
       <li class="wy-breadcrumbs-aside">
@@ -169,8 +170,8 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <div class="section" id="dryvr-s-language">
-<h1>DryVR&#8217;s Language<a class="headerlink" href="#dryvr-s-language" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="dryvr-s-verification-language">
+<h1>DryVR&#8217;s Verification Language<a class="headerlink" href="#dryvr-s-verification-language" title="Permalink to this headline">¶</a></h1>
 <p>In DryVR,  a hybrid system is modeled as a combination of a white-box that specifies the mode switches (<a class="reference internal" href="#transition-graph-label"><span class="std std-ref">Transition Graph</span></a>) and a black-box that can simulate the continuous evolution in each mode (<a class="reference internal" href="#black-box-label"><span class="std std-ref">Black-box Simulator</span></a>).</p>
 <div class="section" id="black-box-simulator">
 <span id="black-box-label"></span><h2>Black-box Simulator<a class="headerlink" href="#black-box-simulator" title="Permalink to this headline">¶</a></h2>
@@ -194,9 +195,9 @@ as the simulation trajectory of the system in the given mode starting from <img 
 <a class="reference internal image-reference" href="_images/curgraph.png"><img alt="transition graph" src="_images/curgraph.png" style="width: 360.0px; height: 360.0px;" /></a>
 <p class="caption"><span class="caption-text">The transition of Automatic Emergency Braking (AEB) system</span></p>
 </div>
-<p>A transition graph is a labeled, directed acyclic graph as shown on the right. The vertex labels (red nodes in the graph) specify the modes of the system, and the edge labels specify the transition time from the predecessor node to the successor node.</p>
+<p>A transition graph is a labeled, directed graph as shown on the right. The vertex labels (red nodes in the graph) specify the modes of the system, and the edge labels specify the guard and reset from the predecessor node to the successor node.</p>
 <p>The transition graph shown on the right defines an automatic emergency braking system. Car1 is driving ahead of Car2 on a straight lane. Initially, both car1 and car2 are in the constant speed mode (Const;Const). Within a short amount of time ([0,0.1]s) Car1 transits into brake mode while Car2 remains in the cruise mode (Brk;Const). After [0.8,0.9]s, Car2 will react by braking as well so both cars are in the brake mode (Brk;Brk).</p>
-<p>The transition graph will be generated automatically by DryVR and stored in the tool&#8217;s root directory as curgraph.png</p>
+<p>The transition graph will be generated automatically by DryVR and stored in the tool&#8217;s root directory as curGraph.png</p>
 </div>
 <div class="section" id="input-format">
 <span id="input-format-label"></span><h2>Input Format<a class="headerlink" href="#input-format" title="Permalink to this headline">¶</a></h2>
@@ -237,16 +238,18 @@ as the simulation trajectory of the system in the given mode starting from <img 
 </div>
 <div class="section" id="output-interpretation">
 <h2>Output Interpretation<a class="headerlink" href="#output-interpretation" title="Permalink to this headline">¶</a></h2>
-<p>The tool will print background information like the current mode, transition time, initial set on the run. The final result about goal reached/cannot find graph will be printed at the bottom.</p>
-<p>When the system find transition graph, the final result will look like</p>
+<p>The tool will print background information like the current mode, transition time, initial set and discrepancy function information on the run. The final result about safe/unsafe will be printed at the bottom.</p>
+<p>The whole verification algorithm will start from doing a few simulations to quickly find the counter-example. If the simulations are all safe, then the main verification process will start. The number of initial simulation can be changed by the user (See {<a class="reference internal" href="parameters_configuration.html#parameter-label"><span class="std std-ref">Parameters configuration</span></a>})</p>
+<p>When the system is safe, the final result will look like</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span>System is Safe!
 </pre></div>
 </div>
-<p>When the system is unsafe from simulation, the final result will look like</p>
+<p>If the verification result is safe, the cooresponding reachtubes are stored in &#8220;output/reachtube.txt&#8221;</p>
+<p>When the system is unsafe from the initial simulations, the final result will look like</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">Current</span> <span class="n">simulation</span> <span class="ow">is</span> <span class="ow">not</span> <span class="n">safe</span><span class="o">.</span> <span class="n">Program</span> <span class="n">halt</span>
 </pre></div>
 </div>
-<p>When the system is unsafe from verification, the final result will look like</p>
+<p>When the system is unsafe from the verification process, the final result will look like</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">System</span> <span class="ow">is</span> <span class="ow">not</span> <span class="n">safe</span> <span class="ow">in</span> <span class="n">Mode</span> <span class="p">[</span><span class="n">Mode</span> <span class="n">name</span><span class="p">]</span>
 </pre></div>
 </div>
@@ -254,9 +257,8 @@ as the simulation trajectory of the system in the given mode starting from <img 
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">Hit</span> <span class="n">refine</span> <span class="n">threshold</span><span class="p">,</span> <span class="n">system</span> <span class="n">halt</span><span class="p">,</span> <span class="n">result</span> <span class="n">unknown</span>
 </pre></div>
 </div>
-<p>If the simulation result is not safe, the unsafe simulation trajectory will be stored in &#8220;output/Traj.txt&#8221;.
-Otherwise the last simulation result will be stored in &#8220;Traj.txt&#8221;.</p>
-<p>If the verfication result is not safe, the counter example reachtube will be stored in &#8220;output/unsafeTube.txt&#8221;.</p>
+<p>If the simulation result is not safe from the initial simulations, the unsafe simulation trajectory will be stored in &#8220;output/Traj.txt&#8221;.</p>
+<p>If the verfication result is not safe from the verification process, the counter example reachtube will be stored in &#8220;output/unsafeTube.txt&#8221;.</p>
 </div>
 <div class="section" id="advanced-tricks-verify-your-own-black-box-system">
 <span id="advance-label"></span><h2>Advanced Tricks: Verify your own black-box system<a class="headerlink" href="#advanced-tricks-verify-your-own-black-box-system" title="Permalink to this headline">¶</a></h2>
@@ -346,7 +348,7 @@ Go to inputFile folder and create an input file for your new model using the for
   <span class="s2">&quot;variables&quot;</span><span class="p">:[</span><span class="s2">&quot;temp&quot;</span><span class="p">],</span>
   <span class="s2">&quot;guards&quot;</span><span class="p">:[</span><span class="s2">&quot;And(t&gt;1.0,t&lt;=1.1)&quot;</span><span class="p">,</span><span class="s2">&quot;And(t&gt;1.0,t&lt;=1.1)&quot;</span><span class="p">],</span>
   <span class="s2">&quot;initialSet&quot;</span><span class="p">:[[</span><span class="mf">75.0</span><span class="p">],[</span><span class="mf">76.0</span><span class="p">]],</span>
-  <span class="s2">&quot;unsafeSet&quot;</span><span class="p">:</span><span class="s2">&quot;@On:temp&gt;91@Off:temp&gt;91&quot;</span><span class="p">,</span>
+  <span class="s2">&quot;unsafeSet&quot;</span><span class="p">:</span><span class="s2">&quot;@Allmode:temp&gt;91&quot;</span><span class="p">,</span>
   <span class="s2">&quot;timeHorizon&quot;</span><span class="p">:</span><span class="mf">3.5</span><span class="p">,</span>
   <span class="s2">&quot;directory&quot;</span><span class="p">:</span><span class="s2">&quot;examples/Thermostats&quot;</span>
 <span class="p">}</span>
@@ -384,7 +386,7 @@ Run the verification algorithm using the command:</p>
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="dryvr&#39;s_control_synthesis.html" class="btn btn-neutral float-right" title="DryVR’s Control Synthesis" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="dryvr&#39;s_control_synthesis.html" class="btn btn-neutral float-right" title="DryVR’s Synthesis Language" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
         <a href="usage.html" class="btn btn-neutral" title="Usage" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
@@ -418,7 +420,7 @@ Run the verification algorithm using the command:</p>
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'./',
-            VERSION:'0.2',
+            VERSION:'2.0',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
             HAS_SOURCE:  true,

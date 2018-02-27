@@ -9,7 +9,7 @@ from collections import defaultdict
 from igraph import *
 from src.common.constant import *
 from src.common.io import writeReachTubeFile
-from src.common.utils import randomPoint,calcDelta,calcCenterPoint,buildModeStr
+from src.common.utils import randomPoint,calcDelta,calcCenterPoint,buildModeStr,trimTraces
 from src.discrepancy.Global_Disc import *
 from src.discrepancy.PW_Discrepancy import PW_Bloat_to_tube
 
@@ -230,6 +230,8 @@ def clacBloatedTube(modeLabel, initialSet, timeHorizon, simFuc, bloatingMethod, 
 		newInitPoint = randomPoint(initialSet[0], initialSet[1])
 		traces.append(simFuc(modeLabel, newInitPoint, timeHorizon))
 
+	# Trim the trace to the same length
+	traces = trimTraces(traces)
 	if guardChecker is not None:
 		# pre truncked traces to get better bloat result
 		maxIdx = -1

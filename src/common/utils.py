@@ -174,7 +174,7 @@ def neg(orig):
     """
     return 'Not('+orig+')'
 
-def trim_traces(traces):
+def trimTraces(traces):
     """
     trim all traces to the same length
     

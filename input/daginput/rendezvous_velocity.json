@@ -1,0 +1,13 @@
+{
+	"vertex":["PhaseI"],
+	"edge":[],
+	"variables":["x", "y", "dot_x", "dot_y", "x_double_dot", "y_double_dot", "force_x", "force_y"],
+	"guards":[],
+	"initialSet":[
+		[ 0.0, -9005.0, 0.15, 0.15, 0.0, 0.0, 0.0, 0.0 ],
+		[ 1.0, -9000.0, 0.20, 0.20, 0.1, 0.1, 0.0, 0.0 ]
+	],
+	"unsafeSet":"@Allmode:And( (x*x+y*y)<=50 , (dot_x * dot_x + dot_y * dot_y)>=5 )",
+	"timeHorizon":11000,
+	"directory":"examples/AF_rendezvous"
+}

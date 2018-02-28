@@ -1,6 +1,5 @@
 """
 This file contains core bloating algorithm for dryvr
-It is very messy. I will rewrite this part eventually!
 """
 
 from numpy import log, exp

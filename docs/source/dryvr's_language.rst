@@ -1,5 +1,5 @@
-DryVR's Language
-=======================
+DryVR's Verification Language
+===================================
 
 In DryVR,  a hybrid system is modeled as a combination of a white-box that specifies the mode switches (:ref:`transition-graph-label`) and a black-box that can simulate the continuous evolution in each mode (:ref:`black-box-label`).
 
@@ -36,11 +36,11 @@ Transition Graph
     The transition of Automatic Emergency Braking (AEB) system
 
 
-A transition graph is a labeled, directed acyclic graph as shown on the right. The vertex labels (red nodes in the graph) specify the modes of the system, and the edge labels specify the transition time from the predecessor node to the successor node.
+A transition graph is a labeled, directed graph as shown on the right. The vertex labels (red nodes in the graph) specify the modes of the system, and the edge labels specify the guard and reset from the predecessor node to the successor node.
 
 The transition graph shown on the right defines an automatic emergency braking system. Car1 is driving ahead of Car2 on a straight lane. Initially, both car1 and car2 are in the constant speed mode (Const;Const). Within a short amount of time ([0,0.1]s) Car1 transits into brake mode while Car2 remains in the cruise mode (Brk;Const). After [0.8,0.9]s, Car2 will react by braking as well so both cars are in the brake mode (Brk;Brk).
 
-The transition graph will be generated automatically by DryVR and stored in the tool's root directory as curgraph.png
+The transition graph will be generated automatically by DryVR and stored in the tool's root directory as curGraph.png
 
 
 .. _input-format-label:
@@ -88,17 +88,21 @@ Example input for the Automatic Emergency Braking System ::
 Output Interpretation
 ^^^^^^^^^^^^^^^^^^^^^^^^^
 
-The tool will print background information like the current mode, transition time, initial set on the run. The final result about goal reached/cannot find graph will be printed at the bottom.
+The tool will print background information like the current mode, transition time, initial set and discrepancy function information on the run. The final result about safe/unsafe will be printed at the bottom.
 
-When the system find transition graph, the final result will look like ::
+The whole verification algorithm will start from doing a few simulations to quickly find the counter-example. If the simulations are all safe, then the main verification process will start. The number of initial simulation can be changed by the user (See {:ref:`parameter-label`}) 
+
+When the system is safe, the final result will look like ::
 
     System is Safe!
 
-When the system is unsafe from simulation, the final result will look like ::
+If the verification result is safe, the cooresponding reachtubes are stored in "output/reachtube.txt"
+
+When the system is unsafe from the initial simulations, the final result will look like ::
 
     Current simulation is not safe. Program halt
 
-When the system is unsafe from verification, the final result will look like ::
+When the system is unsafe from the verification process, the final result will look like ::
 
    System is not safe in Mode [Mode name]
 
@@ -106,10 +110,9 @@ When the system is unknown from verification, the final result will look like ::
 
    Hit refine threshold, system halt, result unknown
 
-If the simulation result is not safe, the unsafe simulation trajectory will be stored in "output/Traj.txt".
-Otherwise the last simulation result will be stored in "Traj.txt".
+If the simulation result is not safe from the initial simulations, the unsafe simulation trajectory will be stored in "output/Traj.txt".
 
-If the verfication result is not safe, the counter example reachtube will be stored in "output/unsafeTube.txt".
+If the verfication result is not safe from the verification process, the counter example reachtube will be stored in "output/unsafeTube.txt".
 
 
 .. _advance-label:
@@ -215,7 +218,7 @@ The input file can be written as: ::
       "variables":["temp"],
       "guards":["And(t>1.0,t<=1.1)","And(t>1.0,t<=1.1)"],
       "initialSet":[[75.0],[76.0]],
-      "unsafeSet":"@On:temp>91@Off:temp>91",
+      "unsafeSet":"@Allmode:temp>91",
       "timeHorizon":3.5,
       "directory":"examples/Thermostats"
     }

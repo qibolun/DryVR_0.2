@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Examples &mdash; DryVR 0.2 documentation</title>
+  <title>Examples and Performance Evaluation &mdash; DryVR 2.0 documentation</title>
   
 
   
@@ -35,9 +35,9 @@
         <link rel="index" title="Index"
               href="genindex.html"/>
         <link rel="search" title="Search" href="search.html"/>
-    <link rel="top" title="DryVR 0.2 documentation" href="index.html"/>
-        <link rel="next" title="Publications" href="publications.html"/>
-        <link rel="prev" title="DryVR’s Control Synthesis" href="dryvr&#39;s_control_synthesis.html"/> 
+    <link rel="top" title="DryVR 2.0 documentation" href="index.html"/>
+        <link rel="next" title="Parameters configuration" href="parameters_configuration.html"/>
+        <link rel="prev" title="DryVR’s Synthesis Language" href="dryvr&#39;s_control_synthesis.html"/> 
 
   
   <script src="_static/js/modernizr.min.js"></script>
@@ -66,7 +66,7 @@
             
             
               <div class="version">
-                0.2
+                2.0
               </div>
             
           
@@ -92,22 +92,26 @@
             
               <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="status.html">Status</a></li>
-<li class="toctree-l1"><a class="reference internal" href="installtion.html">Installtion</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installtion.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="usage.html">Usage</a></li>
-<li class="toctree-l1"><a class="reference internal" href="dryvr's_language.html">DryVR&#8217;s Language</a></li>
-<li class="toctree-l1"><a class="reference internal" href="dryvr's_control_synthesis.html">DryVR&#8217;s Control Synthesis</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Examples</a><ul>
+<li class="toctree-l1"><a class="reference internal" href="dryvr's_language.html">DryVR&#8217;s Verification Language</a></li>
+<li class="toctree-l1"><a class="reference internal" href="dryvr's_control_synthesis.html">DryVR&#8217;s Synthesis Language</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Examples and Performance Evaluation</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#getting-started-simple-automatic-emergency-braking">Getting started: Simple Automatic Emergency Braking</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#safety-verification-of-the-aeb-system">Safety Verification of the AEB System</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#verification-result-of-the-aeb-system">Verification Result of the AEB System</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="#the-autonomous-vehicle-benchmark">The Autonomous Vehicle Benchmark</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#other-examples">Other examples</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#verification-examples">Verification Examples</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#verification-peformance-evaluation">Verification Peformance Evaluation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#synthesis-examples">Synthesis Examples</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#synthesis-performance-evaluation">Synthesis Performance Evaluation</a></li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="parameters_configuration.html">Parameters configuration</a></li>
 <li class="toctree-l1"><a class="reference internal" href="publications.html">Publications</a></li>
-<li class="toctree-l1"><a class="reference internal" href="contact.html">Contact</a></li>
+<li class="toctree-l1"><a class="reference internal" href="contact.html">People Involved</a></li>
 </ul>
 
             
@@ -152,7 +156,7 @@
     
       <li><a href="index.html">Docs</a> &raquo;</li>
         
-      <li>Examples</li>
+      <li>Examples and Performance Evaluation</li>
     
     
       <li class="wy-breadcrumbs-aside">
@@ -171,8 +175,8 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <div class="section" id="examples">
-<span id="example-label"></span><h1>Examples<a class="headerlink" href="#examples" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="examples-and-performance-evaluation">
+<span id="example-label"></span><h1>Examples and Performance Evaluation<a class="headerlink" href="#examples-and-performance-evaluation" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="getting-started-simple-automatic-emergency-braking">
 <h2>Getting started: Simple Automatic Emergency Braking<a class="headerlink" href="#getting-started-simple-automatic-emergency-braking" title="Permalink to this headline">¶</a></h2>
 <div class="figure align-center" id="id1">
@@ -213,41 +217,265 @@ For each vehicle, we mainly analyze four variables: absolute position
 (<img class="math" src="_images/math/fd6ecc3c8de21a8b9fa313de0689ccbab4eb89be.png" alt="sx"/>) and velocity (<img class="math" src="_images/math/9d56bbbc3f4be9472b38cbb6cba75877a4c49a00.png" alt="vx"/>) orthogonal to the road direction
 (<img class="math" src="_images/math/a59f68a4202623bb859a7093f0316bf466e6f75d.png" alt="x"/>-axis), and absolute position (<img class="math" src="_images/math/40a6b534f5e3fadfa3bf3bd9f1c25010346afb5b.png" alt="sy"/>) and velocity (<img class="math" src="_images/math/eac614ff2950b134eb3f03433d495c3700e14f66.png" alt="vy"/>) along the
 road direction (<img class="math" src="_images/math/276f7e256cbddeb81eee42e1efc348f3cb4ab5f8.png" alt="y"/>-axis). The throttle and steering is captured using the four variables.</p>
-<p>Due to the MATLAB license issue, we are not able to release the Simulink benchmarks we have used in the publications. We have since reproduced the ADAS and autonomous vehicle benchmark in Python and connect it with DryVR as a simulator. We are hoping to move more examples to Python in the near future.</p>
-<p>For more details, please refer to Section 2.5 of the CAV2017 paper.</p>
 </div>
-<div class="section" id="other-examples">
-<h2>Other examples<a class="headerlink" href="#other-examples" title="Permalink to this headline">¶</a></h2>
-<p>Next, we briefly introduce other examples included in the inputFile folder and their verification results. Note that as the algorithm uses nondeterministic method to generate traces, the verification result like refine times, running time may vary between different runs.</p>
-<p><strong>AutoPassing</strong></p>
-<p>Initial condition: Car1 is behind Car2 in the same lane, with Car1 in Acc1 and Car2 in Const.</p>
-<p>Transition graph: Car1 goes through the mode sequence TurnLeft, Acc1, Brk, and  TurnRight, Const with specified time intervals in each mode to complete the overtake maneuver. If Car2 switches to Acc1 before Car1 enters Acc1 then Car1 aborts and changes back to right lane. If Car2 switches to Dec before Car1 enters TurnLeft, then Car1 should adjust the time to switch to TurnLeft to avoid collision.</p>
-<p>Requirement: Car1 overtakes Car2 or abort the overtaking while maintaining minimal safe separation.</p>
-<p>Inputfiles:</p>
+<div class="section" id="verification-examples">
+<h2>Verification Examples<a class="headerlink" href="#verification-examples" title="Permalink to this headline">¶</a></h2>
+<p>DryVR now comes with more than two dozen interesting examples, including</p>
 <ul class="simple">
-<li>input_AutoPassingSafe: safe</li>
-<li>input_AutoPassingUnsafe: unsafe</li>
-<li>input_AutoPassingSimpleSafe: safe</li>
-<li>input_AutoPassingSimpleUnsafe: unsafe</li>
+<li>6 mixed-signal circuit models with hundreds of nonlinear terms in the dynamics and both time and state dependent transitions</li>
+<li>6 high dimensional linear system models (up to 384 dimensions)derived from fields such as civil engineering and robotics</li>
+<li>an 8-dimensional hybrid vehicle lane switch model modeling a vehicle switches its lane on highway if it get too close to another vehicle in front of it</li>
+<li>a set of standard 2-7 dimensional benchmarks</li>
 </ul>
-<p><strong>Merge</strong></p>
-<p>Initial condition: Car1 is in left and Car2 is in the right lane; initial positions and speeds are in some range; Car1 is in Const mode, and Car2 is in Const mode.</p>
-<p>Transition graph:  Car1 goes through the mode Acc1, TurnRight, Const with specified intervals of time to transit from mode to another mode. Car2 goes through the mode Acc1 or Const, TurnRight, Const with specified intervals of time to transit from mode to another mode. Car1 will merge ahead of Car2 of behind of Car2 based on cars&#8217;s mode transition.</p>
-<p>Requirement: Car1 merges ahead or behind of Car2 and maintains at least a given safe separation.</p>
-<p>InputFiles:</p>
+<p>The simulators for these models are also available in the folder &#8220;examples&#8221; under the root directory, and the input files are in the folder &#8220;input/daginput&#8221; and &#8220;input/nondaginput&#8221;.</p>
+</div>
+<div class="section" id="verification-peformance-evaluation">
+<h2>Verification Peformance Evaluation<a class="headerlink" href="#verification-peformance-evaluation" title="Permalink to this headline">¶</a></h2>
+<p>We have measured performance for examples come with DryVR 2.0.
+Peformance is measured using computer with i7 6600u, 16gb ram, Ubuntu 16.04 OS.</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="35%" />
+<col width="12%" />
+<col width="26%" />
+<col width="13%" />
+<col width="13%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td>Model</td>
+<td>Dimension</td>
+<td>Time for 1 simulation</td>
+<td>Total Time</td>
+<td>Flow* time</td>
+</tr>
+<tr class="row-even"><td>Biological model I</td>
+<td>7</td>
+<td>0.01s</td>
+<td>0.04s</td>
+<td>66.4s</td>
+</tr>
+<tr class="row-odd"><td>Biological model II</td>
+<td>7</td>
+<td>0.01s</td>
+<td>0.04s</td>
+<td>223.4s</td>
+</tr>
+<tr class="row-even"><td>Coupled Vanderpol</td>
+<td>4</td>
+<td>0.03s</td>
+<td>0.14s</td>
+<td>1038.3s</td>
+</tr>
+<tr class="row-odd"><td>Spring pendulum</td>
+<td>4</td>
+<td>0.05s</td>
+<td>0.16s</td>
+<td>1377.5s</td>
+</tr>
+<tr class="row-even"><td>Roessler</td>
+<td>3</td>
+<td>0.02s</td>
+<td>0.36s</td>
+<td>17.1s</td>
+</tr>
+<tr class="row-odd"><td>Lorentz system</td>
+<td>3</td>
+<td>0.34s</td>
+<td>1.07s</td>
+<td>316.7s</td>
+</tr>
+<tr class="row-even"><td>Lac operon</td>
+<td>2</td>
+<td>0.47s</td>
+<td>171.35s</td>
+<td>44.2s</td>
+</tr>
+<tr class="row-odd"><td>Lotka-Volterra</td>
+<td>2</td>
+<td>0.02s</td>
+<td>0.10s</td>
+<td>3.9s</td>
+</tr>
+<tr class="row-even"><td>Buckling column</td>
+<td>2</td>
+<td>0.04s</td>
+<td>0.43s</td>
+<td>26.4s</td>
+</tr>
+<tr class="row-odd"><td>Jet engine</td>
+<td>2</td>
+<td>0.07s</td>
+<td>12.1s</td>
+<td>6.8s</td>
+</tr>
+<tr class="row-even"><td>Brusselator</td>
+<td>2</td>
+<td>0.10s</td>
+<td>3.02s</td>
+<td>5.2s</td>
+</tr>
+<tr class="row-odd"><td>Vanderpol</td>
+<td>2</td>
+<td>0.05s</td>
+<td>2.92s</td>
+<td>6.4s</td>
+</tr>
+<tr class="row-even"><td>Vehicle platoon 3</td>
+<td>9</td>
+<td>0.32s</td>
+<td>4.28s</td>
+<td>21.08s</td>
+</tr>
+<tr class="row-odd"><td>Uniform nor sigmoid</td>
+<td>3</td>
+<td>120.91s</td>
+<td>1314.22s</td>
+<td>Exception</td>
+</tr>
+<tr class="row-even"><td>Uniform inverter loop</td>
+<td>2</td>
+<td>10.94s</td>
+<td>278.56s</td>
+<td>Exception</td>
+</tr>
+<tr class="row-odd"><td>Uniform inverter sigmoid</td>
+<td>2</td>
+<td>24.87s</td>
+<td>246.76s</td>
+<td>Exception</td>
+</tr>
+<tr class="row-even"><td>Uniform nor ramp</td>
+<td>3</td>
+<td>173.77s</td>
+<td>1765.55s</td>
+<td>Exception</td>
+</tr>
+<tr class="row-odd"><td>Uniform or ramp</td>
+<td>4</td>
+<td>176.70s</td>
+<td>1778.87s</td>
+<td>Exception</td>
+</tr>
+<tr class="row-even"><td>Uniform or sigmoid</td>
+<td>4</td>
+<td>168.75s</td>
+<td>2186.00s</td>
+<td>Exception</td>
+</tr>
+<tr class="row-odd"><td>Clamped beam</td>
+<td>348</td>
+<td>540.80s</td>
+<td>5717.63s</td>
+<td>Time out</td>
+</tr>
+<tr class="row-even"><td>Building model</td>
+<td>48</td>
+<td>3.28s</td>
+<td>20.24s</td>
+<td>Time out</td>
+</tr>
+<tr class="row-odd"><td>Partial differential equation</td>
+<td>20</td>
+<td>12.05s</td>
+<td>41.21s</td>
+<td>Time out</td>
+</tr>
+<tr class="row-even"><td>FOM</td>
+<td>20</td>
+<td>12.18s</td>
+<td>40.9s</td>
+<td>Time out</td>
+</tr>
+<tr class="row-odd"><td>Motor control system</td>
+<td>8</td>
+<td>5.22s</td>
+<td>17.89s</td>
+<td>Time out</td>
+</tr>
+<tr class="row-even"><td>International space station</td>
+<td>25</td>
+<td>79.99s</td>
+<td>243.60s</td>
+<td>Time out</td>
+</tr>
+<tr class="row-odd"><td>Lane switch</td>
+<td>8</td>
+<td>0.29s</td>
+<td>563.52s</td>
+<td>N/A</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="synthesis-examples">
+<h2>Synthesis Examples<a class="headerlink" href="#synthesis-examples" title="Permalink to this headline">¶</a></h2>
+<p>We provide 6 controller synthesis benchmarks examples, including:</p>
 <ul class="simple">
-<li>input_MergeSafe: safe</li>
-<li>input_MergeUnsafe: unsafe</li>
+<li>A vehicle collision avoidance model where a car driving on the highway is asked to avoid an obstacle in front of it.</li>
+<li>Robot find a path in a maze.</li>
+<li>Motion planning from synthesis tool Pessoa with specification similar to Example 2.</li>
+<li>DC motor where the velocity of a DC motor needs to be regulated.</li>
+<li>Room heating where the task is to control the temperature of 3 rooms and keep them around 21.</li>
+<li>Inverted pendulum as a classical reach-avoid problem.</li>
 </ul>
-<p><strong>MergeBetween</strong></p>
-<p>Initial condition: Car1, Car2, Car3 are all in the same lane, with Car1 behind Car2, Car2 behind Car3, and in the Const mode, initial positions and speeds are in some range.</p>
-<p>Transition graph: Car1 goes through the mode sequence TurnLeft, Acc1, Dec, and TurnRight, Const with specified time intervals in each mode to overtake Car2. Car3 transits from Const to Acc1 then transits back to Const, so Car3 is always ahead of Car1.</p>
-<p>Requirement: Car1 merges between Car2 and Car3 and any two vehicles maintain at least a given safe separation.</p>
-<p>InputFiles:</p>
-<ul class="simple">
-<li>input_MergeBetweenSafe: safe</li>
-<li>input_MergeBetweenUnsafe: unsafe</li>
-</ul>
+</div>
+<div class="section" id="synthesis-performance-evaluation">
+<h2>Synthesis Performance Evaluation<a class="headerlink" href="#synthesis-performance-evaluation" title="Permalink to this headline">¶</a></h2>
+<p>Peformance is measured using computer with i7 6600u, 16gb ram, Ubuntu 16.04 OS.
+Note the running time for graph search can be very different since the alogirthm is randomly search for the graph. It may also return nothing as well. Try to run algorithm multiple times if it does not return the graph.</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="34%" />
+<col width="13%" />
+<col width="16%" />
+<col width="21%" />
+<col width="16%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td>Example</td>
+<td>Dimension</td>
+<td>Time horizon</td>
+<td>Min staying time</td>
+<td>Running Time</td>
+</tr>
+<tr class="row-even"><td>vehicle collision avoidance</td>
+<td>4</td>
+<td>50.0s</td>
+<td>2.0s</td>
+<td>1896.26s</td>
+</tr>
+<tr class="row-odd"><td>robot in maze</td>
+<td>4</td>
+<td>10.0s</td>
+<td>1.0s</td>
+<td>98.93s</td>
+</tr>
+<tr class="row-even"><td>motion plan</td>
+<td>3</td>
+<td>6.0s</td>
+<td>1.0s</td>
+<td>4.55s</td>
+</tr>
+<tr class="row-odd"><td>DC motor</td>
+<td>2</td>
+<td>1.0s</td>
+<td>0.1s</td>
+<td>0.35s</td>
+</tr>
+<tr class="row-even"><td>room heating</td>
+<td>3</td>
+<td>25.0s</td>
+<td>2.0s</td>
+<td>2.66s</td>
+</tr>
+<tr class="row-odd"><td>inverted pendulum</td>
+<td>2</td>
+<td>2.0s</td>
+<td>0.2s</td>
+<td>6.06s</td>
+</tr>
+</tbody>
+</table>
 </div>
 </div>
 
@@ -261,10 +489,10 @@ road direction (<img class="math" src="_images/math/276f7e256cbddeb81eee42e1efc3
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="publications.html" class="btn btn-neutral float-right" title="Publications" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="parameters_configuration.html" class="btn btn-neutral float-right" title="Parameters configuration" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="dryvr&#39;s_control_synthesis.html" class="btn btn-neutral" title="DryVR’s Control Synthesis" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="dryvr&#39;s_control_synthesis.html" class="btn btn-neutral" title="DryVR’s Synthesis Language" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   
@@ -295,7 +523,7 @@ road direction (<img class="math" src="_images/math/276f7e256cbddeb81eee42e1efc3
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'./',
-            VERSION:'0.2',
+            VERSION:'2.0',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
             HAS_SOURCE:  true,

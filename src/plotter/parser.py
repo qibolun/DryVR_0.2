@@ -16,7 +16,7 @@ def parse(data):
 
 	for line in data:
 		# This is a mode indicator
-		if ',' in line or '->' in line or line.strip().isalpha():
+		if ',' in line or '->' in line or line.strip().isalpha() or len(line.strip())==1:
 			insertData(curNode, lowerBound, upperBound)
 			# There is new a transition
 			if '->' in line:

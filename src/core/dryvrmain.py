@@ -349,7 +349,7 @@ def graphSearch(inputFile):
 		dummyNode.children[mode] = GraphSearchNode(mode, remainTime, minTimeThres, dummyNode.level+1)
 		dummyNode.children[mode].parent = dummyNode
  	# curModeStack = GraphSearchNode(initialMode, remainTime, minTimeThres, 0)
-	curModeStack = dummyNode.children[0]
+	curModeStack = dummyNode.children[startModes[0]]
  	curModeStack.initial = (params.initialSet[0], params.initialSet[1])
 	
  	startTime = time.time()
@@ -482,7 +482,10 @@ def graphSearch(inputFile):
  					else:
  						temp.append(t)
  				traces.append(temp)
- 			curModeStack = curModeStack.parent
+			if curModeStack.parent != dummyNode:
+ 				curModeStack = curModeStack.parent
+			else:
+				break
  		# Reorganize the content in modes list for plotter use
  		modes = modes[::-1]
  		traces = traces[::-1]

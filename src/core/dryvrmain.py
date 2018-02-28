@@ -330,6 +330,7 @@ def graphSearch(inputFile):
 	simFunction = importSimFunction(params.path)
 	# Read the important param
 	availableModes = params.modes
+	startModes = params.modes
 	initialMode = params.initialMode
 	remainTime = params.timeHorizon
 	minTimeThres = params.minTimeThres
@@ -342,9 +343,15 @@ def graphSearch(inputFile):
  	# Current Method is ugly, we need to get rid of the initial Mode for GraphSearch
  	# It helps us to achieve the full automate search
  	# TODO Get rid of the initial Mode thing
- 	curModeStack = GraphSearchNode(initialMode, remainTime, minTimeThres, 0)
+	random.shuffle(startModes)
+	dummyNode = GraphSearchNode("start", remainTime, minTimeThres, 0)
+	for mode in startModes:
+		dummyNode.children[mode] = GraphSearchNode(mode, remainTime, minTimeThres, dummyNode.level+1)
+		dummyNode.children[mode].parent = dummyNode
+ 	# curModeStack = GraphSearchNode(initialMode, remainTime, minTimeThres, 0)
+	curModeStack = dummyNode.children[0]
  	curModeStack.initial = (params.initialSet[0], params.initialSet[1])
-
+	
  	startTime = time.time()
  	while True:
 
@@ -361,7 +368,7 @@ def graphSearch(inputFile):
  			curModeStack = curModeStack.parent
  			continue
 
- 		# If we have visit all available modes
+ 		# If we have visited all available modes
  		# We should select a new candidate point to proceed
  		# If there is no candidates available,
  		# Then we can say current node is not valid and go back to parent
@@ -369,7 +376,7 @@ def graphSearch(inputFile):
  			if len(curModeStack.candidates)<2:
  				print "Back to previous mode because we do not have any other modes to pick"
 	 			curModeStack = curModeStack.parent
-	 			# If the tried all possible case with no luck to find path
+	 			# If the tried all possible cases with no luck to find path
 	 			if not curModeStack:
 	 				break
 	 			continue
@@ -426,15 +433,17 @@ def graphSearch(inputFile):
  				break
 
  		# We have visited all next mode we have, generate some thing new
- 		# This is acutally not necssary, just shuffle all modes would be enough
+ 		# This is actually not necssary, just shuffle all modes would be enough
  		# There should not be RANDMODENUM things since it does not make any difference
  		# Anyway, for each candidate point, we will try to visit all modes eventually
  		# Therefore, using RANDMODENUM to get some random modes visit first is useless
  		# TODO, fix this part
  		if len(curModeStack.visited) == len(curModeStack.children):
- 			leftMode = set(availableModes) - set(curModeStack.children.keys())
- 			randomModes = random.sample(leftMode, min(len(leftMode), RANDMODENUM))
- 			random.shuffle(randomModes)
+ 			# leftMode = set(availableModes) - set(curModeStack.children.keys())
+ 			# randomModes = random.sample(leftMode, min(len(leftMode), RANDMODENUM))
+ 			# random.shuffle(randomModes)
+			randomModes = availableModes
+			random.shuffle(randomModes)
 
  			randomSections = curModeStack.randomPicker(RANDSECTIONNUM)
  			for mode in randomModes:

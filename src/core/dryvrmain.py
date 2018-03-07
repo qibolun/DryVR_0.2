@@ -348,17 +348,28 @@ def graphSearch(inputFile):
 	for mode in startModes:
 		dummyNode.children[mode] = GraphSearchNode(mode, remainTime, minTimeThres, dummyNode.level+1)
 		dummyNode.children[mode].parent = dummyNode
+		dummyNode.children[mode].initial = (params.initialSet[0], params.initialSet[1])
  	# curModeStack = GraphSearchNode(initialMode, remainTime, minTimeThres, 0)
 	curModeStack = dummyNode.children[startModes[0]]
- 	curModeStack.initial = (params.initialSet[0], params.initialSet[1])
+	dummyNode.visited.add(startModes[0])
 	
  	startTime = time.time()
  	while True:
 
- 		print str(curModeStack)
-
 		if not curModeStack:
 			break
+
+		if curModeStack == dummyNode:
+			startModes.pop(0)
+			if len(startModes)==0:
+				break
+			
+			
+			curModeStack = dummyNode.children[startModes[0]]
+			dummyNode.visited.add(startModes[0])
+			continue
+		
+		print str(curModeStack)
 
 		# Keep check the remain time, if the remain time is less than minTime
 		# It means it is impossible to stay in one mode more than minTime

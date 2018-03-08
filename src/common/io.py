@@ -84,10 +84,15 @@ def parseVerificationInputFile(path):
         if not 'bloatingMethod' in data:
             data['bloatingMethod'] = 'GLOBAL'
 
-        # set a fake kvalue since kvalue is not used in this case
+        # Set a fake kvalue since kvalue is not used in this case
 
         if data['bloatingMethod'] == "GLOBAL":
             data['kvalue'] = [1.0 for i in range(len(data['variables']))]
+
+        # Set a fake directory if the directory is not provided, this means the user provides
+        # simulation function to DryVR directly
+        if not 'directory' in data:
+            data['directory'] = ""
 
         checkVerificationInput(data)
         return DryVRInput(
@@ -128,6 +133,12 @@ def parseRrtInputFile(path):
 
         if data['bloatingMethod'] == "GLOBAL":
             data['kvalue'] = [1.0 for i in range(len(data['variables']))]
+
+        # Set a fake directory if the directory is not provided, this means the user provides
+        # simulation function to DryVR directly
+        if not 'directory' in data:
+            data['directory'] = ""
+
         checkSynthesisInput(data)
 
         return RrtInput(

@@ -16,21 +16,20 @@ from src.core.initialsetstack import InitialSetStack, GraphSearchNode
 from src.core.reset import Reset
 from src.core.uniformchecker import UniformChecker
 
-def verify(inputFile):
+def verify(params, simFunction):
 	"""
     DryVR verification algorithm.
     It does the verification and print out the verify result.
     
     Args:
-        inputFile (str): input file path
+        params (obj): object that contains params for the input file
+        simFunction (function): black-box simulation function
 
     Returns:
         None
 
     """
 
-    # Parse the input json file and read out the parameters
-	params = parseVerificationInputFile(inputFile)
 	# Build the graph object
 	graph = buildGraph(
 		params.vertex,
@@ -44,8 +43,6 @@ def verify(inputFile):
 	# Bolun 02/12/2018
 	assert graph.is_dag()==True or params.initialMode!="", "Graph is not DAG and you do not have initial mode!"
 
-	# Import simulation function and build objects
-	simFunction = importSimFunction(params.path)
 	checker = UniformChecker(params.unsafeSet, params.variables)
 	guard = Guard(params.variables)
 	reseter = Reset(params.variables)
@@ -305,24 +302,21 @@ def verify(inputFile):
 				curModeStack = prevModeStack
 
 
-def graphSearch(inputFile):
+def graphSearch(params, simFunction):
 	"""
     DryVR controller synthesis algorithm.
     It does the controller synthesis and print out the search result.
     tube and transition graph will be stored in ouput folder if algorithm finds one
     
     Args:
-        inputFile (str): input file path
+        params (obj): object that contains params for the input file
+        simFunction (function): black-box simulation function
 
     Returns:
         None
 
     """
 
-    # Parse the input json file and read out the parameters
-	params = parseRrtInputFile(inputFile)
-	# Get simulation function
-	simFunction = importSimFunction(params.path)
 	# Construct objects
 	checker = UniformChecker(params.unsafeSet, params.variables)
 	goalSetChecker = GoalChecker(params.goalSet, params.variables)

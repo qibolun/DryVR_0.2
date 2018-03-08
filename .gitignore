@@ -13,3 +13,4 @@
 config
 output/unsafeSim
 octave-workspace
+.DS_Store

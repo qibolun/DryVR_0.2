@@ -14,6 +14,7 @@ from src.core.guard import Guard
 from src.core.initialset import InitialSet
 from src.core.initialsetstack import InitialSetStack, GraphSearchNode
 from src.core.reset import Reset
+from src.core.reachtube import ReachTube
 from src.core.uniformchecker import UniformChecker
 
 def verify(data, simFunction):
@@ -240,7 +241,8 @@ def verify(data, simFunction):
                 print 'simulation time', simEndTime-startTime
                 print 'verification time', time.time()-simEndTime
                 writeReachTubeFile(unsafeTube, UNSAFEFILENAME)
-                exit()
+                retReach = ReachTube(curModeStack.bloatedTube, params.variables, params.vertex)
+                return retReach
 
             elif safety == UNKNOWN:
                 # Refine the current initial set
@@ -268,9 +270,10 @@ def verify(data, simFunction):
                 # All the nodes are safe
                 print "System is Safe!"
                 writeReachTubeFile(curModeStack.bloatedTube, REACHTUBEOUTPUT)
+                retReach = ReachTube(curModeStack.bloatedTube, params.variables, params.vertex)
                 print 'simulation time', simEndTime-startTime
                 print 'verification time', time.time()-simEndTime
-                return
+                return retReach
             elif backwardFlag == UNKNOWN:
                 print "Hit refine threshold, system halt, result unknown"
                 print 'simulation time', simEndTime-startTime

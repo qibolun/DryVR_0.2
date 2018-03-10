@@ -20,7 +20,8 @@ class ReachTube():
         self.tube = tube
         self.variables = variables
         self.modes = modes
-        
+        print(variables)
+        print(modes)
 
         # Build the raw string representation so user can print it
         
@@ -40,7 +41,7 @@ class ReachTube():
 
         curMode = ""
         for line in tube:
-            if isinstance(line, str):
+            if isinstance(line, unicode):
                 curMode = line.split('->')[-1].split(',')[0] # Get current mode name
                 for var in ['t']+self.variables:
                     self.tubeDic[curMode][var].append(line)

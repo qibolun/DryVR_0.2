@@ -41,7 +41,7 @@ class ReachTube():
 
         curMode = ""
         for line in tube:
-            if isinstance(line, unicode):
+            if isinstance(line, unicode) or isinstance(line, str):
                 curMode = line.split('->')[-1].split(',')[0] # Get current mode name
                 for var in ['t']+self.variables:
                     self.tubeDic[curMode][var].append(line)

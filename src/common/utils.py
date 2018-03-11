@@ -243,3 +243,16 @@ def checkSynthesisInput(data):
 
     if data["bloatingMethod"] == "PW":
         assert 'kvalue' in data, "kvalue need to be provided when bloating method set to PW"
+
+def isIpynb():
+    """
+    Check if the code is running on Ipython notebook
+    """
+    try:
+        cfg = get_ipython().config 
+        if "IPKernelApp" in cfg:
+            return True
+        else:
+            return False
+    except NameError:
+        return False

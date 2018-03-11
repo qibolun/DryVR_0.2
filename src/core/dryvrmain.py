@@ -6,10 +6,11 @@ import time
 
 from src.common.constant import *
 from src.common.io import parseVerificationInputFile, writeReachTubeFile, parseRrtInputFile, writeRrtResultFile
-from src.common.utils import importSimFunction, randomPoint, buildModeStr
+from src.common.utils import importSimFunction, randomPoint, buildModeStr, isIpynb
 from src.core.distance import DistChecker
 from src.core.dryvrcore import *
 from src.core.goalchecker import GoalChecker
+from src.core.graph import Graph
 from src.core.guard import Guard
 from src.core.initialset import InitialSet
 from src.core.initialsetstack import InitialSetStack, GraphSearchNode
@@ -38,6 +39,9 @@ def verify(data, simFunction):
         params.guards,
         params.resets
     )
+
+    # Build the progress graph for jupyter notebook
+    progressGraph = Graph(params, isIpynb())
 
     # Make sure the initial mode is specfieid if the graph is dag
     # FIXME should move this part to input check
@@ -143,6 +147,8 @@ def verify(data, simFunction):
             print "current mode label:",curLabel
             curSuccessors = graph.successors(curVertex)
             curInitial = [curStack[-1].lowerBound, curStack[-1].upperBound]
+            # Update the progress graph
+            progressGraph.update(buildModeStr(graph, curVertex), curModeStack.bloatedTube[0], curModeStack.remainTime)
 
             if len(curSuccessors) == 0:
                 # If there is not successor

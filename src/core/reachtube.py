@@ -20,8 +20,6 @@ class ReachTube():
         self.tube = tube
         self.variables = variables
         self.modes = modes
-        print(variables)
-        print(modes)
 
         # Build the raw string representation so user can print it
         

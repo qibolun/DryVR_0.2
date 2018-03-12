@@ -40,6 +40,7 @@ class Graph():
         self.fig.suptitle('', fontsize=10)
         # Draw the graph when initialize
         self.draw()
+        isIpynb = True
         if isIpynb:
             plt.show()
 
@@ -50,10 +51,15 @@ class Graph():
         Draw the white-box transition graph.
         """
 
-        # Delete old plot
-        nx.draw_networkx_nodes(self.G, self.pos, node_color=self.colors, cmap=plt.get_cmap('jet'), node_size = 1000)
         nx.draw_networkx_labels(self.G, self.pos)
-        nx.draw_networkx_edges(self.G, self.pos, edge_color='b', arrows=True)
+        options = {
+            'node_color': self.colors,
+            'node_size': 1000,
+            'cmap': plt.get_cmap('jet'),
+            'arrowstyle': '-|>',
+            'arrowsize': 50,
+        }
+        nx.draw_networkx(self.G, self.pos, arrows=True, **options)
         self.fig.canvas.draw()
 
     def update(self, curNode, title, remainTime):

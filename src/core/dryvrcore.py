@@ -226,6 +226,7 @@ def clacBloatedTube(modeLabel, initialSet, timeHorizon, simFuc, bloatingMethod, 
 	traces = []
 	traces.append(simFuc(modeLabel, curCenter, timeHorizon))
 	# Simulate SIMTRACENUM times to learn the sensitivity
+	print "=======real simu trace num", SIMTRACENUM
 	for _ in range(SIMTRACENUM):
 		newInitPoint = randomPoint(initialSet[0], initialSet[1])
 		traces.append(simFuc(modeLabel, newInitPoint, timeHorizon))

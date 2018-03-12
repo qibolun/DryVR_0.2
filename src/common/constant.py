@@ -26,14 +26,3 @@ UNSAFEFILENAME = 'output/unsafeTube.txt'
 NEWLINE = '----------------------------------------------'
 PW = "PW"
 GLOBAL = "GLOBAL"
-
-
-# Verification constant
-SIMUTESTNUM = 1
-SIMTRACENUM = 10
-REFINETHRES = 10
-CHILDREFINETHRES = 2
-
-# Synthesis Constant
-RANDMODENUM = 3
-RANDSECTIONNUM = 3

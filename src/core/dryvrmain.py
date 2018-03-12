@@ -4,9 +4,10 @@ This file contains a single function that verifies model
 import random
 import time
 
+import src.common.config as userConfig
 from src.common.constant import *
 from src.common.io import parseVerificationInputFile, writeReachTubeFile, parseRrtInputFile, writeRrtResultFile
-from src.common.utils import importSimFunction, randomPoint, buildModeStr, isIpynb
+from src.common.utils import importSimFunction, randomPoint, buildModeStr, isIpynb, overloadConfig
 from src.core.distance import DistChecker
 from src.core.dryvrcore import *
 from src.core.goalchecker import GoalChecker
@@ -18,7 +19,7 @@ from src.core.reset import Reset
 from src.core.reachtube import ReachTube
 from src.core.uniformchecker import UniformChecker
 
-def verify(data, simFunction):
+def verify(data, simFunction, paramConfig={}):
     """
     DryVR verification algorithm.
     It does the verification and print out the verify result.
@@ -26,11 +27,17 @@ def verify(data, simFunction):
     Args:
         data (dict): dictionary that contains params for the input file
         simFunction (function): black-box simulation function
+        paramConfig (dict): user-specified configuration
 
     Returns:
         None
 
     """
+    # There are some fields can be config by user,
+    # If user specified these fields in paramConfig, 
+    # overload these parameters to userConfig
+    overloadConfig(userConfig, paramConfig)
+
     params = parseVerificationInputFile(data)
     # Build the graph object
     graph = buildGraph(
@@ -55,7 +62,7 @@ def verify(data, simFunction):
 
     # Step 1) Simulation Test
     # Random generate points, then simulate and check the result
-    for _ in range(SIMUTESTNUM):
+    for _ in range(userConfig.SIMUTESTNUM):
         randInit = randomPoint(params.initialSet[0], params.initialSet[1])
 
         if DEBUG:
@@ -94,7 +101,7 @@ def verify(data, simFunction):
         initialMode = graph.vs.find(label=params.initialMode).index
 
     # Build the initial set stack
-    curModeStack = InitialSetStack(initialMode, REFINETHRES, params.timeHorizon)
+    curModeStack = InitialSetStack(initialMode, userConfig.REFINETHRES, params.timeHorizon)
     curModeStack.stack.append(InitialSet(params.initialSet[0], params.initialSet[1]))
     curModeStack.bloatedTube.append(buildModeStr(graph, initialMode))
     while True:
@@ -158,7 +165,8 @@ def verify(data, simFunction):
                     curRemainTime,
                     simFunction,
                     params.bloatingMethod,
-                    params.kvalue
+                    params.kvalue,
+                    userConfig.SIMTRACENUM,
                 )
 
             candidateTube = []
@@ -177,6 +185,7 @@ def verify(data, simFunction):
                     simFunction,
                     params.bloatingMethod,
                     params.kvalue,
+                    userConfig.SIMTRACENUM,
                     guardChecker = guard,
                     guardStr = curGuardStr,
                 )
@@ -198,7 +207,7 @@ def verify(data, simFunction):
                 # Build next mode stack
                 nextModeStack = InitialSetStack(
                     curSuccessor,
-                    CHILDREFINETHRES,
+                    userConfig.CHILDREFINETHRES,
                     curRemainTime-transiteTime,
                 )
                 nextModeStack.parent = curModeStack
@@ -311,7 +320,7 @@ def verify(data, simFunction):
                 curModeStack = prevModeStack
 
 
-def graphSearch(data, simFunction):
+def graphSearch(data, simFunction, paramConfig={}):
     """
     DryVR controller synthesis algorithm.
     It does the controller synthesis and print out the search result.
@@ -325,6 +334,11 @@ def graphSearch(data, simFunction):
         None
 
     """
+
+    # There are some fields can be config by user,
+    # If user specified these fields in paramConfig, 
+    # overload these parameters to userConfig
+    overloadConfig(userConfig, paramConfig)
 
     params = parseRrtInputFile(data)
     # Construct objects
@@ -394,7 +408,8 @@ def graphSearch(data, simFunction):
                 curModeStack.remainTime,
                 simFunction,
                 params.bloatingMethod,
-                params.kvalue
+                params.kvalue,
+                userConfig.SIMTRACENUM
             )
 
             # Cut the bloated tube once it intersect with the unsafe set
@@ -409,7 +424,7 @@ def graphSearch(data, simFunction):
             curModeStack.bloatedTube = curBloatedTube
 
             # Generate candidates points for next node
-            randomSections = curModeStack.randomPicker(RANDSECTIONNUM)
+            randomSections = curModeStack.randomPicker(userConfig.RANDSECTIONNUM)
 
             if not randomSections:
                 print "bloated tube is not long enough, discard the mode"
@@ -437,10 +452,10 @@ def graphSearch(data, simFunction):
         # TODO, fix this part
         if len(curModeStack.visited) == len(curModeStack.children):
             leftMode = set(availableModes) - set(curModeStack.children.keys())
-            randomModes = random.sample(leftMode, min(len(leftMode), RANDMODENUM))
+            randomModes = random.sample(leftMode, min(len(leftMode), userConfig.RANDMODENUM))
             random.shuffle(randomModes)
 
-            randomSections = curModeStack.randomPicker(RANDSECTIONNUM)
+            randomSections = curModeStack.randomPicker(userConfig.RANDSECTIONNUM)
             for mode in randomModes:
                 candidate = curModeStack.candidates[0]
                 curModeStack.children[mode] = GraphSearchNode(mode, curModeStack.remainTime-candidate[1][0], minTimeThres, curModeStack.level+1)

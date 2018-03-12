@@ -40,7 +40,6 @@ class Graph():
         self.fig.suptitle('', fontsize=10)
         # Draw the graph when initialize
         self.draw()
-        isIpynb = True
         if isIpynb:
             plt.show()
 

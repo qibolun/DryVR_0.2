@@ -85,8 +85,6 @@ class ReachTube():
         return res
 
 
-
-
 if __name__ == "__main__":
     # Test script 
     f = open("../../output/reachtube.txt").readlines()

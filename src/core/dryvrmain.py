@@ -48,7 +48,7 @@ def verify(data, simFunction, paramConfig={}):
     )
 
     # Build the progress graph for jupyter notebook
-    # isIpynb is used to detect if the coding is running
+    # isIpynb is used to detect if the code is running
     # on notebook or terminal, the graph will only be shown
     # in notebook mode
     progressGraph = Graph(params, isIpynb())

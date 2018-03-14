@@ -8,6 +8,7 @@ import glpk
 import numpy as np
 import matplotlib.pyplot as plt
 import time
+from cvxopt import matrix, solvers
 
 # Global vars
 dimensions = 0
@@ -165,8 +166,9 @@ def k_gamma_calc(A, b, c):
     gamma = res.x[1]
     """
 
-    # use glpk
 
+    # use glpk
+    '''
     lp = glpk.LPX()
     lp.name = 'logk_gamma'
     lp.obj.maximize = False             # set this as a minimization problem
@@ -183,6 +185,30 @@ def k_gamma_calc(A, b, c):
     lp.simplex()                        # solve this LP with the simplex method
     k = exp(lp.cols[0].primal)
     gamma = lp.cols[1].primal
+    '''
+
+    # use cvxopt
+    # print 'The input matrix ------------------------------------------------------'
+    # print 'A is ', A 
+    
+    # The 1d array for creating cvx matrix
+    A1 = []
+    for i in range(len(A[0])):
+        for j in range(len(A)):
+            A1.append(A[j][i])
+    
+    # print 'A1 is', A1 
+
+    A_ = matrix(A1, (len(A),2))
+    b_ = matrix(b)
+    c_ = matrix(c)
+
+    # print 'The matrix ------------------------------------------------------'
+    # print 'A is ', A_
+
+    sol = solvers.lp(c_, A_, b_)
+    k = exp(sol['x'][0])
+    gamma = sol['x'][1]
 
     return k, gamma
 

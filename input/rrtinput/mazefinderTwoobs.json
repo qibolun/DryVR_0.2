@@ -1,6 +1,5 @@
 {
 	"modes":["UP", "DOWN", "LEFT", "RIGHT"],
-	"initialMode":"RIGHT",
 	"variables":["x","y"],
 	"initialSet":[[1.0,1.0],[1.1,1.0]],
 	"unsafeSet":"@Allmode:Or(And(x>=1.5, x<=2.5, y>=3.5, y<=4.5), And(x>=3.5, x<=4.5, y>=1.5, y<=2.5),x<0, x>5, y<0, y>5)",

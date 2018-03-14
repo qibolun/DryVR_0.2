@@ -1,6 +1,5 @@
 {	
 	"modes":["OFF", "ON_1", "ON_2", "ON_3"],
-	"initialMode":"ON_1",
 	"variables":["TEMP_1","TEMP_2","TEMP_3"],
 	"initialSet":[[19.5, 20.8, 22.6],[19.55, 20.85, 22.65]],
 	"unsafeSet":"",

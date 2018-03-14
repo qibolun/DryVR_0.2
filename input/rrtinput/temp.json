@@ -1,6 +1,5 @@
 {	
 	"modes":["On", "Off"],
-	"initialMode":"On",
 	"variables":["temp"],
 	"initialSet":[[75.0],[76.0]],
 	"unsafeSet":"@Allmode:temp>90",

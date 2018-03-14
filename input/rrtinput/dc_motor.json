@@ -1,6 +1,5 @@
 {
 	"modes":["-2", "-1", "0", "1", "2"],
-	"initialMode":"0",
 	"variables":["x_1","x_2"],
 	"initialSet":[[10.0,-2.0],[11.0,-1.0]],
 	"unsafeSet":"@Allmode:Or(x_1<=-1, x_1>=30.0, x_2<=-3, x_2>=3)",

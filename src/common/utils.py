@@ -17,7 +17,7 @@ DryVRInput = namedtuple(
 # This is the tuple for rtt input file parsed by DryVR
 RrtInput = namedtuple(
     'RttInput',
-    'modes initialMode variables initialSet unsafeSet goalSet timeHorizon minTimeThres path goal bloatingMethod kvalue'
+    'modes variables initialSet unsafeSet goalSet timeHorizon minTimeThres path goal bloatingMethod kvalue'
 )
 
 def importSimFunction(path):

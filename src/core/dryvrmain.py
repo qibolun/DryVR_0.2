@@ -337,192 +337,193 @@ def graphSearch(data, simFunction, paramConfig={}):
         None
 
     """
-
+    # There are some fields can be config by user,
+    # If user specified these fields in paramConfig, 
+    # overload these parameters to userConfig
+    overloadConfig(userConfig, paramConfig)
     # Parse the input json file and read out the parameters
-	params = parseRrtInputFile(inputFile)
-	# Get simulation function
-	simFunction = importSimFunction(params.path)
-	# Construct objects
-	checker = UniformChecker(params.unsafeSet, params.variables)
-	goalSetChecker = GoalChecker(params.goalSet, params.variables)
-	distanceChecker = DistChecker(params.goal, params.variables)
-	simFunction = importSimFunction(params.path)
-	# Read the important param
-	availableModes = params.modes
-	startModes = params.modes
-	initialMode = params.initialMode
-	remainTime = params.timeHorizon
-	minTimeThres = params.minTimeThres
+    params = parseRrtInputFile(data)
+    # Construct objects
+    checker = UniformChecker(params.unsafeSet, params.variables)
+    goalSetChecker = GoalChecker(params.goalSet, params.variables)
+    distanceChecker = DistChecker(params.goal, params.variables)
+    simFunction = importSimFunction(params.path)
+    # Read the important param
+    availableModes = params.modes
+    startModes = params.modes
+    remainTime = params.timeHorizon
+    minTimeThres = params.minTimeThres
 
-	# Set goal rach flag to False
-	# Once the flag is set to True, It means we find a transition Graph
- 	goalReached = False
+    # Set goal rach flag to False
+    # Once the flag is set to True, It means we find a transition Graph
+    goalReached = False
 
- 	# Build the initial mode stack
- 	# Current Method is ugly, we need to get rid of the initial Mode for GraphSearch
- 	# It helps us to achieve the full automate search
- 	# TODO Get rid of the initial Mode thing
-	random.shuffle(startModes)
-	dummyNode = GraphSearchNode("start", remainTime, minTimeThres, 0)
-	for mode in startModes:
-		dummyNode.children[mode] = GraphSearchNode(mode, remainTime, minTimeThres, dummyNode.level+1)
-		dummyNode.children[mode].parent = dummyNode
-		dummyNode.children[mode].initial = (params.initialSet[0], params.initialSet[1])
- 	# curModeStack = GraphSearchNode(initialMode, remainTime, minTimeThres, 0)
-	curModeStack = dummyNode.children[startModes[0]]
-	dummyNode.visited.add(startModes[0])
-	
- 	startTime = time.time()
- 	while True:
+    # Build the initial mode stack
+    # Current Method is ugly, we need to get rid of the initial Mode for GraphSearch
+    # It helps us to achieve the full automate search
+    # TODO Get rid of the initial Mode thing
+    random.shuffle(startModes)
+    dummyNode = GraphSearchNode("start", remainTime, minTimeThres, 0)
+    for mode in startModes:
+        dummyNode.children[mode] = GraphSearchNode(mode, remainTime, minTimeThres, dummyNode.level+1)
+        dummyNode.children[mode].parent = dummyNode
+        dummyNode.children[mode].initial = (params.initialSet[0], params.initialSet[1])
 
-		if not curModeStack:
-			break
+    curModeStack = dummyNode.children[startModes[0]]
+    dummyNode.visited.add(startModes[0])
+    
+    startTime = time.time()
+    while True:
 
-		if curModeStack == dummyNode:
-			startModes.pop(0)
-			if len(startModes)==0:
-				break
-			
-			
-			curModeStack = dummyNode.children[startModes[0]]
-			dummyNode.visited.add(startModes[0])
-			continue
-		
-		print str(curModeStack)
+        if not curModeStack:
+            break
 
-		# Keep check the remain time, if the remain time is less than minTime
-		# It means it is impossible to stay in one mode more than minTime
-		# Therefore, we have to go back to parents
- 		if curModeStack.remainTime < minTimeThres:
- 			print "Back to previous mode because we cannot stay longer than the min time thres"
- 			curModeStack = curModeStack.parent
- 			continue
+        if curModeStack == dummyNode:
+            startModes.pop(0)
+            if len(startModes)==0:
+                break
+            
+            
+            curModeStack = dummyNode.children[startModes[0]]
+            dummyNode.visited.add(startModes[0])
+            continue
+        
+        print str(curModeStack)
 
- 		# If we have visited all available modes
- 		# We should select a new candidate point to proceed
- 		# If there is no candidates available,
- 		# Then we can say current node is not valid and go back to parent
- 		if len(curModeStack.visited) == len(availableModes):
- 			if len(curModeStack.candidates)<2:
- 				print "Back to previous mode because we do not have any other modes to pick"
-	 			curModeStack = curModeStack.parent
-	 			# If the tried all possible cases with no luck to find path
-	 			if not curModeStack:
-	 				break
-	 			continue
-	 		else:
-	 			print "Pick a new point from candidates"
-	 			curModeStack.candidates.pop(0)
-	 			curModeStack.visited = set()
-	 			curModeStack.children = {}
-	 			continue
+        # Keep check the remain time, if the remain time is less than minTime
+        # It means it is impossible to stay in one mode more than minTime
+        # Therefore, we have to go back to parents
+        if curModeStack.remainTime < minTimeThres:
+            print "Back to previous mode because we cannot stay longer than the min time thres"
+            curModeStack = curModeStack.parent
+            continue
+
+        # If we have visited all available modes
+        # We should select a new candidate point to proceed
+        # If there is no candidates available,
+        # Then we can say current node is not valid and go back to parent
+        if len(curModeStack.visited) == len(availableModes):
+            if len(curModeStack.candidates)<2:
+                print "Back to previous mode because we do not have any other modes to pick"
+                curModeStack = curModeStack.parent
+                # If the tried all possible cases with no luck to find path
+                if not curModeStack:
+                    break
+                continue
+            else:
+                print "Pick a new point from candidates"
+                curModeStack.candidates.pop(0)
+                curModeStack.visited = set()
+                curModeStack.children = {}
+                continue
 
 
- 		# Generate bloated tube if we haven't done so
- 		if not curModeStack.bloatedTube:
- 			print "no bloated tube find in this mode, generate one"
- 			curBloatedTube = clacBloatedTube(
- 				curModeStack.mode,
- 				curModeStack.initial,
- 				curModeStack.remainTime,
- 				simFunction,
- 				params.bloatingMethod,
-				params.kvalue
- 			)
+        # Generate bloated tube if we haven't done so
+        if not curModeStack.bloatedTube:
+            print "no bloated tube find in this mode, generate one"
+            curBloatedTube = clacBloatedTube(
+                curModeStack.mode,
+                curModeStack.initial,
+                curModeStack.remainTime,
+                simFunction,
+                params.bloatingMethod,
+                params.kvalue,
+                userConfig.SIMTRACENUM
+            )
 
- 			# Cut the bloated tube once it intersect with the unsafe set
- 			curBloatedTube = checker.cutTubeTillUnsafe(curBloatedTube)
+            # Cut the bloated tube once it intersect with the unsafe set
+            curBloatedTube = checker.cutTubeTillUnsafe(curBloatedTube)
 
- 			# If the tube time horizon is less than minTime, it means
- 			# we cannot stay in this mode for min thres time, back to the parent node
- 			if not curBloatedTube or curBloatedTube[-1][0] < minTimeThres:
- 				print "bloated tube is not long enough, discard the mode"
- 				curModeStack = curModeStack.parent
- 				continue
- 			curModeStack.bloatedTube = curBloatedTube
+            # If the tube time horizon is less than minTime, it means
+            # we cannot stay in this mode for min thres time, back to the parent node
+            if not curBloatedTube or curBloatedTube[-1][0] < minTimeThres:
+                print "bloated tube is not long enough, discard the mode"
+                curModeStack = curModeStack.parent
+                continue
+            curModeStack.bloatedTube = curBloatedTube
 
- 			# Generate candidates points for next node
- 			randomSections = curModeStack.randomPicker(RANDSECTIONNUM)
+            # Generate candidates points for next node
+            randomSections = curModeStack.randomPicker(userConfig.RANDSECTIONNUM)
 
- 			if not randomSections:
- 				print "bloated tube is not long enough, discard the mode"
- 				curModeStack = curModeStack.parent
- 				continue
+            if not randomSections:
+                print "bloated tube is not long enough, discard the mode"
+                curModeStack = curModeStack.parent
+                continue
 
- 			# Sort random points based on the distance to the goal set
- 			randomSections.sort(key=lambda x: distanceChecker.calcDistance(x[0], x[1]))
- 			curModeStack.candidates = randomSections
- 			print "Generate new bloated tube and candidate, with candidates length", len(curModeStack.candidates)
- 			
+            # Sort random points based on the distance to the goal set
+            randomSections.sort(key=lambda x: distanceChecker.calcDistance(x[0], x[1]))
+            curModeStack.candidates = randomSections
+            print "Generate new bloated tube and candidate, with candidates length", len(curModeStack.candidates)
+            
 
- 			# Check if the current tube reaches goal
- 			result, tube = goalSetChecker.goalReachTube(curBloatedTube)
- 			if result:
- 				curModeStack.bloatedTube = tube
- 				goalReached = True
- 				break
+            # Check if the current tube reaches goal
+            result, tube = goalSetChecker.goalReachTube(curBloatedTube)
+            if result:
+                curModeStack.bloatedTube = tube
+                goalReached = True
+                break
 
- 		# We have visited all next mode we have, generate some thing new
- 		# This is actually not necssary, just shuffle all modes would be enough
- 		# There should not be RANDMODENUM things since it does not make any difference
- 		# Anyway, for each candidate point, we will try to visit all modes eventually
- 		# Therefore, using RANDMODENUM to get some random modes visit first is useless
- 		# TODO, fix this part
- 		if len(curModeStack.visited) == len(curModeStack.children):
- 			# leftMode = set(availableModes) - set(curModeStack.children.keys())
- 			# randomModes = random.sample(leftMode, min(len(leftMode), RANDMODENUM))
- 			# random.shuffle(randomModes)
-			randomModes = availableModes
-			random.shuffle(randomModes)
+        # We have visited all next mode we have, generate some thing new
+        # This is actually not necssary, just shuffle all modes would be enough
+        # There should not be RANDMODENUM things since it does not make any difference
+        # Anyway, for each candidate point, we will try to visit all modes eventually
+        # Therefore, using RANDMODENUM to get some random modes visit first is useless
+        # TODO, fix this part
+        if len(curModeStack.visited) == len(curModeStack.children):
+            # leftMode = set(availableModes) - set(curModeStack.children.keys())
+            # randomModes = random.sample(leftMode, min(len(leftMode), RANDMODENUM))
+            # random.shuffle(randomModes)
+            randomModes = availableModes
+            random.shuffle(randomModes)
 
- 			randomSections = curModeStack.randomPicker(RANDSECTIONNUM)
- 			for mode in randomModes:
- 				candidate = curModeStack.candidates[0]
- 				curModeStack.children[mode] = GraphSearchNode(mode, curModeStack.remainTime-candidate[1][0], minTimeThres, curModeStack.level+1)
- 				curModeStack.children[mode].initial = (candidate[0][1:], candidate[1][1:])
- 				curModeStack.children[mode].parent = curModeStack
+            randomSections = curModeStack.randomPicker(userConfig.RANDSECTIONNUM)
+            for mode in randomModes:
+                candidate = curModeStack.candidates[0]
+                curModeStack.children[mode] = GraphSearchNode(mode, curModeStack.remainTime-candidate[1][0], minTimeThres, curModeStack.level+1)
+                curModeStack.children[mode].initial = (candidate[0][1:], candidate[1][1:])
+                curModeStack.children[mode].parent = curModeStack
 
- 		# Random visit a candidate that is not visited before
- 		for key in curModeStack.children:
- 			if not key in curModeStack.visited:
- 				break
+        # Random visit a candidate that is not visited before
+        for key in curModeStack.children:
+            if not key in curModeStack.visited:
+                break
 
- 		print "transit point is", curModeStack.candidates[0]
- 		curModeStack.visited.add(key)
- 		curModeStack = curModeStack.children[key]
+        print "transit point is", curModeStack.candidates[0]
+        curModeStack.visited.add(key)
+        curModeStack = curModeStack.children[key]
 
- 	# Back track to print out trace
- 	print "RRT run time", time.time()-startTime
- 	if goalReached:
- 		print("goal reached")
- 		traces = []
- 		modes = []
- 		while curModeStack:
- 			modes.append(curModeStack.mode)
- 			if not curModeStack.candidates:
- 				traces.append([t for t in curModeStack.bloatedTube])
- 			else:
- 				# Cut the trace till candidate
- 				temp = []
- 				for t in curModeStack.bloatedTube:
- 					if t == curModeStack.candidates[0][0]:
- 						temp.append(curModeStack.candidates[0][0])
- 						temp.append(curModeStack.candidates[0][1])
- 						break
- 					else:
- 						temp.append(t)
- 				traces.append(temp)
-			if curModeStack.parent != dummyNode:
- 				curModeStack = curModeStack.parent
-			else:
-				break
- 		# Reorganize the content in modes list for plotter use
- 		modes = modes[::-1]
- 		traces = traces[::-1]
- 		buildRrtGraph(modes, traces)
- 		for i in range(1, len(modes)):
- 			modes[i] = modes[i-1]+'->'+modes[i]
+    # Back track to print out trace
+    print "RRT run time", time.time()-startTime
+    if goalReached:
+        print("goal reached")
+        traces = []
+        modes = []
+        while curModeStack:
+            modes.append(curModeStack.mode)
+            if not curModeStack.candidates:
+                traces.append([t for t in curModeStack.bloatedTube])
+            else:
+                # Cut the trace till candidate
+                temp = []
+                for t in curModeStack.bloatedTube:
+                    if t == curModeStack.candidates[0][0]:
+                        temp.append(curModeStack.candidates[0][0])
+                        temp.append(curModeStack.candidates[0][1])
+                        break
+                    else:
+                        temp.append(t)
+                traces.append(temp)
+            if curModeStack.parent != dummyNode:
+                curModeStack = curModeStack.parent
+            else:
+                break
+        # Reorganize the content in modes list for plotter use
+        modes = modes[::-1]
+        traces = traces[::-1]
+        buildRrtGraph(modes, traces)
+        for i in range(1, len(modes)):
+            modes[i] = modes[i-1]+'->'+modes[i]
 
- 		writeRrtResultFile(modes, traces, RRTOUTPUT)
- 	else:
- 		print("could not find graph")
+        writeRrtResultFile(modes, traces, RRTOUTPUT)
+    else:
+        print("could not find graph")

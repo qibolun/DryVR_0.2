@@ -139,7 +139,6 @@ def parseRrtInputFile(data):
 
     return RrtInput(
         modes = data["modes"],
-        initialMode = data["initialMode"],
         variables = data["variables"],
         initialSet = data["initialSet"],
         unsafeSet = data["unsafeSet"],

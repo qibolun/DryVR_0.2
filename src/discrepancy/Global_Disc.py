@@ -8,7 +8,6 @@ import glpk
 import numpy as np
 import matplotlib.pyplot as plt
 import time
-from cvxopt import matrix, solvers
 
 # Global vars
 dimensions = 0
@@ -53,24 +52,24 @@ def read_data(traces):
 
     # Align all the traces
     for i in range (len(traces)):
-    	initial_time = traces[i][0][0]
-    	for j in range (len(traces[i])):
-    		traces[i][j][0] = traces[i][j][0] - initial_time
+        initial_time = traces[i][0][0]
+        for j in range (len(traces[i])):
+            traces[i][j][0] = traces[i][j][0] - initial_time
 
     #reasign the start time and end time
     start_time = 0;
     for i in range (len(traces)):
-    	end_time = min(end_time,traces[i][-1][0])
+        end_time = min(end_time,traces[i][-1][0])
 
     #trim all the points after the end time
     traces_trim = [];
     for i in range (len(traces)):
-    	trace_trim = [];
-    	for j in range (len(traces[i])):
-    		if traces[i][j][0] <= end_time + error_thred_time:
-    			trace_trim.append(traces[i][j])
-    	traces_trim.append(trace_trim)
-    	#print(len(trace_trim))
+        trace_trim = [];
+        for j in range (len(traces[i])):
+            if traces[i][j][0] <= end_time + error_thred_time:
+                trace_trim.append(traces[i][j])
+        traces_trim.append(trace_trim)
+        #print(len(trace_trim))
 
     #reasign trace_len
     trace_len = len(trace_trim)
@@ -166,9 +165,8 @@ def k_gamma_calc(A, b, c):
     gamma = res.x[1]
     """
 
-
     # use glpk
-    '''
+
     lp = glpk.LPX()
     lp.name = 'logk_gamma'
     lp.obj.maximize = False             # set this as a minimization problem
@@ -185,30 +183,6 @@ def k_gamma_calc(A, b, c):
     lp.simplex()                        # solve this LP with the simplex method
     k = exp(lp.cols[0].primal)
     gamma = lp.cols[1].primal
-    '''
-
-    # use cvxopt
-    # print 'The input matrix ------------------------------------------------------'
-    # print 'A is ', A 
-    
-    # The 1d array for creating cvx matrix
-    A1 = []
-    for i in range(len(A[0])):
-        for j in range(len(A)):
-            A1.append(A[j][i])
-    
-    # print 'A1 is', A1 
-
-    A_ = matrix(A1, (len(A),2))
-    b_ = matrix(b)
-    c_ = matrix(c)
-
-    # print 'The matrix ------------------------------------------------------'
-    # print 'A is ', A_
-
-    sol = solvers.lp(c_, A_, b_)
-    k = exp(sol['x'][0])
-    gamma = sol['x'][1]
 
     return k, gamma
 

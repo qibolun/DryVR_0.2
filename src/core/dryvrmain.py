@@ -4,315 +4,334 @@ This file contains a single function that verifies model
 import random
 import time
 
+import src.common.config as userConfig
 from src.common.constant import *
 from src.common.io import parseVerificationInputFile, writeReachTubeFile, parseRrtInputFile, writeRrtResultFile
-from src.common.utils import importSimFunction, randomPoint, buildModeStr
+from src.common.utils import importSimFunction, randomPoint, buildModeStr, isIpynb, overloadConfig
 from src.core.distance import DistChecker
 from src.core.dryvrcore import *
 from src.core.goalchecker import GoalChecker
+from src.core.graph import Graph
 from src.core.guard import Guard
 from src.core.initialset import InitialSet
 from src.core.initialsetstack import InitialSetStack, GraphSearchNode
 from src.core.reset import Reset
+from src.core.reachtube import ReachTube
 from src.core.uniformchecker import UniformChecker
 
-def verify(inputFile):
-	"""
+def verify(data, simFunction, paramConfig={}):
+    """
     DryVR verification algorithm.
     It does the verification and print out the verify result.
     
     Args:
-        inputFile (str): input file path
+        data (dict): dictionary that contains params for the input file
+        simFunction (function): black-box simulation function
+        paramConfig (dict): user-specified configuration
 
     Returns:
         None
 
     """
+    # There are some fields can be config by user,
+    # If user specified these fields in paramConfig, 
+    # overload these parameters to userConfig
+    overloadConfig(userConfig, paramConfig)
 
-    # Parse the input json file and read out the parameters
-	params = parseVerificationInputFile(inputFile)
-	# Build the graph object
-	graph = buildGraph(
-		params.vertex,
-		params.edge,
-		params.guards,
-		params.resets
-	)
+    params = parseVerificationInputFile(data)
+    # Build the graph object
+    graph = buildGraph(
+        params.vertex,
+        params.edge,
+        params.guards,
+        params.resets
+    )
 
-	# Make sure the initial mode is specfieid if the graph is dag
-	# FIXME should move this part to input check
-	# Bolun 02/12/2018
-	assert graph.is_dag()==True or params.initialMode!="", "Graph is not DAG and you do not have initial mode!"
+    # Build the progress graph for jupyter notebook
+    # isIpynb is used to detect if the code is running
+    # on notebook or terminal, the graph will only be shown
+    # in notebook mode
+    progressGraph = Graph(params, isIpynb())
 
-	# Import simulation function and build objects
-	simFunction = importSimFunction(params.path)
-	checker = UniformChecker(params.unsafeSet, params.variables)
-	guard = Guard(params.variables)
-	reseter = Reset(params.variables)
-	startTime = time.time()
+    # Make sure the initial mode is specfieid if the graph is dag
+    # FIXME should move this part to input check
+    # Bolun 02/12/2018
+    assert graph.is_dag()==True or params.initialMode!="", "Graph is not DAG and you do not have initial mode!"
 
-	# Step 1) Simulation Test
-	# Random generate points, then simulate and check the result
-	for _ in range(SIMUTESTNUM):
-		randInit = randomPoint(params.initialSet[0], params.initialSet[1])
+    checker = UniformChecker(params.unsafeSet, params.variables)
+    guard = Guard(params.variables)
+    reseter = Reset(params.variables)
+    startTime = time.time()
 
-		if DEBUG:
-			print 'Random checking round ', _, 'at point ', randInit
+    # Step 1) Simulation Test
+    # Random generate points, then simulate and check the result
+    for _ in range(userConfig.SIMUTESTNUM):
+        randInit = randomPoint(params.initialSet[0], params.initialSet[1])
 
-		# Do a full hybrid simulation
-		simResult = simulate(
-			graph,
-			randInit,
-			params.timeHorizon,
-			guard,
-			simFunction,
-			reseter,
-			params.initialMode,
-			params.deterministic
-		)
+        if DEBUG:
+            print 'Random checking round ', _, 'at point ', randInit
 
-		# Check the traces for each mode
-		for mode in simResult:
-			safety = checker.checkSimuTrace(simResult[mode], mode)
-			if safety == -1:
-				print 'Current simulation is not safe. Program halt'
-				print 'simulation time', time.time()-startTime
-				exit()
-	simEndTime = time.time()
+        # Do a full hybrid simulation
+        simResult = simulate(
+            graph,
+            randInit,
+            params.timeHorizon,
+            guard,
+            simFunction,
+            reseter,
+            params.initialMode,
+            params.deterministic
+        )
 
-	# Step 2) Check Reach Tube
-	# Calculate the over approximation of the reach tube and check the result
-	print "Verification Begin"
+        # Check the traces for each mode
+        for mode in simResult:
+            safety = checker.checkSimuTrace(simResult[mode], mode)
+            if safety == -1:
+                print 'Current simulation is not safe. Program halt'
+                print 'simulation time', time.time()-startTime
+                exit()
+    simEndTime = time.time()
 
-	# Get the initial mode
-	if not params.initialMode:
-		computeOrder =  graph.topological_sorting(mode=OUT)
-		initialMode = computeOrder[0]
-	else:
-		initialMode = graph.vs.find(label=params.initialMode).index
+    # Step 2) Check Reach Tube
+    # Calculate the over approximation of the reach tube and check the result
+    print "Verification Begin"
 
-	# Build the initial set stack
-	curModeStack = InitialSetStack(initialMode, REFINETHRES, params.timeHorizon)
-	curModeStack.stack.append(InitialSet(params.initialSet[0], params.initialSet[1]))
-	curModeStack.bloatedTube.append(buildModeStr(graph, initialMode))
-	while True:
-		# backwardFlag can be SAFE, UNSAFE or UNKNWON
-		# If the backwardFlag is SAFE/UNSAFE, means that the children nodes
-		# of current nodes are all SAFE/UNSAFE. If one of the child node is
-		# UNKNWON, then the backwardFlag is UNKNWON.
-		backwardFlag = SAFE
+    # Get the initial mode
+    if not params.initialMode:
+        computeOrder =  graph.topological_sorting(mode=OUT)
+        initialMode = computeOrder[0]
+    else:
+        initialMode = graph.vs.find(label=params.initialMode).index
 
-		while curModeStack.stack:
-			print str(curModeStack)
-			print curModeStack.stack[-1]
+    # Build the initial set stack
+    curModeStack = InitialSetStack(initialMode, userConfig.REFINETHRES, params.timeHorizon)
+    curModeStack.stack.append(InitialSet(params.initialSet[0], params.initialSet[1]))
+    curModeStack.bloatedTube.append(buildModeStr(graph, initialMode))
+    while True:
+        # backwardFlag can be SAFE, UNSAFE or UNKNWON
+        # If the backwardFlag is SAFE/UNSAFE, means that the children nodes
+        # of current nodes are all SAFE/UNSAFE. If one of the child node is
+        # UNKNWON, then the backwardFlag is UNKNWON.
+        backwardFlag = SAFE
 
-			if not curModeStack.isValid():
-				# A stack will be invalid if number of initial sets 
-				# is more than refine threshold we set for each stack.
-				# Thus we declare this stack is UNKNOWN
-				print curModeStack.mode, "is not valid anymore"
-				backwardFlag = UNKNOWN
-				break
+        while curModeStack.stack:
+            print str(curModeStack)
+            print curModeStack.stack[-1]
 
-			# This is condition check to make sure the reach tube output file 
-			# will be readable. Let me try to explain this.
-			# A reachtube outout will be something like following
-			# MODEA->MODEB
-			# [0.0, 1.0, 1.1]
-			# [0.1, 1.1, 1.2]
-			# .....
-			# Once we have refinement, we will add mutiple reach tube to 
-			# this curModeStack.bloatedTube
-			# However, we want to copy MODEA->MODEB so we know thats two different
-			# reach tube from two different refined initial set
-			# The result will be look like following
-			# MODEA->MODEB
-			# [0.0, 1.0, 1.1]
-			# [0.1, 1.1, 1.2]
-			# .....
-			# MODEA->MODEB (this one gets copied!)
-			# [0.0, 1.5, 1.6]
-			# [0.1, 1.6, 1.7]
-			# .....
-			if isinstance(curModeStack.bloatedTube[-1], list):
-				curModeStack.bloatedTube.append(curModeStack.bloatedTube[0])
+            if not curModeStack.isValid():
+                # A stack will be invalid if number of initial sets 
+                # is more than refine threshold we set for each stack.
+                # Thus we declare this stack is UNKNOWN
+                print curModeStack.mode, "is not valid anymore"
+                backwardFlag = UNKNOWN
+                break
 
-
-			curStack = curModeStack.stack
-			curVertex = curModeStack.mode
-			curRemainTime = curModeStack.remainTime
-			curLabel = graph.vs[curVertex]['label']
-			print "current mode label:",curLabel
-			curSuccessors = graph.successors(curVertex)
-			curInitial = [curStack[-1].lowerBound, curStack[-1].upperBound]
-
-			if len(curSuccessors) == 0:
-				# If there is not successor
-				# Calculate the current bloated tube without considering the guard
-				curBloatedTube = clacBloatedTube(curLabel,
-					curInitial,
-					curRemainTime,
-					simFunction,
-					params.bloatingMethod,
-					params.kvalue
-				)
-
-			candidateTube = []
-			shortestTime = float("inf")
-			shortestTube = None
-
-			for curSuccessor in curSuccessors:
-				edgeID = graph.get_eid(curVertex, curSuccessor)
-				curGuardStr = graph.es[edgeID]['guards']
-				curResetStr = graph.es[edgeID]['resets']
-				# Calulcate the current bloated tube with guard involved
-				# Pre-check the simulation trace so we can get better bloated result
-				curBloatedTube = clacBloatedTube(curLabel,
-					curInitial,
-					curRemainTime,
-					simFunction,
-					params.bloatingMethod,
-					params.kvalue,
-					guardChecker = guard,
-					guardStr = curGuardStr,
-				)
-
-				# Use the guard to calculate the next initial set
-				nextInit, trunckedResult, transiteTime = guard.guardReachTube(
-					curBloatedTube,
-					curGuardStr,
-				)
-
-				print graph.vs[curSuccessor]['label'], transiteTime, nextInit or "next initial not found", curGuardStr
-				
-				if nextInit == None:
-					continue
-
-				# Reset the next initial set
-				nextInit = reseter.resetSet(curResetStr, nextInit[0], nextInit[1])
-
-				# Build next mode stack
-				nextModeStack = InitialSetStack(
-					curSuccessor,
-					CHILDREFINETHRES,
-					curRemainTime-transiteTime,
-				)
-				nextModeStack.parent = curModeStack
-				nextModeStack.stack.append(InitialSet(nextInit[0], nextInit[1]))
-				nextModeStack.bloatedTube.append(curModeStack.bloatedTube[0]+'->'+buildModeStr(graph, curSuccessor))
-				curStack[-1].child[curSuccessor] = nextModeStack
-				if len(trunckedResult)>len(candidateTube):
-					candidateTube = trunckedResult
-
-				# In case of must transition
-				# We need to record shortest tube
-				# As shortest tube is the tube invoke transition
-				if trunckedResult[-1][0] < shortestTime:
-					shortestTime = trunckedResult[-1][0]
-					shortestTube = trunckedResult
-
-			# Handle must transition
-			if params.deterministic and len(curStack[-1].child)>0:
-				nextModesInfo = []
-				for nextMode in curStack[-1].child:
-					nextModesInfo.append((curStack[-1].child[nextMode].remainTime, nextMode))
-				# This mode gets transit first, only keep this mode
-				maxRemainTime, maxTimeMode = max(nextModesInfo)
-				# Pop other modes becuase of deterministic system
-				for _, nextMode in nextModesInfo:
-					if nextMode == maxTimeMode:
-						continue
-					curStack[-1].child.pop(nextMode)
-				candidateTube = shortestTube
-				print "Handle deterministic system, next mode", graph.vs[curStack[-1].child.keys()[0]]['label']
-
-			if not candidateTube:
-				candidateTube = curBloatedTube
-
-			# Check the safety for current bloated tube
-			safety = checker.checkReachTube(candidateTube, curLabel)
-			if safety == UNSAFE:
-				print "System is not safe in Mode ", curLabel
-				# Start back Tracking from this point and print tube to a file
-				# push current unsafeTube to unsafe tube holder
-				unsafeTube = [curModeStack.bloatedTube[0]] + candidateTube
-				while curModeStack.parent is not None:
-					prevModeStack = curModeStack.parent
-					unsafeTube = [prevModeStack.bloatedTube[0]] + prevModeStack.stack[-1].bloatedTube + unsafeTube
-					curModeStack = prevModeStack
-				print 'simulation time', simEndTime-startTime
-				print 'verification time', time.time()-simEndTime
-				writeReachTubeFile(unsafeTube, UNSAFEFILENAME)
-				exit()
-
-			elif safety == UNKNOWN:
-				# Refine the current initial set
-				print curModeStack.mode, "check bloated tube unknown"
-				discardInitial = curModeStack.stack.pop()
-				initOne, initTwo = discardInitial.refine()
-				curModeStack.stack.append(initOne)
-				curModeStack.stack.append(initTwo)
-
-			elif safety == SAFE:
-				print "Mode", curModeStack.mode, "check bloated tube safe"
-				if curModeStack.stack[-1].child:
-					curModeStack.stack[-1].bloatedTube += candidateTube
-					nextMode, nextModeStack = curModeStack.stack[-1].child.popitem()
-					curModeStack = nextModeStack
-					print "Child exist in cur mode inital", curModeStack.mode, "is curModeStack Now"
-				else:
-					curModeStack.bloatedTube += candidateTube
-					curModeStack.stack.pop()
-					print "No child exist in current initial, pop"
-
-		if curModeStack.parent is None:
-			# We are at head now
-			if backwardFlag == SAFE:
-				# All the nodes are safe
-				print "System is Safe!"
-				writeReachTubeFile(curModeStack.bloatedTube, REACHTUBEOUTPUT)
-				print 'simulation time', simEndTime-startTime
-				print 'verification time', time.time()-simEndTime
-				return
-			elif backwardFlag == UNKNOWN:
-				print "Hit refine threshold, system halt, result unknown"
-				print 'simulation time', simEndTime-startTime
-				print 'verification time', time.time()-simEndTime
-				exit()
-		else:
-			if backwardFlag == SAFE:
-				prevModeStack = curModeStack.parent
-				prevModeStack.stack[-1].bloatedTube += curModeStack.bloatedTube
-				print 'back flag safe from',curModeStack.mode,'to',prevModeStack.mode
-				if len(prevModeStack.stack[-1].child) == 0:
-					# There is no next mode from this initial set
-					prevModeStack.bloatedTube += prevModeStack.stack[-1].bloatedTube
-					prevModeStack.stack.pop()
-					curModeStack = prevModeStack
-					print "No child in prev mode initial, pop,", prevModeStack.mode, "is curModeStack Now"
-				else:
-					# There is another mode transition from this initial set
-					nextMode, nextModeStack = prevModeStack.stack[-1].child.popitem()
-					curModeStack = nextModeStack
-					print "Child exist in prev mode inital", nextModeStack.mode, "is curModeStack Now"
-			elif backwardFlag == UNKNOWN:
-				prevModeStack = curModeStack.parent
-				print 'back flag unknown from',curModeStack.mode,'to',prevModeStack.mode
-				discardInitial = prevModeStack.stack.pop()
-				initOne, initTwo = discardInitial.refine()
-				prevModeStack.stack.append(initOne)
-				prevModeStack.stack.append(initTwo)
-				curModeStack = prevModeStack
+            # This is condition check to make sure the reach tube output file 
+            # will be readable. Let me try to explain this.
+            # A reachtube outout will be something like following
+            # MODEA->MODEB
+            # [0.0, 1.0, 1.1]
+            # [0.1, 1.1, 1.2]
+            # .....
+            # Once we have refinement, we will add mutiple reach tube to 
+            # this curModeStack.bloatedTube
+            # However, we want to copy MODEA->MODEB so we know thats two different
+            # reach tube from two different refined initial set
+            # The result will be look like following
+            # MODEA->MODEB
+            # [0.0, 1.0, 1.1]
+            # [0.1, 1.1, 1.2]
+            # .....
+            # MODEA->MODEB (this one gets copied!)
+            # [0.0, 1.5, 1.6]
+            # [0.1, 1.6, 1.7]
+            # .....
+            if isinstance(curModeStack.bloatedTube[-1], list):
+                curModeStack.bloatedTube.append(curModeStack.bloatedTube[0])
 
 
-def graphSearch(inputFile):
-	"""
+            curStack = curModeStack.stack
+            curVertex = curModeStack.mode
+            curRemainTime = curModeStack.remainTime
+            curLabel = graph.vs[curVertex]['label']
+            print "current mode label:",curLabel
+            curSuccessors = graph.successors(curVertex)
+            curInitial = [curStack[-1].lowerBound, curStack[-1].upperBound]
+            # Update the progress graph
+            progressGraph.update(buildModeStr(graph, curVertex), curModeStack.bloatedTube[0], curModeStack.remainTime)
+
+            if len(curSuccessors) == 0:
+                # If there is not successor
+                # Calculate the current bloated tube without considering the guard
+                curBloatedTube = clacBloatedTube(curLabel,
+                    curInitial,
+                    curRemainTime,
+                    simFunction,
+                    params.bloatingMethod,
+                    params.kvalue,
+                    userConfig.SIMTRACENUM,
+                )
+
+            candidateTube = []
+            shortestTime = float("inf")
+            shortestTube = None
+
+            for curSuccessor in curSuccessors:
+                edgeID = graph.get_eid(curVertex, curSuccessor)
+                curGuardStr = graph.es[edgeID]['guards']
+                curResetStr = graph.es[edgeID]['resets']
+                # Calulcate the current bloated tube with guard involved
+                # Pre-check the simulation trace so we can get better bloated result
+                curBloatedTube = clacBloatedTube(curLabel,
+                    curInitial,
+                    curRemainTime,
+                    simFunction,
+                    params.bloatingMethod,
+                    params.kvalue,
+                    userConfig.SIMTRACENUM,
+                    guardChecker = guard,
+                    guardStr = curGuardStr,
+                )
+
+                # Use the guard to calculate the next initial set
+                nextInit, trunckedResult, transiteTime = guard.guardReachTube(
+                    curBloatedTube,
+                    curGuardStr,
+                )
+
+                print graph.vs[curSuccessor]['label'], transiteTime, nextInit or "next initial not found", curGuardStr
+                
+                if nextInit == None:
+                    continue
+
+                # Reset the next initial set
+                nextInit = reseter.resetSet(curResetStr, nextInit[0], nextInit[1])
+
+                # Build next mode stack
+                nextModeStack = InitialSetStack(
+                    curSuccessor,
+                    userConfig.CHILDREFINETHRES,
+                    curRemainTime-transiteTime,
+                )
+                nextModeStack.parent = curModeStack
+                nextModeStack.stack.append(InitialSet(nextInit[0], nextInit[1]))
+                nextModeStack.bloatedTube.append(curModeStack.bloatedTube[0]+'->'+buildModeStr(graph, curSuccessor))
+                curStack[-1].child[curSuccessor] = nextModeStack
+                if len(trunckedResult)>len(candidateTube):
+                    candidateTube = trunckedResult
+
+                # In case of must transition
+                # We need to record shortest tube
+                # As shortest tube is the tube invoke transition
+                if trunckedResult[-1][0] < shortestTime:
+                    shortestTime = trunckedResult[-1][0]
+                    shortestTube = trunckedResult
+
+            # Handle must transition
+            if params.deterministic and len(curStack[-1].child)>0:
+                nextModesInfo = []
+                for nextMode in curStack[-1].child:
+                    nextModesInfo.append((curStack[-1].child[nextMode].remainTime, nextMode))
+                # This mode gets transit first, only keep this mode
+                maxRemainTime, maxTimeMode = max(nextModesInfo)
+                # Pop other modes becuase of deterministic system
+                for _, nextMode in nextModesInfo:
+                    if nextMode == maxTimeMode:
+                        continue
+                    curStack[-1].child.pop(nextMode)
+                candidateTube = shortestTube
+                print "Handle deterministic system, next mode", graph.vs[curStack[-1].child.keys()[0]]['label']
+
+            if not candidateTube:
+                candidateTube = curBloatedTube
+
+            # Check the safety for current bloated tube
+            safety = checker.checkReachTube(candidateTube, curLabel)
+            if safety == UNSAFE:
+                print "System is not safe in Mode ", curLabel
+                # Start back Tracking from this point and print tube to a file
+                # push current unsafeTube to unsafe tube holder
+                unsafeTube = [curModeStack.bloatedTube[0]] + candidateTube
+                while curModeStack.parent is not None:
+                    prevModeStack = curModeStack.parent
+                    unsafeTube = [prevModeStack.bloatedTube[0]] + prevModeStack.stack[-1].bloatedTube + unsafeTube
+                    curModeStack = prevModeStack
+                print 'simulation time', simEndTime-startTime
+                print 'verification time', time.time()-simEndTime
+                writeReachTubeFile(unsafeTube, UNSAFEFILENAME)
+                retReach = ReachTube(curModeStack.bloatedTube, params.variables, params.vertex)
+                return retReach
+
+            elif safety == UNKNOWN:
+                # Refine the current initial set
+                print curModeStack.mode, "check bloated tube unknown"
+                discardInitial = curModeStack.stack.pop()
+                initOne, initTwo = discardInitial.refine()
+                curModeStack.stack.append(initOne)
+                curModeStack.stack.append(initTwo)
+
+            elif safety == SAFE:
+                print "Mode", curModeStack.mode, "check bloated tube safe"
+                if curModeStack.stack[-1].child:
+                    curModeStack.stack[-1].bloatedTube += candidateTube
+                    nextMode, nextModeStack = curModeStack.stack[-1].child.popitem()
+                    curModeStack = nextModeStack
+                    print "Child exist in cur mode inital", curModeStack.mode, "is curModeStack Now"
+                else:
+                    curModeStack.bloatedTube += candidateTube
+                    curModeStack.stack.pop()
+                    print "No child exist in current initial, pop"
+
+        if curModeStack.parent is None:
+            # We are at head now
+            if backwardFlag == SAFE:
+                # All the nodes are safe
+                print "System is Safe!"
+                writeReachTubeFile(curModeStack.bloatedTube, REACHTUBEOUTPUT)
+                retReach = ReachTube(curModeStack.bloatedTube, params.variables, params.vertex)
+                print 'simulation time', simEndTime-startTime
+                print 'verification time', time.time()-simEndTime
+                return retReach
+            elif backwardFlag == UNKNOWN:
+                print "Hit refine threshold, system halt, result unknown"
+                print 'simulation time', simEndTime-startTime
+                print 'verification time', time.time()-simEndTime
+                exit()
+        else:
+            if backwardFlag == SAFE:
+                prevModeStack = curModeStack.parent
+                prevModeStack.stack[-1].bloatedTube += curModeStack.bloatedTube
+                print 'back flag safe from',curModeStack.mode,'to',prevModeStack.mode
+                if len(prevModeStack.stack[-1].child) == 0:
+                    # There is no next mode from this initial set
+                    prevModeStack.bloatedTube += prevModeStack.stack[-1].bloatedTube
+                    prevModeStack.stack.pop()
+                    curModeStack = prevModeStack
+                    print "No child in prev mode initial, pop,", prevModeStack.mode, "is curModeStack Now"
+                else:
+                    # There is another mode transition from this initial set
+                    nextMode, nextModeStack = prevModeStack.stack[-1].child.popitem()
+                    curModeStack = nextModeStack
+                    print "Child exist in prev mode inital", nextModeStack.mode, "is curModeStack Now"
+            elif backwardFlag == UNKNOWN:
+                prevModeStack = curModeStack.parent
+                print 'back flag unknown from',curModeStack.mode,'to',prevModeStack.mode
+                discardInitial = prevModeStack.stack.pop()
+                initOne, initTwo = discardInitial.refine()
+                prevModeStack.stack.append(initOne)
+                prevModeStack.stack.append(initTwo)
+                curModeStack = prevModeStack
+
+
+def graphSearch(data, simFunction, paramConfig={}):
+    """
     DryVR controller synthesis algorithm.
     It does the controller synthesis and print out the search result.
     tube and transition graph will be stored in ouput folder if algorithm finds one
     
     Args:
-        inputFile (str): input file path
+        data (dict): dictionary that contains params for the input file
+        simFunction (function): black-box simulation function
 
     Returns:
         None

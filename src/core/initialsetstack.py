@@ -5,7 +5,7 @@ import random
 
 class InitialSetStack():
 	"""
-    This is class to for list of initial sets for a single node
+    This is class is for list of initial sets for a single node
     """
 	def __init__(self, mode, threshold, remainTime):
 		"""

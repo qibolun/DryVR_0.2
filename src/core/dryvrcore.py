@@ -204,7 +204,16 @@ def simulate(g, initCondition, timeHorizon, guard, simFuc, reseter, initialMode,
 	writeReachTubeFile(simResult, SIMRESULTOUTPUT)
 	return retval
 
-def clacBloatedTube(modeLabel, initialSet, timeHorizon, simFuc, bloatingMethod, kvalue, guardChecker=None, guardStr=None):
+def clacBloatedTube(
+		modeLabel, 
+		initialSet, 
+		timeHorizon, 
+		simFuc, 
+		bloatingMethod, 
+		kvalue, 
+		simTraceNum,
+		guardChecker=None, 
+		guardStr=None):
 	"""
     This function calculate the reach tube for single given mode
 
@@ -214,6 +223,7 @@ def clacBloatedTube(modeLabel, initialSet, timeHorizon, simFuc, bloatingMethod, 
         timeHorizon (float): time horizon to simulate
         simFuc (function): simulation function
         bloatingMethod (str): determine the bloating method for reach tube, either GLOBAL or PW
+        simTraceNum (int): number of simulations used to calculate the discrepency
         kvalue (list): list of float used when bloating method set to PW
         guardChecker (obj): guard check object
         guardStr (str): guard string
@@ -227,7 +237,7 @@ def clacBloatedTube(modeLabel, initialSet, timeHorizon, simFuc, bloatingMethod, 
 	traces = []
 	traces.append(simFuc(modeLabel, curCenter, timeHorizon))
 	# Simulate SIMTRACENUM times to learn the sensitivity
-	for _ in range(SIMTRACENUM):
+	for _ in range(simTraceNum):
 		newInitPoint = randomPoint(initialSet[0], initialSet[1])
 		traces.append(simFuc(modeLabel, newInitPoint, timeHorizon))
 

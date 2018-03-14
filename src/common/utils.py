@@ -243,3 +243,46 @@ def checkSynthesisInput(data):
 
     if data["bloatingMethod"] == "PW":
         assert 'kvalue' in data, "kvalue need to be provided when bloating method set to PW"
+
+def isIpynb():
+    """
+    Check if the code is running on Ipython notebook
+    """
+    try:
+        cfg = get_ipython().config 
+        if "IPKernelApp" in cfg:
+            return True
+        else:
+            return False
+    except NameError:
+        return False
+
+def overloadConfig(configObj, userConfig):
+    """
+    Overload user config to config module
+    
+    Args:
+        configObj (module): config module
+        userConfig (dict): user specified config
+    """
+
+    if "SIMUTESTNUM" in userConfig:
+        configObj.SIMUTESTNUM = userConfig["SIMUTESTNUM"]
+
+    if "SIMTRACENUM" in userConfig:
+        configObj.SIMTRACENUM = userConfig["SIMTRACENUM"]
+
+    if "REFINETHRES" in userConfig:
+        configObj.REFINETHRES = userConfig["REFINETHRES"]
+
+    if "CHILDREFINETHRES" in userConfig:
+        configObj.CHILDREFINETHRES = userConfig["CHILDREFINETHRES"]
+
+    if "RANDMODENUM" in userConfig:
+        configObj.RANDMODENUM = userConfig["RANDMODENUM"]
+
+    if "RANDSECTIONNUM" in userConfig:
+        configObj.RANDSECTIONNUM = userConfig["RANDSECTIONNUM"]
+
+
+

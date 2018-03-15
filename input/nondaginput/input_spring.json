@@ -3,7 +3,7 @@
     "edge":[],
     "variables":["r","theta","dr","dtheta"],
     "guards":[],
-    "initialMode":"Default",
+    "initialVertex":0,
     "initialSet":[[1.19,0.49,0.0,0.0],[1.21,0.51,0.0,0.0]],
     "unsafeSet":"@Allmode:r<0",
     "timeHorizon":10.0,

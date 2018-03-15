@@ -10,7 +10,7 @@
 		"x_one == 1",
 		"x_two == 0"
 	],
-	"initialMode":"off_on",
+	"initialVertex":1,
 	"initialSet":[[1.5, 1.0],[1.55	, 1.2]],
 	"unsafeSet":"@Allmode:x_two<=-0.7",
 	"timeHorizon":5.0,

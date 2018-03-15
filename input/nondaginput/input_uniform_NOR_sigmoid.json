@@ -4,7 +4,7 @@
     "variables":["Vm","Vout","stim"],
     "guards":["t==3.2","t==4.0"],
     "resets":["Vout=[0,Vout]",""],
-    "initialMode":"NOR_Rampup",
+    "initialVertex":0,
     "initialSet":[[0.75,1.15,0.0],[0.75,1.2,0.0]],
     "unsafeSet":"@Allmode:Vout>1.32",
     "timeHorizon":6.4,

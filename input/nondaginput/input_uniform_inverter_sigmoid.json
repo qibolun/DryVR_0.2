@@ -3,7 +3,7 @@
 	"edge":[[0,1],[1,0]],
 	"variables":["v","stim_local"],
 	"guards":["t==3.2", "t==3.2"],
-	"initialMode":"Inverter_Rampup",
+	"initialVertex":0,
 	"initialSet":[[1.19, 0.0],[1.20, 0.0]],
 	"unsafeSet":"@Allmode:v>=1.32",
 	"timeHorizon":6.4,

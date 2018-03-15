@@ -56,7 +56,7 @@ def verify(data, simFunction, paramConfig={}):
     # Make sure the initial mode is specfieid if the graph is dag
     # FIXME should move this part to input check
     # Bolun 02/12/2018
-    assert graph.is_dag()==True or params.initialMode!="", "Graph is not DAG and you do not have initial mode!"
+    assert graph.is_dag()==True or params.initialVertex!=-1, "Graph is not DAG and you do not have initial mode!"
 
     checker = UniformChecker(params.unsafeSet, params.variables)
     guard = Guard(params.variables)
@@ -79,7 +79,7 @@ def verify(data, simFunction, paramConfig={}):
             guard,
             simFunction,
             reseter,
-            params.initialMode,
+            params.initialVertex,
             params.deterministic
         )
 
@@ -97,16 +97,16 @@ def verify(data, simFunction, paramConfig={}):
     print "Verification Begin"
 
     # Get the initial mode
-    if not params.initialMode:
+    if params.initialVertex == -1:
         computeOrder =  graph.topological_sorting(mode=OUT)
-        initialMode = computeOrder[0]
+        initialVertex = computeOrder[0]
     else:
-        initialMode = graph.vs.find(label=params.initialMode).index
+        initialVertex = params.initialVertex
 
     # Build the initial set stack
-    curModeStack = InitialSetStack(initialMode, userConfig.REFINETHRES, params.timeHorizon)
+    curModeStack = InitialSetStack(initialVertex, userConfig.REFINETHRES, params.timeHorizon)
     curModeStack.stack.append(InitialSet(params.initialSet[0], params.initialSet[1]))
-    curModeStack.bloatedTube.append(buildModeStr(graph, initialMode))
+    curModeStack.bloatedTube.append(buildModeStr(graph, initialVertex))
     while True:
         # backwardFlag can be SAFE, UNSAFE or UNKNWON
         # If the backwardFlag is SAFE/UNSAFE, means that the children nodes

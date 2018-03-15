@@ -4,7 +4,7 @@
     "variables":["Vm","Vout","stim"],
     "guards":["And(stim>=1.2,stim<=1.2)","And(t>=2,t<=2)","And(stim<=0,stim>=0)","And(t>=2,t<=2)"],
     "resets":["stim=1.2;Vout=[0,Vout]","stim=1.2;Vout=[0,Vout]","stim=0","stim=0"],
-    "initialMode":"NOR_Rampup",
+    "initialVertex":0,
     "initialSet":[[0.75,1.17,0.0],[0.75,1.18,0.0]],
     "unsafeSet":"@Allmode:Vout>1.32",
     "timeHorizon":6.4,

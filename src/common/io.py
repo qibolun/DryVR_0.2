@@ -71,8 +71,8 @@ def parseVerificationInputFile(data):
         data['resets'] = ["" for _ in range(len(data["edge"]))]
 
     # If initialMode is missing, fill with empty initial mode
-    if not 'initialMode' in data:
-        data['initialMode'] = ""
+    if not 'initialVertex' in data:
+        data['initialVertex'] = -1
 
     # If deterministic is missing, default to non-deterministic
     if not 'deterministic' in data:
@@ -103,7 +103,7 @@ def parseVerificationInputFile(data):
         timeHorizon=data["timeHorizon"],
         path=data["directory"],
         resets=data["resets"],
-        initialMode=data["initialMode"],
+        initialVertex=data["initialVertex"],
         deterministic=data["deterministic"],
         bloatingMethod=data['bloatingMethod'],
         kvalue=data['kvalue'],

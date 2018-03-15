@@ -87,7 +87,7 @@ def buildRrtGraph(modes, traces):
 	graph.save()
 
 
-def simulate(g, initCondition, timeHorizon, guard, simFuc, reseter, initialMode, deterministic):
+def simulate(g, initCondition, timeHorizon, guard, simFuc, reseter, initialVertex, deterministic):
 	"""
     This function does a full hybrid simulation
 
@@ -98,7 +98,7 @@ def simulate(g, initCondition, timeHorizon, guard, simFuc, reseter, initialMode,
         guard (list): list of guard string corresponding to each transition
         simFuc (function): simulation function
         reseter (list): list of reset corresponding to each transition
-        initialMode (str): initial mode that simulation starts
+        initialVertex (int): initial vertex that simulation starts
         deterministic (bool) : enable or disable must transition
 
     Returns:
@@ -108,15 +108,12 @@ def simulate(g, initCondition, timeHorizon, guard, simFuc, reseter, initialMode,
     """
 
 	retval = defaultdict(list)
-
 	# If you do not delcare initialMode, then we will just use topological sort to find starting point
-	print type(initialMode)
-	if not initialMode:
+	if initialVertex == -1:
 		computerOrder = g.topological_sorting(mode=OUT)
 		curVertex = computerOrder[0]
 	else:
-		curVertex = g.vs.find(label=initialMode).index
-
+		curVertex = initialVertex
 	remainTime = timeHorizon
 	curTime = 0
 

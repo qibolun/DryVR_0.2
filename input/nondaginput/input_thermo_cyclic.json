@@ -3,7 +3,7 @@
 	"edge":[[0,1],[1,0]],
 	"variables":["temp"],
 	"guards":["And(t>1.0,t<=1.1)","And(t>1.0,t<=1.1)"],
-	"initialMode":"On",
+	"initialVertex":0,
 	"resets":["", ""],
 	"initialSet":[[75.0],[76.0]],
 	"unsafeSet":"@On:temp>91@Off:temp>91",

@@ -3,7 +3,7 @@
     "edge":[],
     "variables":["x","y","z"],
     "guards":[],
-    "initialMode":"Default",
+    "initialVertex":0,
     "initialSet":[[0.9, -0.1, 0.9],[1.1, 0.1, 1.1]],
     "unsafeSet":"@Allmode:y<-0.3",
     "timeHorizon":10.0,

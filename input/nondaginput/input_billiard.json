@@ -36,7 +36,7 @@
 		"vx=-vx;posx=5",
 		"vy=-vy;posy=5"
 	],
-	"initialMode":"NormalA",
+	"initialVertex":0,
 	"initialSet":[[1.5, 0.0, 1.0, 1.0],[1.51, 0.0, 1.0, 1.0]],
 	"unsafeSet":"@Allmode:posy>=12.0",
 	"timeHorizon":16,

@@ -14,7 +14,6 @@ The input for DryVR control synthesis is of the form ::
 
     {
       "modes":[modes that black simulator takes]
-      "initialMode":[initial mode that DryVR start to search]
       "variables":[the name of variables in the system]
       "initialSet":[two arrays defining the lower and upper bound of each variable]
       "unsafeSet":@[mode name]:[unsafe region]
@@ -29,7 +28,6 @@ Example input for the robot in maze example ::
 
     {
       "modes":["0", "1", "2", "3", "4", "5", "6", "7"],
-      "initialMode":"1",
       "variables":["x","y","vx","vy"],
       "initialSet":[[1.0,1.0,1.0,1.0],[1.1,1.0,1.0,1.0]],
       "unsafeSet":"@Allmode:Or(And(x>=2.0, x<3.0, y>=3.0, y<=4.0), And(x>=3.0, x<=4.0, y>=2.0, y<3.0), x<0, x>5, y<0, y>5)",

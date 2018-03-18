@@ -17,7 +17,7 @@ The input for DryVR control synthesis is of the form ::
       "variables":[the name of variables in the system]
       "initialSet":[two arrays defining the lower and upper bound of each variable]
       "unsafeSet":@[mode name]:[unsafe region]
-      "goalSet":[two arrays defining the lower and upper bound of each variable for goal]
+      "goalSet":[A z3 expression for target set]
       "timeHorizon":[time bound for control synthesis, the graph should be bounded in time horizon]
       "directory": directory of the folder which contains the simulator for black-box system
       "minTimeThres": minimal staying time for each mode to limit number of trainsition.

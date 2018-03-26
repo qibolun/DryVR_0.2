@@ -28,8 +28,9 @@ def TC_Simulate(Modes,initialCondition,time_bound):
 
 if __name__ == "__main__":
 
-	sol = TC_Simulate("TurnLeft", [0, 0, 0, 1, 0.1], 30)
-
+	sol = TC_Simulate("Dec", [0, 0, 0, 1, 0.0], 30)
+	# for line in sol:
+	# 	print line
 	#nextsol = TC_Simulate("TurnRight",sol[-1][1:],50)#2.4
 
 	#finalsol = TC_Simulate("Const",nextsol[-1][1:],1.5)
@@ -46,8 +47,8 @@ if __name__ == "__main__":
 	sy = [row[2] for row in sol]
 	#sxfinal = [row[1] for row in finalsol]
 	#syfinal = [row[2] for row in finalsol]
-	plt.plot(sx, sy, "-r")
-	plt.show()
+	# plt.plot(sx, sy, "-r")
+	# plt.show()
 
 	# 	nextdelta = [row[5] for row in nextsol]
 # #	for row in sol:

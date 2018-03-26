@@ -1,16 +1,15 @@
 {
-	"vertex":["Acc1;Const","TurnLeft;Const","Acc1;Const","Dec;Const","TurnRight;Const","Const;Const"],
-	"edge":[[0,1],[1,2],[2,3],[3,4],[4,5]],
+	"vertex":["Acc1;Const","TurnLeft;Const","Acc1;Const","TurnRight;Const","Const;Const"],
+	"edge":[[0,1],[1,2],[2,3],[3,4]],
 	"variables":["car1_x","car1_y","car1_vx","car1_vy","car2_x","car2_y","car2_vx","car2_vy"],
 	"guards":[
 		"And(car1_y-car2_y>=10,car1_y-car2_y<=10.1)",
 		"And(t>10.0,t<=12.0)",
-		"And(t>5.0,t<=6.0)",
-		"And(t>5.0,t<=6.0)",
+		"And(car2_y-car1_y>=10,car2_y-car1_y<=10.1)",
 		"And(t>10.0,t<=12.0)"
 	],
-	"initialSet":[[0.0,0.5,0.0,1.0,0.0,-17.0,0.0,1.0],[0.0,1.0,0.0,1.0,0.0,-15.0,0.0,1.0]],
+	"initialSet":[[0.0,0.5,0.0,1.0,0.0,-17.0,0.0,1.0],[0.0,1.0,0.0,1.0,0.0,-16.0,0.0,1.0]],
 	"unsafeSet":"@Allmode:And(car1_x-car2_x<2, car2_x-car1_x<2, car1_y-car2_y<2, car2_y-car1_y<2)",
-	"timeHorizon":50.0,
+	"timeHorizon":40.0,
 	"directory":"examples/cars"
 }

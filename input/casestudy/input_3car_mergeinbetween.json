@@ -1,0 +1,40 @@
+{
+	"vertex":[
+		"Acc1;Const;Const",
+		"TurnRight;Const;Const",
+		"Const;Const;Const",
+		"Dec;Acc1;Const",
+		"TurnRight;Const;Const"
+	],
+	"edge":[[0,1],[1,2],[0,3],[3,4],[4,2]],
+	"variables":[
+		"car1_x",
+		"car1_y",
+		"car1_vx",
+		"car1_vy",
+		"car2_x",
+		"car2_y",
+		"car2_vx",
+		"car2_vy",
+		"car3_x", 
+		"car3_y", 
+		"car3_vx",
+		"car3_vy"
+	],
+	"guards":[
+		"And(car2_y-car1_y>=10,car2_y-car1_y<=10.1)",
+		"And(t>10.0,t<=12.0)",
+		"And(t>8.0,t<=8.5)",
+		"And(car1_y-car2_y>=10,car1_y-car2_y<=10.1)",
+		"And(t>10.0,t<=12.0)"
+	],
+	"initialSet":[
+		[-3.0,0.5,0.0,1.0,0.0,-17.0,0.0,1.0,0.0,-45.0,0.0,1.0],
+		[-3.0,1.0,0.0,1.0,0.0,-16.5,0.0,1.0,0.0,-44.0,0.0,1.0]
+	],
+	"unsafeSet":"@Allmode:Or(And(car1_x-car2_x<2, car2_x-car1_x<2, car1_y-car2_y<2, car2_y-car1_y<2), And(car1_x-car3_x<2, car3_x-car1_x<2, car1_y-car3_y<2, car3_y-car1_y<2))",
+	"timeHorizon":20.0,
+	"directory":"examples/cars",
+	"bloatingMethod":"PW",
+    "kvalue":[2,2,2,2,2,2,2,2,2,2,2,2]
+}

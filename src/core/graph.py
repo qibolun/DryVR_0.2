@@ -19,6 +19,9 @@ class Graph():
             params (obj): An object contains the parameter
             isIpynb (bool): check if the code is running on ipython or not
         """
+        self.isIpynb = isIpynb
+        if not isIpynb:
+            return
         vertex = []
         # Build unique identifier for a vertex and mode name
         for idx,v in enumerate(params.vertex):
@@ -40,8 +43,7 @@ class Graph():
         self.fig.suptitle('', fontsize=10)
         # Draw the graph when initialize
         self.draw()
-        if isIpynb:
-            plt.show()
+        plt.show()
 
 
 
@@ -69,6 +71,8 @@ class Graph():
             title (str): current transition path as the title
             remainTime (float): remaining time
         """
+        if not self.isIpynb:
+            return
         self.ax.clear()
         self.colors = ['green'] * len(self.G.nodes())
         self.colors[list(self.G.nodes()).index(curNode)] = 'red'

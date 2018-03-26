@@ -11,7 +11,7 @@ SAFE = 1
 UNSAFE = -1
 UNKNOWN = 0
 NOSTATUS = 99
-BLOATDEBUG = False
+BLOATDEBUG = True
 PLOTDIM = 1
 
 # File Pathes

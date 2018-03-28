@@ -1,0 +1,15 @@
+{
+	"vertex":["Const;Const","Const;Brk","Brk;Brk"],
+	"edge":[[0,1],[1,2]],
+	"variables":["car1_x","car1_y","car1_vx","car1_vy","car2_x","car2_y","car2_vx","car2_vy"],
+	"guards":[
+		"And(t>5.0,t<=5.1)",
+		"And(car1_y-car2_y>=10,car1_y-car2_y<=10.1)"
+	],
+	"initialSet":[[0.0,0.5,0.0,1.0,0.0,-17.0,0.0,1.0],[0.0,1.0,0.0,1.0,0.0,-16.5,0.0,1.0]],
+	"unsafeSet":"@Allmode:And(car1_x-car2_x<2, car2_x-car1_x<2, car1_y-car2_y<2, car2_y-car1_y<2)",
+	"timeHorizon":40.0,
+	"directory":"examples/cars",
+	"bloatingMethod":"PW",
+    "kvalue":[2,2,2,2,2,2,2,2]
+}

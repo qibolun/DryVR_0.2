@@ -2,11 +2,9 @@
 	"vertex":[
 		"Acc1;Const;Const",
 		"TurnRight;Const;Const",
-		"Const;Const;Const",
-		"Dec;Acc1;Const",
-		"TurnRight;Const;Const"
+		"Const;Const;Const"
 	],
-	"edge":[[0,1],[1,2],[0,3],[3,4],[4,2]],
+	"edge":[[0,1],[1,2]],
 	"variables":[
 		"car1_x",
 		"car1_y",
@@ -23,17 +21,11 @@
 	],
 	"guards":[
 		"And(car2_y-car1_y>=10,car2_y-car1_y<=10.1)",
-		"And(t>10.0,t<=12.0)",
-		"And(t>=1.0,t<=1.1)",
-		"And(car1_y-car2_y>=10,car1_y-car2_y<=10.1)",
 		"And(t>10.0,t<=12.0)"
 	],
 	"resets":[
 		"",
-		"car1_vy=1.0",
-		"",
-		"car1_vy=1.0",
-		""
+		"car1_vy=1.0"
 	],
 	"initialSet":[
 		[-3.0,0.5,0.0,1.0,0.0,-1.0,0.0,1.0,0.0,-40.0,0.0,1.0],

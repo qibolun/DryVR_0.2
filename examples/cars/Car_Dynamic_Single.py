@@ -26,7 +26,6 @@ def Car_dynamic(y,t,v_initial,acc,acc_time,turn_indicator,turn_time,turn_back_ti
 		#print('25')
 	else:
 		print('Something is wrong with time here when calculting velocity!')
-
 	# set the steering angle
 	delta_initial = 0.0
 	if turn_indicator == 'Right':
@@ -106,7 +105,10 @@ def Car_simulate(Mode,initial,time_bound):
 		acc_time = 0.0
 	elif (Mode == 'Dec') or (Mode == 'Brk'): 
 		turn_indicator = 'Straight'
-		acc = -0.2
+		if v_initial == 0.0:
+			acc = 0.0
+		else:
+			acc = -0.2
 		acc_time = 0.0
 	elif Mode =='TurnLeft':
 		turn_indicator = 'Left'
@@ -133,7 +135,6 @@ def Car_simulate(Mode,initial,time_bound):
 		elif (t[i] > acc_time + 5.0):
 			v[i] = v_initial + acc * 5.0
 
-	# print v
 
 	# Construct the final output
 	trace = []

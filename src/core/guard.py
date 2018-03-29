@@ -55,7 +55,7 @@ class Guard():
         curSolver.add(eval(guardStr))
         return curSolver, symbolsIdx
 
-    def guardSimuTube(self, trace, guardStr):
+    def guardSimuTrace(self, trace, guardStr):
         """
         Check the guard for simulation trace.
         Note we treat the simulation trace as the set as well.
@@ -96,7 +96,7 @@ class Guard():
             curSolver.push()
             for symbol in symbols:
                 curSolver.add(self.varDic[symbol] >= min(lower[symbols[symbol]], upper[symbols[symbol]]))
-                curSolver.add(self.varDic[symbol] <= max(upper[symbols[symbol]], upper[symbols[symbol]]))
+                curSolver.add(self.varDic[symbol] <= max(lower[symbols[symbol]], upper[symbols[symbol]]))
             if curSolver.check() == sat:
                 curSolver.pop()
                 guardSet[idx] = upper
@@ -123,7 +123,7 @@ class Guard():
         Returns:
             the length of the truncated traces.
         """
-        nextInit, trace = self.guardSimuTube(trace, guardStr)
+        nextInit, trace = self.guardSimuTrace(trace, guardStr)
         return len(trace)
 
 

@@ -28,29 +28,29 @@ def Car_dynamic(y,t,v_initial,acc,acc_time,turn_indicator,turn_time,turn_back_ti
         print('Something is wrong with time here when calculting velocity!')
     # set the steering angle
     delta_initial = 0.0
-    if turn_indicator == 'Right':
+    if turn_indicator == 'Left':
         # print(t)
         if t <= turn_time:
             delta_steer = delta_initial;
         elif (t > turn_time) and (t <= turn_time + 2.0):
-            delta_steer = delta_initial + 1.0 
+            delta_steer = delta_initial + 3.0 
         elif (t > turn_time + 2.0) and (t <= turn_back_time):
             delta_steer = delta_initial 
         elif (t > turn_back_time) and (t <= turn_back_time + 2.0):
-            delta_steer = delta_initial - 1.0 
+            delta_steer = delta_initial - 3.0 
         elif t > turn_back_time + 2.0:
             delta_steer = delta_initial
         else:
             print('Something is wrong with time here when calculting steering angle!')
-    elif turn_indicator =='Left':
+    elif turn_indicator =='Right':
         if t <= turn_time:
             delta_steer = delta_initial;
         elif (t > turn_time) and (t <= turn_time + 2.0):
-            delta_steer = delta_initial + (-1.0) 
+            delta_steer = delta_initial + (-3.0) 
         elif (t > turn_time + 2.0) and (t <= turn_back_time):
             delta_steer = delta_initial 
         elif (t > turn_back_time) and (t < turn_back_time + 2.0):
-            delta_steer = delta_initial + (1.0)
+            delta_steer = delta_initial + (3.0)
         elif t > turn_back_time + 2.0:
             delta_steer = delta_initial
         else:
@@ -126,10 +126,14 @@ def Car_simulate(Mode,initial,time_bound):
         turn_indicator = 'Left'
         turn_time = 0.0
         turn_back_time = 5.0
+        if v_initial < 0.5:
+            turn_back_time = 10.0
     elif Mode == 'TurnRight':
         turn_indicator = 'Right'
         turn_time = 0.0
         turn_back_time = 5.0
+        if v_initial < 0.5:
+            turn_back_time = 10.0
     else:
         print('Wrong Mode name!')
 
@@ -170,7 +174,7 @@ def Car_simulate(Mode,initial,time_bound):
 
 if __name__ == "__main__":
     print "start test"
-    traj = Car_simulate("TurnLeft", [0.0,0.0,1.0,0.0], "10.0")
+    traj = Car_simulate("TurnLeft", [0.0,0.0,0.0,1.0], "10.0")
     for line in traj:
         print line
 

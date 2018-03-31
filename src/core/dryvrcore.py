@@ -143,7 +143,7 @@ def simulate(g, initCondition, timeHorizon, guard, simFuc, reseter, initialVerte
 
 		if len(curSuccessors) == 0:
 			# Some model return numpy array, convert to list
-			initCondition, trunckedResult = guard.guardSimuTube(
+			initCondition, trunckedResult = guard.guardSimuTrace(
 				curSimResult,
 				None
 			)
@@ -158,7 +158,7 @@ def simulate(g, initCondition, timeHorizon, guard, simFuc, reseter, initialVerte
 				curGuardStr = g.es[edgeID]['guards']
 				curResetStr = g.es[edgeID]['resets']
 
-				nextInit, trunckedResult = guard.guardSimuTube(
+				nextInit, trunckedResult = guard.guardSimuTrace(
 					curSimResult,
 					curGuardStr
 				)

@@ -1,0 +1,19 @@
+{
+    "vertex": ["Acc1;Const","Dec;Const","Const;Const"],
+    "edge": [[0,1],[1,2]],
+    "variables":["car1_x","car1_y","car1_vx","car1_vy","car2_x","car2_y","car2_vx","car2_vy"],
+    "guards": [
+        "car2_y-car1_y == 2.0",
+        "car1_y == car2_y"
+    ],
+    "resets": [
+        "",
+        "car1_vy = 16.67"
+    ],
+    "initialSet":[[3.0,1.0,0.0,16.67,0.0,17.0,0.0,16.67],[3.0,1.5,0.0,16.67,0.0,18.0,0.0,16.67]],
+    "unsafeSet":"@Allmode:And(car1_x-car2_x<2, car2_x-car1_x<2, car1_y-car2_y<2, car2_y-car1_y<2)",
+    "timeHorizon":30.0,
+    "directory":"examples/cars_fix",
+    "bloatingMethod":"PW",
+    "kvalue":[2,2,2,2,2,2,2,2]
+}

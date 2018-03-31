@@ -38,6 +38,8 @@ def verify(data, simFunction, paramConfig={}):
     # overload these parameters to userConfig
     overloadConfig(userConfig, paramConfig)
 
+    GLOBALREFINECOUNTER = 0
+
     params = parseVerificationInputFile(data)
     # Build the graph object
     graph = buildGraph(
@@ -258,6 +260,7 @@ def verify(data, simFunction, paramConfig={}):
                     curModeStack = prevModeStack
                 print 'simulation time', simEndTime-startTime
                 print 'verification time', time.time()-simEndTime
+                print 'refine time', GLOBALREFINECOUNTER
                 writeReachTubeFile(unsafeTube, UNSAFEFILENAME)
                 retReach = ReachTube(curModeStack.bloatedTube, params.variables, params.vertex)
                 return retReach
@@ -269,6 +272,7 @@ def verify(data, simFunction, paramConfig={}):
                 initOne, initTwo = discardInitial.refine()
                 curModeStack.stack.append(initOne)
                 curModeStack.stack.append(initTwo)
+                GLOBALREFINECOUNTER+=1
 
             elif safety == SAFE:
                 print "Mode", curModeStack.mode, "check bloated tube safe"
@@ -287,6 +291,7 @@ def verify(data, simFunction, paramConfig={}):
             if backwardFlag == SAFE:
                 # All the nodes are safe
                 print "System is Safe!"
+                print "refine time", GLOBALREFINECOUNTER
                 writeReachTubeFile(curModeStack.bloatedTube, REACHTUBEOUTPUT)
                 retReach = ReachTube(curModeStack.bloatedTube, params.variables, params.vertex)
                 print 'simulation time', simEndTime-startTime
@@ -321,6 +326,7 @@ def verify(data, simFunction, paramConfig={}):
                 prevModeStack.stack.append(initOne)
                 prevModeStack.stack.append(initTwo)
                 curModeStack = prevModeStack
+                GLOBALREFINECOUNTER+=1
 
 
 def graphSearch(data, simFunction, paramConfig={}):

@@ -33,9 +33,7 @@ def Car_dynamic(y,t,v_initial,acc,turn_indicator,turn_time,turn_back_time):
             ub = trn[i]
             lb = trn[i+1]
             break
-    turn_factor = lb + (ub-lb) * (abs(v_initial)if abs(v_initial)>=30 or abs(v_initial)<1.0:
-            print("Speed limit error")
-            exit() - vel[i])
+    turn_factor = lb + (ub-lb) * (abs(v_initial) - vel[i])
     if turn_indicator == 'Left':
         # print(t)
         if t <= turn_time:
@@ -189,7 +187,7 @@ def Car_simulate(Mode,initial,time_bound):
 if __name__ == "__main__":
     print "start test"
     # 16.67*3.6 = 60km/hr
-    traj = Car_simulate("TurnLeft", [0.0,0.0,0.0,21.16], "10")
+    traj = Car_simulate("TurnRight", [0.0,0.0,0.0,21.16], "10")
     for line in traj:
         print line
     # # x = [16.67, 4.17, 30.0, 20.0, 25.0, 10.0,8.0,5.0,3.0,27.5,17.5,2,12.5,1]

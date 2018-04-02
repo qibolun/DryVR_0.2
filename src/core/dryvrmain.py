@@ -156,7 +156,6 @@ def verify(data, simFunction, paramConfig={}):
             curVertex = curModeStack.mode
             curRemainTime = curModeStack.remainTime
             curLabel = graph.vs[curVertex]['label']
-            print "current mode label:",curLabel
             curSuccessors = graph.successors(curVertex)
             curInitial = [curStack[-1].lowerBound, curStack[-1].upperBound]
             # Update the progress graph
@@ -201,7 +200,6 @@ def verify(data, simFunction, paramConfig={}):
                     curGuardStr,
                 )
 
-                print graph.vs[curSuccessor]['label'], transiteTime, nextInit or "next initial not found", curGuardStr
                 
                 if nextInit == None:
                     continue

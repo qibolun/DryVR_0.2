@@ -300,7 +300,7 @@ def verify(data, simFunction, paramConfig={}):
                 print "Hit refine threshold, system halt, result unknown"
                 print 'simulation time', simEndTime-startTime
                 print 'verification time', time.time()-simEndTime
-                return "UNKNOWN", retReach
+                return "UNKNOWN", None
         else:
             if backwardFlag == SAFE:
                 prevModeStack = curModeStack.parent

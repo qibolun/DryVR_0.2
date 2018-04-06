@@ -30,7 +30,7 @@ def writeReachTubeFile(result, path):
     """
     with open(path, 'w') as f:
         for line in result:
-            if isinstance(line, unicode):
+            if isinstance(line, unicode) or isinstance(line, str):
                 f.write(line+'\n')
             elif isinstance(line, list):
                 f.write(' '.join(map(str,line))+'\n')

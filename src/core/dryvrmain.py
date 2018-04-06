@@ -30,7 +30,8 @@ def verify(data, simFunction, paramConfig={}):
         paramConfig (dict): user-specified configuration
 
     Returns:
-        None
+        Safety (str): safety of the system
+        Reach (obj): reach tube object
 
     """
     # There are some fields can be config by user,
@@ -91,7 +92,7 @@ def verify(data, simFunction, paramConfig={}):
             if safety == -1:
                 print 'Current simulation is not safe. Program halt'
                 print 'simulation time', time.time()-startTime
-                exit()
+                return "UNSAFE", None
     simEndTime = time.time()
 
     # Step 2) Check Reach Tube
@@ -110,10 +111,10 @@ def verify(data, simFunction, paramConfig={}):
     curModeStack.stack.append(InitialSet(params.initialSet[0], params.initialSet[1]))
     curModeStack.bloatedTube.append(buildModeStr(graph, initialVertex))
     while True:
-        # backwardFlag can be SAFE, UNSAFE or UNKNWON
+        # backwardFlag can be SAFE, UNSAFE or UNKNOWN
         # If the backwardFlag is SAFE/UNSAFE, means that the children nodes
         # of current nodes are all SAFE/UNSAFE. If one of the child node is
-        # UNKNWON, then the backwardFlag is UNKNWON.
+        # UNKNOWN, then the backwardFlag is UNKNOWN.
         backwardFlag = SAFE
 
         while curModeStack.stack:
@@ -261,7 +262,7 @@ def verify(data, simFunction, paramConfig={}):
                 print 'refine time', GLOBALREFINECOUNTER
                 writeReachTubeFile(unsafeTube, UNSAFEFILENAME)
                 retReach = ReachTube(curModeStack.bloatedTube, params.variables, params.vertex)
-                return retReach
+                return "UNSAFE", retReach
 
             elif safety == UNKNOWN:
                 # Refine the current initial set
@@ -294,12 +295,12 @@ def verify(data, simFunction, paramConfig={}):
                 retReach = ReachTube(curModeStack.bloatedTube, params.variables, params.vertex)
                 print 'simulation time', simEndTime-startTime
                 print 'verification time', time.time()-simEndTime
-                return retReach
+                return "SAFE", retReach
             elif backwardFlag == UNKNOWN:
                 print "Hit refine threshold, system halt, result unknown"
                 print 'simulation time', simEndTime-startTime
                 print 'verification time', time.time()-simEndTime
-                exit()
+                return "UNKNOWN", retReach
         else:
             if backwardFlag == SAFE:
                 prevModeStack = curModeStack.parent

@@ -27,9 +27,26 @@ def TC_Simulate(Mode,initialCondition,time_bound):
 	for step in t:
 		newt.append(float(format(step, '.2f')))
 	t = newt
+	label = {
+		"0":0,
+		"UP":0,
+		"1":1,
+		"UPRIGHT":1,
+		"2":2,
+		"RIGHT":2,
+		"3":3,
+		"DOWNRIGHT":3,
+		"4":4,
+		"DOWN":4,
+		"5":5,
+		"DOWNLEFT":5,
+		"6":6,
+		"LEFT":6,
+		"7":7,
+		"UPLEFT":7
+	}
 
-
-	sol = odeint(robot_dynamic,initialCondition,t,args=(float(Mode),),hmax = time_step)
+	sol = odeint(robot_dynamic,initialCondition,t,args=(label[Mode],),hmax = time_step)
 
 	# Construct the final output
 	trace = []
@@ -45,6 +62,6 @@ def TC_Simulate(Mode,initialCondition,time_bound):
 	return trace
 
 if __name__ == "__main__":
-	sol = TC_Simulate('3',[0.0,0.0,1.0,0.0],5)
+	sol = TC_Simulate('7',[0.0,0.0,1.0,0.0],1)
 	for s in sol:
 		print(s)

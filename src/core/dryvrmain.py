@@ -352,7 +352,6 @@ def graphSearch(data, simFunction, paramConfig={}):
     checker = UniformChecker(params.unsafeSet, params.variables)
     goalSetChecker = GoalChecker(params.goalSet, params.variables)
     distanceChecker = DistChecker(params.goal, params.variables)
-    simFunction = importSimFunction(params.path)
     # Read the important param
     availableModes = params.modes
     startModes = params.modes
@@ -525,7 +524,7 @@ def graphSearch(data, simFunction, paramConfig={}):
         # Reorganize the content in modes list for plotter use
         modes = modes[::-1]
         traces = traces[::-1]
-        buildRrtGraph(modes, traces)
+        buildRrtGraph(modes, traces, isIpynb())
         for i in range(1, len(modes)):
             modes[i] = modes[i-1]+'->'+modes[i]
 

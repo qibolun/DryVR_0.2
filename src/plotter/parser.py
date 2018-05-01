@@ -38,6 +38,8 @@ def parse(data):
 
 		else:
 			line = map(float,line.strip().split())
+			if len(line)<=1:
+				continue
 			if LOWER:
 				LOWER = False
 				# This data appered in lowerBound before, concat the data

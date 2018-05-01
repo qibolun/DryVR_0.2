@@ -25,26 +25,19 @@
   
 
   
-  
     <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
-  
-
-  
-
-  
-        <link rel="index" title="Index"
-              href="genindex.html"/>
-        <link rel="search" title="Search" href="search.html"/>
-    <link rel="top" title="DryVR 2.0 documentation" href="index.html"/>
-        <link rel="next" title="DryVR’s Synthesis Language" href="dryvr&#39;s_control_synthesis.html"/>
-        <link rel="prev" title="Usage" href="usage.html"/> 
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="DryVR’s Synthesis Language" href="dryvr&#39;s_control_synthesis.html" />
+    <link rel="prev" title="Usage" href="usage.html" /> 
 
   
   <script src="_static/js/modernizr.min.js"></script>
 
 </head>
 
-<body class="wy-body-for-nav" role="document">
+<body class="wy-body-for-nav">
 
    
   <div class="wy-grid-for-nav">
@@ -94,7 +87,7 @@
 <li class="toctree-l1"><a class="reference internal" href="status.html">Status</a></li>
 <li class="toctree-l1"><a class="reference internal" href="installtion.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="usage.html">Usage</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">DryVR&#8217;s Verification Language</a><ul>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">DryVR’s Verification Language</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#black-box-simulator">Black-box Simulator</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#transition-graph">Transition Graph</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#input-format">Input Format</a></li>
@@ -102,7 +95,7 @@
 <li class="toctree-l2"><a class="reference internal" href="#advanced-tricks-verify-your-own-black-box-system">Advanced Tricks: Verify your own black-box system</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="dryvr's_control_synthesis.html">DryVR&#8217;s Synthesis Language</a></li>
+<li class="toctree-l1"><a class="reference internal" href="dryvr's_control_synthesis.html">DryVR’s Synthesis Language</a></li>
 <li class="toctree-l1"><a class="reference internal" href="example.html">Examples and Performance Evaluation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="parameters_configuration.html">Parameters configuration</a></li>
 <li class="toctree-l1"><a class="reference internal" href="publications.html">Publications</a></li>
@@ -118,7 +111,7 @@
     <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
 
       
-      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+      <nav class="wy-nav-top" aria-label="top navigation">
         
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
           <a href="index.html">DryVR</a>
@@ -126,9 +119,10 @@
       </nav>
 
 
-      
       <div class="wy-nav-content">
+        
         <div class="rst-content">
+        
           
 
 
@@ -151,7 +145,7 @@
     
       <li><a href="index.html">Docs</a> &raquo;</li>
         
-      <li>DryVR&#8217;s Verification Language</li>
+      <li>DryVR’s Verification Language</li>
     
     
       <li class="wy-breadcrumbs-aside">
@@ -171,7 +165,7 @@
            <div itemprop="articleBody">
             
   <div class="section" id="dryvr-s-verification-language">
-<h1>DryVR&#8217;s Verification Language<a class="headerlink" href="#dryvr-s-verification-language" title="Permalink to this headline">¶</a></h1>
+<h1>DryVR’s Verification Language<a class="headerlink" href="#dryvr-s-verification-language" title="Permalink to this headline">¶</a></h1>
 <p>In DryVR,  a hybrid system is modeled as a combination of a white-box that specifies the mode switches (<a class="reference internal" href="#transition-graph-label"><span class="std std-ref">Transition Graph</span></a>) and a black-box that can simulate the continuous evolution in each mode (<a class="reference internal" href="#black-box-label"><span class="std std-ref">Black-box Simulator</span></a>).</p>
 <div class="section" id="black-box-simulator">
 <span id="black-box-label"></span><h2>Black-box Simulator<a class="headerlink" href="#black-box-simulator" title="Permalink to this headline">¶</a></h2>
@@ -180,11 +174,11 @@ sequence of time points <img class="math" src="_images/math/07e0f7d7006933f1f612
 states <img class="math" src="_images/math/706d7993b1e926004418817502d64bbaddd862de.png" alt="sim(mode,x_0,t_1), \ldots, sim(mode,x_0,t_k)"/>
 as the simulation trajectory of the system in the given mode starting from <img class="math" src="_images/math/307e583980f527b3f26e1e159435e0a8d262736b.png" alt="x_0"/> at the time points <img class="math" src="_images/math/07e0f7d7006933f1f612779ac3aecf313f5b6f6a.png" alt="t_1, \ldots, t_k"/>.</p>
 <p>DryVR uses the black-box simulator by calling the simulation function:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">TC_Simulate</span><span class="p">(</span><span class="n">Modes</span><span class="p">,</span><span class="n">initialCondition</span><span class="p">,</span><span class="n">time_bound</span><span class="p">)</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">TC_Simulate</span><span class="p">(</span><span class="n">Modes</span><span class="p">,</span><span class="n">initialCondition</span><span class="p">,</span><span class="n">time_bound</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>Given the mode name &#8220;Mode&#8221;, initial state &#8220;initialCondition&#8221;  and time horizon &#8220;time_bound&#8221;, the function TC_Simulate should return an python array of the form:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="p">[[</span><span class="n">t_0</span><span class="p">,</span><span class="n">variable_1</span><span class="p">(</span><span class="n">t_0</span><span class="p">),</span><span class="n">variable_2</span><span class="p">(</span><span class="n">t_0</span><span class="p">),</span><span class="o">...</span><span class="p">],[</span><span class="n">t_1</span><span class="p">,</span><span class="n">variable_1</span><span class="p">(</span><span class="n">t_1</span><span class="p">),</span><span class="n">variable_2</span><span class="p">(</span><span class="n">t_1</span><span class="p">),</span><span class="o">...</span><span class="p">],</span><span class="o">...</span><span class="p">]</span>
+<p>Given the mode name “Mode”, initial state “initialCondition”  and time horizon “time_bound”, the function TC_Simulate should return an python array of the form:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">[[</span><span class="n">t_0</span><span class="p">,</span><span class="n">variable_1</span><span class="p">(</span><span class="n">t_0</span><span class="p">),</span><span class="n">variable_2</span><span class="p">(</span><span class="n">t_0</span><span class="p">),</span><span class="o">...</span><span class="p">],[</span><span class="n">t_1</span><span class="p">,</span><span class="n">variable_1</span><span class="p">(</span><span class="n">t_1</span><span class="p">),</span><span class="n">variable_2</span><span class="p">(</span><span class="n">t_1</span><span class="p">),</span><span class="o">...</span><span class="p">],</span><span class="o">...</span><span class="p">]</span>
 </pre></div>
 </div>
 <p>We provide several example simulation functions and you have to write your own if you want to verify systems that use other black-boxes. Once you create the TC_Simulate function and corresponding input file, you can run DryVR to check the safety of your system. To connect DryVR with your own black-box simulator, please refer to section <a class="reference internal" href="#advance-label"><span class="std std-ref">Advanced Tricks: Verify your own black-box system</span></a> for more details.</p>
@@ -197,18 +191,18 @@ as the simulation trajectory of the system in the given mode starting from <img 
 </div>
 <p>A transition graph is a labeled, directed graph as shown on the right. The vertex labels (red nodes in the graph) specify the modes of the system, and the edge labels specify the guard and reset from the predecessor node to the successor node.</p>
 <p>The transition graph shown on the right defines an automatic emergency braking system. Car1 is driving ahead of Car2 on a straight lane. Initially, both car1 and car2 are in the constant speed mode (Const;Const). Within a short amount of time ([0,0.1]s) Car1 transits into brake mode while Car2 remains in the cruise mode (Brk;Const). After [0.8,0.9]s, Car2 will react by braking as well so both cars are in the brake mode (Brk;Brk).</p>
-<p>The transition graph will be generated automatically by DryVR and stored in the tool&#8217;s root directory as curGraph.png</p>
+<p>The transition graph will be generated automatically by DryVR and stored in the tool’s root directory as curGraph.png</p>
 </div>
 <div class="section" id="input-format">
 <span id="input-format-label"></span><h2>Input Format<a class="headerlink" href="#input-format" title="Permalink to this headline">¶</a></h2>
 <p>The input for DryVR is of the form</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="p">{</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
   <span class="s2">&quot;vertex&quot;</span><span class="p">:[</span><span class="n">transition</span> <span class="n">graph</span> <span class="n">vertex</span> <span class="n">labels</span> <span class="p">(</span><span class="n">modes</span><span class="p">)]</span>
   <span class="s2">&quot;edge&quot;</span><span class="p">:[</span><span class="n">transition</span> <span class="n">graph</span> <span class="n">edges</span><span class="p">,</span> <span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">)</span> <span class="n">means</span> <span class="n">there</span> <span class="ow">is</span> <span class="n">a</span> <span class="n">directed</span> <span class="n">edge</span> <span class="kn">from</span> <span class="nn">vertex</span> <span class="n">i</span> <span class="n">to</span> <span class="n">vertex</span> <span class="n">j</span><span class="p">]</span>
   <span class="s2">&quot;variables&quot;</span><span class="p">:[</span><span class="n">the</span> <span class="n">name</span> <span class="n">of</span> <span class="n">variables</span> <span class="ow">in</span> <span class="n">the</span> <span class="n">system</span><span class="p">]</span>
   <span class="s2">&quot;guards&quot;</span><span class="p">:[</span><span class="n">transition</span> <span class="n">graph</span> <span class="n">edge</span> <span class="n">labels</span> <span class="p">(</span><span class="n">transition</span> <span class="n">condition</span><span class="p">)]</span>
   <span class="s2">&quot;resets&quot;</span><span class="p">:[</span><span class="n">reset</span> <span class="n">condition</span> <span class="n">after</span> <span class="n">transition</span><span class="p">]</span> <span class="c1"># This is optional if you do not want reset</span>
-  <span class="s2">&quot;initialMode&quot;</span><span class="p">:[</span><span class="n">label</span> <span class="k">for</span> <span class="n">initial</span> <span class="n">mode</span><span class="p">]</span> <span class="c1"># This is optional for DAG graph</span>
+  <span class="s2">&quot;initialVertex&quot;</span><span class="p">:</span><span class="n">integer</span> <span class="n">indicates</span> <span class="n">the</span> <span class="n">vertex</span> <span class="n">to</span> <span class="n">start</span> <span class="c1"># This is optional for DAG graph</span>
   <span class="s2">&quot;initialSet&quot;</span><span class="p">:[</span><span class="n">two</span> <span class="n">arrays</span> <span class="n">defining</span> <span class="n">the</span> <span class="n">lower</span> <span class="ow">and</span> <span class="n">upper</span> <span class="n">bound</span> <span class="n">of</span> <span class="n">each</span> <span class="n">variable</span><span class="p">]</span>
   <span class="s2">&quot;unsafeSet&quot;</span><span class="p">:</span><span class="o">@</span><span class="p">[</span><span class="n">mode</span> <span class="n">name</span><span class="p">]:[</span><span class="n">unsafe</span> <span class="n">region</span><span class="p">]</span>
   <span class="s2">&quot;timeHorizon&quot;</span><span class="p">:[</span><span class="n">Time</span> <span class="n">bound</span> <span class="k">for</span> <span class="n">the</span> <span class="n">verification</span><span class="p">]</span>
@@ -218,9 +212,9 @@ as the simulation trajectory of the system in the given mode starting from <img 
 <span class="p">}</span>
 </pre></div>
 </div>
-<p>Some fields are optional in DryVR&#8217;s input langauge such as resets, initialMode, bloatingMethod and kvalue under some conditions. Please read the comment.</p>
+<p>Some fields are optional in DryVR’s input langauge such as resets, initialVertex, bloatingMethod and kvalue under some conditions. Please read the comment.</p>
 <p>Example input for the Automatic Emergency Braking System</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="p">{</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
   <span class="s2">&quot;vertex&quot;</span><span class="p">:[</span><span class="s2">&quot;Const;Const&quot;</span><span class="p">,</span><span class="s2">&quot;Brk;Const&quot;</span><span class="p">,</span><span class="s2">&quot;Brk;Brk&quot;</span><span class="p">],</span>
   <span class="s2">&quot;edge&quot;</span><span class="p">:[[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">],[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">]],</span>
   <span class="s2">&quot;variables&quot;</span><span class="p">:[</span><span class="s2">&quot;car1_x&quot;</span><span class="p">,</span><span class="s2">&quot;car1_y&quot;</span><span class="p">,</span><span class="s2">&quot;car1_vx&quot;</span><span class="p">,</span><span class="s2">&quot;car1_vy&quot;</span><span class="p">,</span><span class="s2">&quot;car2_x&quot;</span><span class="p">,</span><span class="s2">&quot;car2_y&quot;</span><span class="p">,</span><span class="s2">&quot;car2_vx&quot;</span><span class="p">,</span><span class="s2">&quot;car2_vy&quot;</span><span class="p">],</span>
@@ -241,50 +235,50 @@ as the simulation trajectory of the system in the given mode starting from <img 
 <p>The tool will print background information like the current mode, transition time, initial set and discrepancy function information on the run. The final result about safe/unsafe will be printed at the bottom.</p>
 <p>The whole verification algorithm will start from doing a few simulations to quickly find the counter-example. If the simulations are all safe, then the main verification process will start. The number of initial simulation can be changed by the user (See {<a class="reference internal" href="parameters_configuration.html#parameter-label"><span class="std std-ref">Parameters configuration</span></a>})</p>
 <p>When the system is safe, the final result will look like</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span>System is Safe!
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>System is Safe!
 </pre></div>
 </div>
-<p>If the verification result is safe, the cooresponding reachtubes are stored in &#8220;output/reachtube.txt&#8221;</p>
+<p>If the verification result is safe, the cooresponding reachtubes are stored in “output/reachtube.txt”</p>
 <p>When the system is unsafe from the initial simulations, the final result will look like</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">Current</span> <span class="n">simulation</span> <span class="ow">is</span> <span class="ow">not</span> <span class="n">safe</span><span class="o">.</span> <span class="n">Program</span> <span class="n">halt</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Current</span> <span class="n">simulation</span> <span class="ow">is</span> <span class="ow">not</span> <span class="n">safe</span><span class="o">.</span> <span class="n">Program</span> <span class="n">halt</span>
 </pre></div>
 </div>
 <p>When the system is unsafe from the verification process, the final result will look like</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">System</span> <span class="ow">is</span> <span class="ow">not</span> <span class="n">safe</span> <span class="ow">in</span> <span class="n">Mode</span> <span class="p">[</span><span class="n">Mode</span> <span class="n">name</span><span class="p">]</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">System</span> <span class="ow">is</span> <span class="ow">not</span> <span class="n">safe</span> <span class="ow">in</span> <span class="n">Mode</span> <span class="p">[</span><span class="n">Mode</span> <span class="n">name</span><span class="p">]</span>
 </pre></div>
 </div>
 <p>When the system is unknown from verification, the final result will look like</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">Hit</span> <span class="n">refine</span> <span class="n">threshold</span><span class="p">,</span> <span class="n">system</span> <span class="n">halt</span><span class="p">,</span> <span class="n">result</span> <span class="n">unknown</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Hit</span> <span class="n">refine</span> <span class="n">threshold</span><span class="p">,</span> <span class="n">system</span> <span class="n">halt</span><span class="p">,</span> <span class="n">result</span> <span class="n">unknown</span>
 </pre></div>
 </div>
-<p>If the simulation result is not safe from the initial simulations, the unsafe simulation trajectory will be stored in &#8220;output/Traj.txt&#8221;.</p>
-<p>If the verfication result is not safe from the verification process, the counter example reachtube will be stored in &#8220;output/unsafeTube.txt&#8221;.</p>
+<p>If the simulation result is not safe from the initial simulations, the unsafe simulation trajectory will be stored in “output/Traj.txt”.</p>
+<p>If the verfication result is not safe from the verification process, the counter example reachtube will be stored in “output/unsafeTube.txt”.</p>
 </div>
 <div class="section" id="advanced-tricks-verify-your-own-black-box-system">
 <span id="advance-label"></span><h2>Advanced Tricks: Verify your own black-box system<a class="headerlink" href="#advanced-tricks-verify-your-own-black-box-system" title="Permalink to this headline">¶</a></h2>
 <p>We use a very simple example of a thermostat as the starting point to show how to use DryVR to verify your own black-box system.</p>
-<p>The thermostat is a one-dimensional linear hybrid system with two modes &#8220;On&#8221; and &#8220;Off&#8221;. The only state variable is the temperature <img class="math" src="_images/math/a59f68a4202623bb859a7093f0316bf466e6f75d.png" alt="x"/>. In the &#8220;On&#8221; mode, the system dynamic is</p>
+<p>The thermostat is a one-dimensional linear hybrid system with two modes “On” and “Off”. The only state variable is the temperature <img class="math" src="_images/math/a59f68a4202623bb859a7093f0316bf466e6f75d.png" alt="x"/>. In the “On” mode, the system dynamic is</p>
 <div class="math">
 <p><img src="_images/math/5d097156266d3b1b6226a8cadf3139db4aaebc12.png" alt="\dot{x} = 0.1 x,"/></p>
-</div><p>and in the &#8220;Off&#8221; mode, the system dynamic is</p>
+</div><p>and in the “Off” mode, the system dynamic is</p>
 <div class="math">
 <p><img src="_images/math/0649e1087caa1a5792006a570fd8b34da865d371.png" alt="\dot{x} = -0.1 x,"/></p>
 </div><p>As for DryVR, of course, all the information about dynamics is hidden. Instead, you need to provide the simulator function TC_Simulate as discussed in <a class="reference internal" href="#black-box-label"><span class="std std-ref">Black-box Simulator</span></a>.</p>
 <p><strong>Step 1</strong>:
 Create a folder in the DryVR root directory for your new model and enter it.</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">cd</span> <span class="n">examples</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">cd</span> <span class="n">examples</span>
 <span class="n">mkdir</span> <span class="n">Thermostats</span>
 <span class="n">cd</span> <span class="n">Thermostats</span>
 </pre></div>
 </div>
 <p><strong>Step 2</strong>:
 Inside your model folder, create a python script for your model.</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">touch</span> <span class="n">Thermostats_ODE</span><span class="o">.</span><span class="n">py</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">touch</span> <span class="n">Thermostats_ODE</span><span class="o">.</span><span class="n">py</span>
 </pre></div>
 </div>
 <p><strong>Step 3</strong>: Write the TC_Simulate function in the python file Thermostats_ODE.py.</p>
 <p>For the thermostat system, one simulator function could be:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">thermo_dynamic</span><span class="p">(</span><span class="n">y</span><span class="p">,</span><span class="n">t</span><span class="p">,</span><span class="n">rate</span><span class="p">):</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">thermo_dynamic</span><span class="p">(</span><span class="n">y</span><span class="p">,</span><span class="n">t</span><span class="p">,</span><span class="n">rate</span><span class="p">):</span>
     <span class="n">dydt</span> <span class="o">=</span> <span class="n">rate</span><span class="o">*</span><span class="n">y</span>
     <span class="k">return</span> <span class="n">dydt</span>
 
@@ -318,7 +312,7 @@ Inside your model folder, create a python script for your model.</p>
 </pre></div>
 </div>
 <p>In this example, we use odeint simulator from Scipy, but you use any programming language as long as the TC_Simulate function follows the input-output requirement:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">TC_Simulate</span><span class="p">(</span><span class="n">Mode</span><span class="p">,</span><span class="n">initialCondition</span><span class="p">,</span><span class="n">time_bound</span><span class="p">)</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">TC_Simulate</span><span class="p">(</span><span class="n">Mode</span><span class="p">,</span><span class="n">initialCondition</span><span class="p">,</span><span class="n">time_bound</span><span class="p">)</span>
 <span class="n">Input</span><span class="p">:</span>
     <span class="n">Mode</span> <span class="p">(</span><span class="n">string</span><span class="p">)</span> <span class="o">--</span> <span class="n">a</span> <span class="n">string</span> <span class="n">indicates</span> <span class="n">the</span> <span class="n">model</span> <span class="n">you</span> <span class="n">want</span> <span class="n">to</span> <span class="n">simulate</span><span class="o">.</span> <span class="n">Ex</span><span class="o">.</span> <span class="s2">&quot;On&quot;</span>
     <span class="n">initialCondition</span> <span class="p">(</span><span class="nb">list</span> <span class="n">of</span> <span class="nb">float</span><span class="p">)</span> <span class="o">--</span> <span class="n">a</span> <span class="nb">list</span> <span class="n">contains</span> <span class="n">the</span> <span class="n">initial</span> <span class="n">condition</span><span class="o">.</span> <span class="n">Ex</span><span class="o">.</span> <span class="s2">&quot;[32.0]&quot;</span>
@@ -331,18 +325,18 @@ Inside your model folder, create a python script for your model.</p>
 </div>
 <p><strong>Step 4</strong>:
 Inside your model folder, create a Python initiate script.</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">touch</span> <span class="fm">__init__</span><span class="o">.</span><span class="n">py</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">touch</span> <span class="fm">__init__</span><span class="o">.</span><span class="n">py</span>
 </pre></div>
 </div>
 <p>Inside your initiate script, import file with function TC_Simulate.</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">Thermostats_ODE</span> <span class="k">import</span> <span class="o">*</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">Thermostats_ODE</span> <span class="k">import</span> <span class="o">*</span>
 </pre></div>
 </div>
 <p><strong>Step 5</strong>:
 Go to inputFile folder and create an input file for your new model using the format discussed in <a class="reference internal" href="#input-format-label"><span class="std std-ref">Input Format</span></a>.</p>
-<p>Create a transition graph specifying the mode transitions. For example, we want the temperature to start within the range <img class="math" src="_images/math/586d9f2d0bf8bd88a1ba56a8613540065633bec8.png" alt="[75,76]"/> in the &#8220;On&#8221; mode. After <img class="math" src="_images/math/c1d7feec46252ba2d3538cfa5c71a9235802383c.png" alt="[1,1.1]"/> second, it transits to the &#8220;Off&#8221; mode, and transits back to the &#8220;On&#8221; mode after another <img class="math" src="_images/math/c1d7feec46252ba2d3538cfa5c71a9235802383c.png" alt="[1,1.1]"/> seconds. For bounded time <img class="math" src="_images/math/b7a8028fc10b9e828d9b340dc3459e6c678a38aa.png" alt="3.5s"/>, we want to check whether the temperature is above <img class="math" src="_images/math/85dd92a01545069e5720b438fa43981e71f9f41e.png" alt="90"/>.</p>
+<p>Create a transition graph specifying the mode transitions. For example, we want the temperature to start within the range <img class="math" src="_images/math/586d9f2d0bf8bd88a1ba56a8613540065633bec8.png" alt="[75,76]"/> in the “On” mode. After <img class="math" src="_images/math/c1d7feec46252ba2d3538cfa5c71a9235802383c.png" alt="[1,1.1]"/> second, it transits to the “Off” mode, and transits back to the “On” mode after another <img class="math" src="_images/math/c1d7feec46252ba2d3538cfa5c71a9235802383c.png" alt="[1,1.1]"/> seconds. For bounded time <img class="math" src="_images/math/b7a8028fc10b9e828d9b340dc3459e6c678a38aa.png" alt="3.5s"/>, we want to check whether the temperature is above <img class="math" src="_images/math/85dd92a01545069e5720b438fa43981e71f9f41e.png" alt="90"/>.</p>
 <p>The input file can be written as:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="p">{</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
   <span class="s2">&quot;vertex&quot;</span><span class="p">:[</span><span class="s2">&quot;On&quot;</span><span class="p">,</span><span class="s2">&quot;Off&quot;</span><span class="p">,</span><span class="s2">&quot;On&quot;</span><span class="p">],</span>
   <span class="s2">&quot;edge&quot;</span><span class="p">:[[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">],[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">]],</span>
   <span class="s2">&quot;variables&quot;</span><span class="p">:[</span><span class="s2">&quot;temp&quot;</span><span class="p">],</span>
@@ -357,15 +351,15 @@ Go to inputFile folder and create an input file for your new model using the for
 <p>Save the input file in the folder input/daginput and name it as input_thermo.json.</p>
 <p><strong>Step6</strong>:
 Run the verification algorithm using the command:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">python</span> <span class="n">main</span><span class="o">.</span><span class="n">py</span> <span class="nb">input</span><span class="o">/</span><span class="n">daginput</span><span class="o">/</span><span class="n">input_thermo</span><span class="o">.</span><span class="n">json</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">python</span> <span class="n">main</span><span class="o">.</span><span class="n">py</span> <span class="nb">input</span><span class="o">/</span><span class="n">daginput</span><span class="o">/</span><span class="n">input_thermo</span><span class="o">.</span><span class="n">json</span>
 </pre></div>
 </div>
 <p>The system has been checked to be safe with the output:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span>System is Safe!
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>System is Safe!
 </pre></div>
 </div>
 <p>We can plot the reachtube using the command:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">python</span> <span class="n">plotter</span><span class="o">.</span><span class="n">py</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">python</span> <span class="n">plotter</span><span class="o">.</span><span class="n">py</span>
 </pre></div>
 </div>
 <p>And the reachtube for the temperature is shown as</p>
@@ -378,9 +372,7 @@ Run the verification algorithm using the command:</p>
 
 
            </div>
-           <div class="articleComments">
-            
-           </div>
+           
           </div>
           <footer>
   
@@ -402,7 +394,7 @@ Run the verification algorithm using the command:</p>
 
     </p>
   </div>
-  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
 
 </footer>
 
@@ -421,6 +413,7 @@ Run the verification algorithm using the command:</p>
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'./',
             VERSION:'2.0',
+            LANGUAGE:'None',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
             HAS_SOURCE:  true,
@@ -438,14 +431,13 @@ Run the verification algorithm using the command:</p>
     <script type="text/javascript" src="_static/js/theme.js"></script>
   
 
-  
-  
   <script type="text/javascript">
       jQuery(function () {
-          SphinxRtdTheme.StickyNav.enable();
+          
+          SphinxRtdTheme.Navigation.enableSticky();
+          
       });
-  </script>
-   
+  </script> 
 
 </body>
 </html>

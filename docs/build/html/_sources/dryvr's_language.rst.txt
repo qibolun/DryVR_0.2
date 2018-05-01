@@ -56,7 +56,7 @@ The input for DryVR is of the form ::
       "variables":[the name of variables in the system]
       "guards":[transition graph edge labels (transition condition)]
       "resets":[reset condition after transition] # This is optional if you do not want reset
-      "initialMode":[label for initial mode] # This is optional for DAG graph
+      "initialVertex":integer indicates the vertex to start # This is optional for DAG graph
       "initialSet":[two arrays defining the lower and upper bound of each variable]
       "unsafeSet":@[mode name]:[unsafe region]
       "timeHorizon":[Time bound for the verification]
@@ -65,7 +65,7 @@ The input for DryVR is of the form ::
       "kvalue": specify the k-value that used by piecewise bloating method # This field must be specified if you choose the bloatingMethod to "PW"
     }
 
-Some fields are optional in DryVR's input langauge such as resets, initialMode, bloatingMethod and kvalue under some conditions. Please read the comment.
+Some fields are optional in DryVR's input langauge such as resets, initialVertex, bloatingMethod and kvalue under some conditions. Please read the comment.
 
 Example input for the Automatic Emergency Braking System ::
 

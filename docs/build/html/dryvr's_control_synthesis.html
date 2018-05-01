@@ -25,26 +25,19 @@
   
 
   
-  
     <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
-  
-
-  
-
-  
-        <link rel="index" title="Index"
-              href="genindex.html"/>
-        <link rel="search" title="Search" href="search.html"/>
-    <link rel="top" title="DryVR 2.0 documentation" href="index.html"/>
-        <link rel="next" title="Examples and Performance Evaluation" href="example.html"/>
-        <link rel="prev" title="DryVR’s Verification Language" href="dryvr&#39;s_language.html"/> 
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Examples and Performance Evaluation" href="example.html" />
+    <link rel="prev" title="DryVR’s Verification Language" href="dryvr&#39;s_language.html" /> 
 
   
   <script src="_static/js/modernizr.min.js"></script>
 
 </head>
 
-<body class="wy-body-for-nav" role="document">
+<body class="wy-body-for-nav">
 
    
   <div class="wy-grid-for-nav">
@@ -94,8 +87,8 @@
 <li class="toctree-l1"><a class="reference internal" href="status.html">Status</a></li>
 <li class="toctree-l1"><a class="reference internal" href="installtion.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="usage.html">Usage</a></li>
-<li class="toctree-l1"><a class="reference internal" href="dryvr's_language.html">DryVR&#8217;s Verification Language</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">DryVR&#8217;s Synthesis Language</a><ul>
+<li class="toctree-l1"><a class="reference internal" href="dryvr's_language.html">DryVR’s Verification Language</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">DryVR’s Synthesis Language</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#input-format">Input Format</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#output-interpretation">Output Interpretation</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#advanced-tricks-making-control-synthesis-work-on-your-own-black-box-system">Advanced Tricks: Making control synthesis work on your own black-box system</a></li>
@@ -116,7 +109,7 @@
     <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
 
       
-      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+      <nav class="wy-nav-top" aria-label="top navigation">
         
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
           <a href="index.html">DryVR</a>
@@ -124,9 +117,10 @@
       </nav>
 
 
-      
       <div class="wy-nav-content">
+        
         <div class="rst-content">
+        
           
 
 
@@ -149,7 +143,7 @@
     
       <li><a href="index.html">Docs</a> &raquo;</li>
         
-      <li>DryVR&#8217;s Synthesis Language</li>
+      <li>DryVR’s Synthesis Language</li>
     
     
       <li class="wy-breadcrumbs-aside">
@@ -169,19 +163,18 @@
            <div itemprop="articleBody">
             
   <div class="section" id="dryvr-s-synthesis-language">
-<h1>DryVR&#8217;s Synthesis Language<a class="headerlink" href="#dryvr-s-synthesis-language" title="Permalink to this headline">¶</a></h1>
+<h1>DryVR’s Synthesis Language<a class="headerlink" href="#dryvr-s-synthesis-language" title="Permalink to this headline">¶</a></h1>
 <p>In DryVR,  a hybrid system is modeled as a combination of a white-box that specifies the mode switches (<a class="reference internal" href="dryvr's_language.html#transition-graph-label"><span class="std std-ref">Transition Graph</span></a>) and a black-box that can simulate the continuous evolution in each mode (<a class="reference internal" href="dryvr's_language.html#black-box-label"><span class="std std-ref">Black-box Simulator</span></a>).</p>
 <p>The control synthesis problem for DryVR is to find a white-box transition graph given the black-box simulator with addition inputs listed in (<a class="reference internal" href="#input-format-control-label"><span class="std std-ref">Input Format</span></a>).</p>
 <div class="section" id="input-format">
 <span id="input-format-control-label"></span><h2>Input Format<a class="headerlink" href="#input-format" title="Permalink to this headline">¶</a></h2>
 <p>The input for DryVR control synthesis is of the form</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="p">{</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
   <span class="s2">&quot;modes&quot;</span><span class="p">:[</span><span class="n">modes</span> <span class="n">that</span> <span class="n">black</span> <span class="n">simulator</span> <span class="n">takes</span><span class="p">]</span>
-  <span class="s2">&quot;initialMode&quot;</span><span class="p">:[</span><span class="n">initial</span> <span class="n">mode</span> <span class="n">that</span> <span class="n">DryVR</span> <span class="n">start</span> <span class="n">to</span> <span class="n">search</span><span class="p">]</span>
   <span class="s2">&quot;variables&quot;</span><span class="p">:[</span><span class="n">the</span> <span class="n">name</span> <span class="n">of</span> <span class="n">variables</span> <span class="ow">in</span> <span class="n">the</span> <span class="n">system</span><span class="p">]</span>
   <span class="s2">&quot;initialSet&quot;</span><span class="p">:[</span><span class="n">two</span> <span class="n">arrays</span> <span class="n">defining</span> <span class="n">the</span> <span class="n">lower</span> <span class="ow">and</span> <span class="n">upper</span> <span class="n">bound</span> <span class="n">of</span> <span class="n">each</span> <span class="n">variable</span><span class="p">]</span>
   <span class="s2">&quot;unsafeSet&quot;</span><span class="p">:</span><span class="o">@</span><span class="p">[</span><span class="n">mode</span> <span class="n">name</span><span class="p">]:[</span><span class="n">unsafe</span> <span class="n">region</span><span class="p">]</span>
-  <span class="s2">&quot;goalSet&quot;</span><span class="p">:[</span><span class="n">two</span> <span class="n">arrays</span> <span class="n">defining</span> <span class="n">the</span> <span class="n">lower</span> <span class="ow">and</span> <span class="n">upper</span> <span class="n">bound</span> <span class="n">of</span> <span class="n">each</span> <span class="n">variable</span> <span class="k">for</span> <span class="n">goal</span><span class="p">]</span>
+  <span class="s2">&quot;goalSet&quot;</span><span class="p">:[</span><span class="n">A</span> <span class="n">z3</span> <span class="n">expression</span> <span class="k">for</span> <span class="n">target</span> <span class="nb">set</span><span class="p">]</span>
   <span class="s2">&quot;timeHorizon&quot;</span><span class="p">:[</span><span class="n">time</span> <span class="n">bound</span> <span class="k">for</span> <span class="n">control</span> <span class="n">synthesis</span><span class="p">,</span> <span class="n">the</span> <span class="n">graph</span> <span class="n">should</span> <span class="n">be</span> <span class="n">bounded</span> <span class="ow">in</span> <span class="n">time</span> <span class="n">horizon</span><span class="p">]</span>
   <span class="s2">&quot;directory&quot;</span><span class="p">:</span> <span class="n">directory</span> <span class="n">of</span> <span class="n">the</span> <span class="n">folder</span> <span class="n">which</span> <span class="n">contains</span> <span class="n">the</span> <span class="n">simulator</span> <span class="k">for</span> <span class="n">black</span><span class="o">-</span><span class="n">box</span> <span class="n">system</span>
   <span class="s2">&quot;minTimeThres&quot;</span><span class="p">:</span> <span class="n">minimal</span> <span class="n">staying</span> <span class="n">time</span> <span class="k">for</span> <span class="n">each</span> <span class="n">mode</span> <span class="n">to</span> <span class="n">limit</span> <span class="n">number</span> <span class="n">of</span> <span class="n">trainsition</span><span class="o">.</span>
@@ -190,9 +183,8 @@
 </pre></div>
 </div>
 <p>Example input for the robot in maze example</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="p">{</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
   <span class="s2">&quot;modes&quot;</span><span class="p">:[</span><span class="s2">&quot;0&quot;</span><span class="p">,</span> <span class="s2">&quot;1&quot;</span><span class="p">,</span> <span class="s2">&quot;2&quot;</span><span class="p">,</span> <span class="s2">&quot;3&quot;</span><span class="p">,</span> <span class="s2">&quot;4&quot;</span><span class="p">,</span> <span class="s2">&quot;5&quot;</span><span class="p">,</span> <span class="s2">&quot;6&quot;</span><span class="p">,</span> <span class="s2">&quot;7&quot;</span><span class="p">],</span>
-  <span class="s2">&quot;initialMode&quot;</span><span class="p">:</span><span class="s2">&quot;1&quot;</span><span class="p">,</span>
   <span class="s2">&quot;variables&quot;</span><span class="p">:[</span><span class="s2">&quot;x&quot;</span><span class="p">,</span><span class="s2">&quot;y&quot;</span><span class="p">,</span><span class="s2">&quot;vx&quot;</span><span class="p">,</span><span class="s2">&quot;vy&quot;</span><span class="p">],</span>
   <span class="s2">&quot;initialSet&quot;</span><span class="p">:[[</span><span class="mf">1.0</span><span class="p">,</span><span class="mf">1.0</span><span class="p">,</span><span class="mf">1.0</span><span class="p">,</span><span class="mf">1.0</span><span class="p">],[</span><span class="mf">1.1</span><span class="p">,</span><span class="mf">1.0</span><span class="p">,</span><span class="mf">1.0</span><span class="p">,</span><span class="mf">1.0</span><span class="p">]],</span>
   <span class="s2">&quot;unsafeSet&quot;</span><span class="p">:</span><span class="s2">&quot;@Allmode:Or(And(x&gt;=2.0, x&lt;3.0, y&gt;=3.0, y&lt;=4.0), And(x&gt;=3.0, x&lt;=4.0, y&gt;=2.0, y&lt;3.0), x&lt;0, x&gt;5, y&lt;0, y&gt;5)&quot;</span><span class="p">,</span>
@@ -209,23 +201,23 @@
 <h2>Output Interpretation<a class="headerlink" href="#output-interpretation" title="Permalink to this headline">¶</a></h2>
 <p>The tool will print background information like the current mode, transition time, initial set on the run. The final result about goal reached or not reached will be printed at the bottom.</p>
 <p>When the system find the transition graph that statisfy the requirement, the final result will look like</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">goal</span> <span class="n">reached</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">goal</span> <span class="n">reached</span>
 </pre></div>
 </div>
 <p>When the system cannot find graph, the final result will look like</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">could</span> <span class="ow">not</span> <span class="n">find</span> <span class="n">graph</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">could</span> <span class="ow">not</span> <span class="n">find</span> <span class="n">graph</span>
 </pre></div>
 </div>
-<p>Note that DryVR&#8217;s algorithm is searching the graph randomly, if the system cannot find the graph, it does not mean the graph is not exist with current input. You can try run the algorithm multiple times to get more accurate result. Increase RANDSECTIONNUM in DryVR&#8217;s configuration will increase the chance of finding hte transition graph. (See {<a class="reference internal" href="parameters_configuration.html#parameter-label"><span class="std std-ref">Parameters configuration</span></a>})
-If the the system find the transition graph, the system will plot the transition graph and will be stored in &#8220;output/rrtGraph.png&#8221;</p>
+<p>Note that DryVR’s algorithm is searching the graph randomly, if the system cannot find the graph, it does not mean the graph is not exist with current input. You can try run the algorithm multiple times to get more accurate result. Increase RANDSECTIONNUM in DryVR’s configuration will increase the chance of finding hte transition graph. (See {<a class="reference internal" href="parameters_configuration.html#parameter-label"><span class="std std-ref">Parameters configuration</span></a>})
+If the the system find the transition graph, the system will plot the transition graph and will be stored in “output/rrtGraph.png”</p>
 </div>
 <div class="section" id="advanced-tricks-making-control-synthesis-work-on-your-own-black-box-system">
 <h2>Advanced Tricks: Making control synthesis work on your own black-box system<a class="headerlink" href="#advanced-tricks-making-control-synthesis-work-on-your-own-black-box-system" title="Permalink to this headline">¶</a></h2>
-<p>Creating black box simulator is exactly same as we introduced in DryVR&#8217;s language page (<a class="reference internal" href="dryvr's_language.html#advance-label"><span class="std std-ref">Advanced Tricks: Verify your own black-box system</span></a>) up to Step 4.</p>
+<p>Creating black box simulator is exactly same as we introduced in DryVR’s language page (<a class="reference internal" href="dryvr's_language.html#advance-label"><span class="std std-ref">Advanced Tricks: Verify your own black-box system</span></a>) up to Step 4.</p>
 <p>For the Step 5, instead of creating a verification input file, you need to create control synthesis input file we have discussed in <a class="reference internal" href="#input-format-control-label"><span class="std std-ref">Input Format</span></a>.</p>
-<p>For example, Let&#8217;s set the intial temperature within the range <img class="math" src="_images/math/586d9f2d0bf8bd88a1ba56a8613540065633bec8.png" alt="[75,76]"/>, and we want to reach the target temperature within the range <img class="math" src="_images/math/91ac51b19f354855517947bb3ecfea3be0ccb522.png" alt="[68,72]"/>, while avoiding temperature that is larger than <img class="math" src="_images/math/85dd92a01545069e5720b438fa43981e71f9f41e.png" alt="90"/>. We want to start our search from &#8220;On&#8221; mode and reach our goal in bounded time <img class="math" src="_images/math/27c3f84f870e3078bd73a6c0a6a73241652680d1.png" alt="4s"/>, and set the minimal staying time to <img class="math" src="_images/math/ae16ed0261178011876a45fd0f98f5c72f3307d2.png" alt="1s"/>.</p>
+<p>For example, Let’s set the intial temperature within the range <img class="math" src="_images/math/586d9f2d0bf8bd88a1ba56a8613540065633bec8.png" alt="[75,76]"/>, and we want to reach the target temperature within the range <img class="math" src="_images/math/91ac51b19f354855517947bb3ecfea3be0ccb522.png" alt="[68,72]"/>, while avoiding temperature that is larger than <img class="math" src="_images/math/85dd92a01545069e5720b438fa43981e71f9f41e.png" alt="90"/>. We want to start our search from “On” mode and reach our goal in bounded time <img class="math" src="_images/math/27c3f84f870e3078bd73a6c0a6a73241652680d1.png" alt="4s"/>, and set the minimal staying time to <img class="math" src="_images/math/ae16ed0261178011876a45fd0f98f5c72f3307d2.png" alt="1s"/>.</p>
 <p>the input file can be written as:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="p">{</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
   <span class="s2">&quot;modes&quot;</span><span class="p">:[</span><span class="s2">&quot;On&quot;</span><span class="p">,</span> <span class="s2">&quot;Off&quot;</span><span class="p">],</span>
   <span class="s2">&quot;initialMode&quot;</span><span class="p">:</span><span class="s2">&quot;On&quot;</span><span class="p">,</span>
   <span class="s2">&quot;variables&quot;</span><span class="p">:[</span><span class="s2">&quot;temp&quot;</span><span class="p">],</span>
@@ -241,16 +233,16 @@ If the the system find the transition graph, the system will plot the transition
 </div>
 <p>Save the input file in the folder input/rrtinput and name it as temp.json.</p>
 <p>Run the graph search algorithm using the command:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">python</span> <span class="n">rrt</span><span class="o">.</span><span class="n">py</span> <span class="nb">input</span><span class="o">/</span><span class="n">rrtinput</span><span class="o">/</span><span class="n">temp</span><span class="o">.</span><span class="n">json</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">python</span> <span class="n">rrt</span><span class="o">.</span><span class="n">py</span> <span class="nb">input</span><span class="o">/</span><span class="n">rrtinput</span><span class="o">/</span><span class="n">temp</span><span class="o">.</span><span class="n">json</span>
 </pre></div>
 </div>
 <p>The graph has been found with the output:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span>goal reached!
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>goal reached!
 </pre></div>
 </div>
 <p>If you check the the output/rrtGraph.png, you would get a transition graph for this problem. As you can see the system turn from On state to Off state to reach the goal.</p>
 <div class="figure align-center" id="id1">
-<a class="reference internal image-reference" href="_images/rrtGraph.png"><img alt="thermostat transition graph" src="_images/rrtGraph.png" style="width: 360.0px; height: 360.0px;" /></a>
+<a class="reference internal image-reference" href="rrtGraph.png"><img alt="thermostat transition graph" src="rrtGraph.png" /></a>
 <p class="caption"><span class="caption-text">The white box transition graph of the thermostat system</span></p>
 </div>
 </div>
@@ -258,9 +250,7 @@ If the the system find the transition graph, the system will plot the transition
 
 
            </div>
-           <div class="articleComments">
-            
-           </div>
+           
           </div>
           <footer>
   
@@ -282,7 +272,7 @@ If the the system find the transition graph, the system will plot the transition
 
     </p>
   </div>
-  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
 
 </footer>
 
@@ -301,6 +291,7 @@ If the the system find the transition graph, the system will plot the transition
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'./',
             VERSION:'2.0',
+            LANGUAGE:'None',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
             HAS_SOURCE:  true,
@@ -318,14 +309,13 @@ If the the system find the transition graph, the system will plot the transition
     <script type="text/javascript" src="_static/js/theme.js"></script>
   
 
-  
-  
   <script type="text/javascript">
       jQuery(function () {
-          SphinxRtdTheme.StickyNav.enable();
+          
+          SphinxRtdTheme.Navigation.enableSticky();
+          
       });
-  </script>
-   
+  </script> 
 
 </body>
 </html>

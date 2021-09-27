@@ -1,3 +1,7 @@
+THIS REPO IS NO LONGER MAINTAINED, FOR LATEST DRYVER CODE, PLEASE VISIT
+https://gitlab.engr.illinois.edu/dryvrgroup/dryvrtool
+
+
 DryVR 2.0 is a software for hybrid system verification. Please find the documentation at 
 
 http://dryvr-02.readthedocs.io/en/latest/
